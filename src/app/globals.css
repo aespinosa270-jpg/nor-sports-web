@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ocultar cursor del sistema en PC para poner el nuestro después */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+}
