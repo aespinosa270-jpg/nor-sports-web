@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Space_Mono, Syncopate } from "next/font/google";
 import "./globals.css";
-
-// 1. IMPORTAMOS EL CURSOR (Tu código original)
 import { CustomCursor } from "@/components/CustomCursor";
-// 2. IMPORTAMOS EL NAVBAR (Lo único nuevo que agregamos)
 import { Navbar } from "@/components/layout/Navbar";
 
-// Cargamos fuentes de Google optimizadas
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -21,8 +17,8 @@ const syncopate = Syncopate({
 });
 
 export const metadata: Metadata = {
-  title: "NOR | READY OR NOT",
-  description: "High-End Technical Wear",
+  title: "NOR | High-Vanguard Sportswear",
+  description: "Advanced athletic gear designed in CDMX.",
 };
 
 export default function RootLayout({
@@ -32,17 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${spaceMono.variable} ${syncopate.variable}`}>
-      <body className="bg-black text-white antialiased overflow-x-hidden selection:bg-white selection:text-black">
-
-        {/* 2. AQUI VA EL CURSOR (Arriba de todo para que renderice primero) */}
+      {/* CAMBIO: Fondo blanco, texto negro, sin overflow-x-hidden en el body */}
+      <body className="bg-white text-black antialiased selection:bg-black selection:text-white">
         <CustomCursor />
-
-        {/* 3. AQUI VA EL NAVBAR (Nuevo - Para que se vea el menú y el carrito) */}
         <Navbar />
-
-        {/* Textura de Ruido de fondo */}
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] filter contrast-150 brightness-100"></div>
-
         {children}
       </body>
     </html>

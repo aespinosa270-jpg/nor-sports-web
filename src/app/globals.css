@@ -2,14 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ocultar cursor del sistema en PC para poner el nuestro después */
-@media (pointer: fine) {
-  body {
-    cursor: none;
-  }
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 245, 245, 245;
 }
 
 body {
-  background-color: #000;
-  color: #fff;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  /* Quitamos el overflow hidden global para que el scroll se sienta natural */
+}
+
+/* Scrollbar estilo Adidas/Moderno (delgada y discreta) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
 }

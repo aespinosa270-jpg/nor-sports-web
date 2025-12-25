@@ -1,28 +1,27 @@
 "use client";
 
-// Importamos el NUEVO Hero y las otras secciones
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ProductShowcase } from "@/components/sections/ProductShowcase";
-import { TechSpecs } from "@/components/sections/TechSpecs";
 
 export default function Home() {
   return (
-    <main className="bg-black min-h-screen w-full overflow-x-hidden selection:bg-white selection:text-black">
+    // El fondo blanco ya viene del globals.css
+    <main className="min-h-screen w-full">
 
-      {/* SECCIÓN 1: EL NUEVO HERO ANIMADO */}
+      {/* SECCIÓN 1: HERO VANGUARDISTA */}
       <HeroSection />
 
-      {/* SECCIÓN 2: CATÁLOGO DE ROPA */}
+      {/* SECCIÓN 2: CATÁLOGO LIMPIO */}
       <ProductShowcase />
 
-      {/* SECCIÓN 3: ESPECIFICACIONES */}
-      <TechSpecs />
-
-      {/* FOOTER */}
-      <footer className="py-12 bg-black border-t border-white/10 text-center relative z-10">
-        <div className="font-mono text-[10px] text-gray-600 space-y-2">
-          <p>DISEÑADO EN CIUDAD DE MÉXICO.</p>
-          <p>NOR © 2025 // TODOS LOS DERECHOS RESERVADOS</p>
+      {/* FOOTER SIMPLE BLANCO */}
+      <footer className="py-16 bg-white border-t border-gray-100 text-center">
+        <div className="container mx-auto px-6">
+          <h2 className="font-display text-2xl font-bold mb-4">NØR</h2>
+          <div className="font-mono text-xs text-gray-500 space-y-2 uppercase tracking-wider">
+            <p>High-Vanguard Sportswear</p>
+            <p>Diseñado en CDMX © 2025</p>
+          </div>
         </div>
       </footer>
 
