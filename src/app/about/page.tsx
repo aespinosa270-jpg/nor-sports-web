@@ -1,77 +1,52 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { Marquee } from "@/components/ui/Marquee";
 
 export default function AboutPage() {
     return (
-        <main className="bg-black min-h-screen pt-32 pb-20 px-6 selection:bg-white selection:text-black">
+        <main className="min-h-screen bg-black text-white pt-32 pb-20">
 
-            <div className="container mx-auto max-w-4xl">
+            {/* 1. MANIFIESTO GIGANTE */}
+            <section className="px-6 md:px-12 max-w-[1800px] mx-auto mb-24">
+                <span className="font-mono text-xs text-gray-500 uppercase tracking-widest mb-8 block">
+                    [ Mission_Statement_V1 ]
+                </span>
+                <h1 className="font-display text-5xl md:text-8xl font-bold uppercase tracking-tighter leading-[0.85]">
+                    We Engineer<br />
+                    <span className="text-gray-600">Chaos Resistance.</span>
+                </h1>
+            </section>
 
-                {/* ENCABEZADO */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-20 border-b border-white/20 pb-8"
-                >
-                    <h1 className="font-display text-5xl md:text-8xl text-white tracking-tighter uppercase leading-none">
-                        CÓDIGO<br />NOR_01
-                    </h1>
-                    <div className="flex justify-between items-end mt-4 font-mono text-xs text-gray-500">
-                        <span>EST. 2025 // CDMX</span>
-                        <span>[ MANIFIESTO ]</span>
-                    </div>
-                </motion.div>
+            <Marquee text="DISEÑADO EN CIUDAD DE MÉXICO // PROBADO EN EL INFIERNO URBANO" />
 
-                {/* CONTENIDO TEXTUAL (Estilo Editorial) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 font-mono text-sm md:text-base text-gray-300 leading-relaxed">
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <p className="mb-8">
-                            <strong className="text-white block mb-2 font-display text-xl tracking-widest">01 // ADAPTACIÓN</strong>
-                            El entorno urbano es hostil. El clima es impredecible. NOR nace de la necesidad de adaptar el cuerpo humano a la velocidad de la ciudad moderna mediante ingeniería textil.
-                        </p>
-                        <p>
-                            No hacemos moda. Diseñamos equipamiento. Cada costura, cada cierre y cada fibra tiene un propósito funcional: sobrevivir al caos con estética impecable.
-                        </p>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                    >
-                        <p className="mb-8">
-                            <strong className="text-white block mb-2 font-display text-xl tracking-widest">02 // TECNOLOGÍA</strong>
-                            Rechazamos los materiales obsoletos. Integramos polímeros hidrofóbicos, membranas transpirables y textiles de grado militar.
-                        </p>
-                        <div className="border-l-2 border-white pl-6 py-2 my-8 italic text-white/60">
-                            "La forma sigue a la función. La estética es la consecuencia de la eficiencia."
-                        </div>
-                        <p>
-                            Somos el puente entre el rendimiento deportivo y la elegancia brutalista.
-                        </p>
-                    </motion.div>
-
+            {/* 2. TEXTO EDITORIAL */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-12 px-6 md:px-12 max-w-[1800px] mx-auto mt-24">
+                <div>
+                    <p className="font-mono text-sm text-gray-400 uppercase tracking-widest sticky top-32">
+                        01 — Origen
+                    </p>
                 </div>
+                <div className="space-y-8 text-lg md:text-xl font-light leading-relaxed text-gray-300">
+                    <p>
+                        Nacido en el tráfico, el smog y la lluvia impredecible de la CDMX.
+                        NØR no es ropa deportiva; es armadura técnica para el atleta urbano.
+                    </p>
+                    <p>
+                        Creemos que el "gym" ya no existe. La ciudad entera es el campo de entrenamiento.
+                        Desde correr en Reforma a las 6AM hasta esquivar autos en Insurgentes.
+                        Necesitas equipo que aguante el ritmo.
+                    </p>
+                    <p className="text-white font-bold">
+                        Rechazamos la moda rápida. Abrazamos la ingeniería brutalista.
+                    </p>
+                </div>
+            </section>
 
-                {/* FIRMA FINAL */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="mt-32 text-center"
-                >
-                    <h2 className="font-display text-[10vw] md:text-[8vw] leading-none text-transparent stroke-white opacity-20 hover:opacity-100 transition-opacity duration-500 select-none" style={{ WebkitTextStroke: "1px white" }}>
-                        READY OR NOT
-                    </h2>
-                </motion.div>
-
+            {/* 3. IMAGEN DE CIERRE (Placeholder) */}
+            <div className="mt-24 w-full h-[50vh] bg-white flex items-center justify-center">
+                <span className="text-black font-display text-9xl font-bold uppercase tracking-tighter opacity-20">
+                    NØR
+                </span>
             </div>
+
         </main>
     );
 }
