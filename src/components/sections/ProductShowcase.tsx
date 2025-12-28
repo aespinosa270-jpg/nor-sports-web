@@ -1,88 +1,84 @@
 "use client";
+import { ProductCard } from "../home/ProductCard"; // Importa el componente nuevo
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-
-const PRODUCTOS = [
+// Mock Data Mejorada (Simulando variantes reales)
+const PRODUCTS = [
     {
-        id: "01",
-        nombre: "PLAYERAS AERO-DRY",
-        precio: "$950 MXN",
-        categoria: "Entrenamiento",
-        imgBg: "bg-gray-100"
+        id: 1,
+        name: "AERO-DRY SHELL",
+        price: 2890,
+        tag: "WATERPROOF",
+        variants: [
+            { colorName: "Onyx", colorHex: "#111111", image: "/p1-black.jpg" },
+            { colorName: "Concrete", colorHex: "#888888", image: "/p1-gray.jpg" }
+        ]
     },
     {
-        id: "02",
-        nombre: "SHORT COMPRESIÓN V2",
-        precio: "$1,200 MXN",
-        categoria: "Running",
-        imgBg: "bg-gray-200"
+        id: 2,
+        name: "KINETIC TIGHTS",
+        price: 1200,
+        tag: "COMPRESSION",
+        variants: [
+            { colorName: "Black", colorHex: "#000000", image: "/p2-black.jpg" },
+            { colorName: "Navy", colorHex: "#1a2b4b", image: "/p2-navy.jpg" }
+        ]
     },
     {
-        id: "03",
-        nombre: "CHAMARRA TÉCNICA SHELL",
-        precio: "$2,890 MXN",
-        categoria: "Outdoor",
-        imgBg: "bg-gray-100"
+        id: 3,
+        name: "CORE VEST V2",
+        price: 1850,
+        tag: "THERMAL",
+        variants: [
+            { colorName: "Olive", colorHex: "#4b5320", image: "/p3-olive.jpg" },
+            { colorName: "Sand", colorHex: "#d2b48c", image: "/p3-sand.jpg" },
+            { colorName: "Onyx", colorHex: "#111111", image: "/p3-black.jpg" }
+        ]
     },
     {
-        id: "04",
-        nombre: "CAPILARIDAD TEE",
-        precio: "$890 MXN",
-        categoria: "Básicos",
-        imgBg: "bg-gray-200"
+        id: 4,
+        name: "TECH RUNNER",
+        price: 3200,
+        tag: "FOOTWEAR",
+        variants: [
+            { colorName: "Ghost", colorHex: "#f0f0f0", image: "/p4-white.jpg" },
+            { colorName: "Volt", colorHex: "#ccff00", image: "/p4-volt.jpg" }
+        ]
     },
 ];
 
 export const ProductShowcase = () => {
     return (
-        <section className="w-full py-24 bg-white">
+        <section className="px-6 md:px-12 py-24 bg-white text-black border-t border-gray-100">
 
-            {/* HEADER DE SECCIÓN ESTILO ADIDAS */}
-            <div className="container mx-auto px-6 md:px-12 mb-12 flex flex-col md:flex-row items-end justify-between">
+            {/* Header Limpio */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                 <div>
-                    <h2 className="font-display text-3xl md:text-4xl text-black uppercase font-bold leading-none mb-4">
-                        NOVEDADES DE TEMPORADA
+                    <span className="font-mono text-xs text-gray-400 uppercase tracking-widest mb-2 block">
+                        [ New_Arrivals ]
+                    </span>
+                    <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tighter">
+                        System Essentials
                     </h2>
                 </div>
-                {/* Link de "Ver todo" limpio */}
-                <Link href="/shop" className="group flex items-center gap-2 font-display font-bold text-sm mt-4 md:mt-0 border-b-2 border-black pb-1">
-                    VER TODO <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </Link>
+
+                {/* Enlace 'Ver Todo' estilo botón técnico */}
+                <a href="/shop" className="hidden md:block font-mono text-xs border border-gray-200 px-6 py-3 hover:bg-black hover:text-white transition-colors uppercase">
+                    View Full Catalog -&gt;
+                </a>
             </div>
 
-            {/* GRID DE PRODUCTOS (Limpio, 4 columnas) */}
-            <div className="container mx-auto px-6 md:px-12">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                    {PRODUCTOS.map((prod) => (
-                        <motion.div
-                            key={prod.id}
-                            whileHover={{ y: -5 }}
-                            className="group cursor-pointer relative"
-                        >
-                            {/* 1. IMAGEN DEL PRODUCTO (Fondo claro) */}
-                            <div className={`aspect-square w-full ${prod.imgBg} relative overflow-hidden mb-4`}>
-                                {/* Placeholder de silueta */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition-opacity group-hover:scale-105 duration-500">
-                                    <svg width="100" height="100" viewBox="0 0 24 24" fill="black"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" /></svg>
-                                </div>
-                                {/* Etiqueta "Nuevo" */}
-                                <div className="absolute top-2 left-2 bg-white px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider">
-                                    Nuevo
-                                </div>
-                            </div>
+            {/* Grid Responsivo */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+                {PRODUCTS.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
+            </div>
 
-                            {/* 2. INFO DEL PRODUCTO (Limpia, texto negro) */}
-                            <div className="flex flex-col">
-                                <span className="font-mono text-xs text-gray-500 mb-1">{prod.categoria}</span>
-                                <h3 className="font-display text-sm md:text-base font-bold text-black uppercase leading-tight group-hover:underline underline-offset-2">
-                                    {prod.nombre}
-                                </h3>
-                                <span className="font-mono text-sm text-black mt-2 font-bold">{prod.precio}</span>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+            {/* Botón Móvil para 'Ver Todo' */}
+            <div className="mt-12 md:hidden">
+                <a href="/shop" className="block w-full text-center font-mono text-xs border border-black px-6 py-4 hover:bg-black hover:text-white transition-colors uppercase font-bold">
+                    View Full Catalog
+                </a>
             </div>
         </section>
     );
