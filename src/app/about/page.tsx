@@ -1,3 +1,4 @@
+"use client";
 import { Marquee } from "@/components/ui/Marquee";
 
 export default function AboutPage() {
@@ -15,6 +16,7 @@ export default function AboutPage() {
                 </h1>
             </section>
 
+            {/* Tira de texto en movimiento */}
             <Marquee text="DISEÑADO EN CIUDAD DE MÉXICO // PROBADO EN EL INFIERNO URBANO" />
 
             {/* 2. TEXTO EDITORIAL */}

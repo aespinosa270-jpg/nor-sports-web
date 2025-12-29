@@ -6,22 +6,19 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { IoBagOutline, IoMenuOutline } from "react-icons/io5";
 import { CartDrawer } from "./CartDrawer";
 import { MobileMenu } from "./MobileMenu";
-import { useCartStore } from "@/store/cartStore"; // <--- 1. IMPORTAMOS EL CEREBRO
+import { useCartStore } from "@/store/cartStore";
 
 export const Navbar = () => {
-    // YA NO necesitamos el estado local para el carrito (isCartOpen)
-    // const [isCartOpen, setIsCartOpen] = useState(false); <--- BORRADO
-
-    // Estado local para menú móvil (ese sí se queda aquí porque es solo visual)
+    // Estado local solo para menú móvil
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // 2. CONEXIÓN GLOBAL: Traemos las funciones y datos del Store
+    // Conexión al Store Global (Zustand)
     const { openCart, items } = useCartStore();
 
-    // Calculamos la cantidad total de artículos (suma de cantidades)
+    // Calcular total de items
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
-    // Lógica de Scroll (Se mantiene igual)
+    // Lógica de Scroll
     const { scrollY } = useScroll();
     const [hidden, setHidden] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -62,7 +59,7 @@ export const Navbar = () => {
                     NØR
                 </Link>
 
-                {/* LINKS CENTRO (Desktop) */}
+                {/* MENÚ DESKTOP */}
                 <div className="hidden md:flex gap-8 items-center">
                     {[
                         { name: "HOMBRE", href: "/shop/men" },
@@ -84,17 +81,16 @@ export const Navbar = () => {
                     ))}
                 </div>
 
-                {/* ICONOS DERECHA */}
+                {/* ÍCONOS */}
                 <div className="flex items-center gap-6 text-black">
 
-                    {/* BOTÓN CARRITO CONECTADO */}
+                    {/* Botón Carrito */}
                     <button
-                        onClick={openCart} // <--- 3. Usamos la acción global para abrir
+                        onClick={openCart}
                         className="relative group hover:scale-110 transition-transform"
                     >
                         <IoBagOutline size={22} />
 
-                        {/* 4. BADGE REAL: Solo se muestra si hay items */}
                         <AnimatePresence>
                             {cartCount > 0 && (
                                 <motion.span
@@ -119,11 +115,8 @@ export const Navbar = () => {
                 </div>
             </motion.nav>
 
-            {/* IMPORTANTE: El CartDrawer ya no recibe props (isOpen/onClose) 
-               porque ahora se conecta directo al store internamente.
-            */}
+            {/* Componentes Globales */}
             <CartDrawer />
-
             <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
         </>
     );
