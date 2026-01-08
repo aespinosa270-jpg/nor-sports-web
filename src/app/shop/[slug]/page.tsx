@@ -9,7 +9,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-// IMPORTAMOS EL STORE DE ZUSTAND
 import { useCartStore } from "@/store/cartStore";
 
 // Mock Data
@@ -29,6 +28,8 @@ const PRODUCT = {
         "/assets/p1-back.jpg"
     ],
     sizes: ["XS", "S", "M", "L", "XL"],
+    // Agregamos un color por defecto al producto mock
+    color: "Black"
 };
 
 export default function ProductPage({ params }: { params: { slug: string } }) {
@@ -36,22 +37,21 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     const [quantity, setQuantity] = useState(1);
     const [currentImage, setCurrentImage] = useState(0);
 
-    // CONECTAMOS CON LA LÓGICA DEL CARRITO
     const { addItem, openCart } = useCartStore();
 
-    // FUNCIÓN PARA AGREGAR AL CARRITO
+    // --- AQUÍ ESTABA EL ERROR ---
     const handleAddToCart = () => {
         if (!selectedSize) return;
 
         addItem({
             name: PRODUCT.name,
             price: PRODUCT.price,
-            image: PRODUCT.images[0], // En el futuro usarás la imagen real
+            image: PRODUCT.images[0],
             size: selectedSize,
             quantity: quantity,
+            color: PRODUCT.color, // <--- ¡ESTA LÍNEA ES LA CLAVE! (Ahora es obligatoria)
         });
 
-        // Abrimos el drawer para dar feedback visual inmediato
         openCart();
     };
 
@@ -61,7 +61,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             <div className="container mx-auto px-6 md:px-12">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
-                    {/* --- COLUMNA IZQUIERDA: GALERÍA VISUAL --- */}
+                    {/* --- COLUMNA IZQUIERDA: GALERÍA --- */}
                     <div className="w-full lg:w-3/5 space-y-4">
                         <div className="relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5">
                             <motion.div
@@ -71,7 +71,6 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                 transition={{ duration: 0.4 }}
                                 className="w-full h-full bg-nor-concrete flex items-center justify-center"
                             >
-                                {/* Placeholder visual */}
                                 <div className="text-nor-dark/20 font-mono text-xs tracking-widest">
                                     IMG_SOURCE_0{currentImage + 1} // RENDER_3D
                                 </div>

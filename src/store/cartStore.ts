@@ -1,15 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Definimos cómo se ve un Item en el carrito
 export interface CartItem {
-    id: number;
+    id: string;      // El ID existe en el item...
     name: string;
     price: number;
+    image: string;
     size: string;
-    color: string;
     quantity: number;
-    image?: string;
+    color: string;   // <--- AGREGAMOS COLOR
 }
 
 interface CartState {
@@ -17,15 +16,16 @@ interface CartState {
     isOpen: boolean;
     openCart: () => void;
     closeCart: () => void;
-    addItem: (item: CartItem) => void;
-    removeItem: (id: number, size: string, color: string) => void; // Necesitamos ID+Size+Color para borrar el correcto
+    // AQUÍ ESTÁ EL TRUCO: Usamos Omit<CartItem, 'id'>
+    // Esto le dice a TS: "Pídeme todo MENOS el id, ese lo pongo yo".
+    addItem: (item: Omit<CartItem, 'id'>) => void;
+    removeItem: (id: string) => void;
     clearCart: () => void;
-    total: () => number;
 }
 
 export const useCartStore = create<CartState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             items: [],
             isOpen: false,
 
@@ -33,32 +33,35 @@ export const useCartStore = create<CartState>()(
             closeCart: () => set({ isOpen: false }),
 
             addItem: (newItem) => set((state) => {
-                // Verificar si ya existe el mismo producto (mismo ID, Talla y Color)
-                const existingItemIndex = state.items.findIndex(
-                    item => item.id === newItem.id && item.size === newItem.size && item.color === newItem.color
-                );
+                // Generamos ID único combinando nombre, talla y color
+                const uniqueId = `${newItem.name}-${newItem.size}-${newItem.color}`;
 
-                if (existingItemIndex > -1) {
-                    // Si existe, incrementamos cantidad
-                    const updatedItems = [...state.items];
-                    updatedItems[existingItemIndex].quantity += 1;
-                    return { items: updatedItems, isOpen: true }; // Abrimos el carrito al añadir
+                const existingItem = state.items.find((i) => i.id === uniqueId);
+
+                if (existingItem) {
+                    return {
+                        items: state.items.map((i) =>
+                            i.id === uniqueId ? { ...i, quantity: i.quantity + newItem.quantity } : i
+                        ),
+                        isOpen: true,
+                    };
                 }
 
-                // Si no, lo agregamos nuevo
-                return { items: [...state.items, { ...newItem, quantity: 1 }], isOpen: true };
+                // Aquí agregamos el ID generado al objeto final
+                return {
+                    items: [...state.items, { ...newItem, id: uniqueId }],
+                    isOpen: true,
+                };
             }),
 
-            removeItem: (id, size, color) => set((state) => ({
-                items: state.items.filter(item => !(item.id === id && item.size === size && item.color === color))
+            removeItem: (id) => set((state) => ({
+                items: state.items.filter((i) => i.id !== id),
             })),
 
             clearCart: () => set({ items: [] }),
-
-            total: () => get().items.reduce((acc, item) => acc + (item.price * item.quantity), 0),
         }),
         {
-            name: 'nor-cart-storage', // Guarda el carrito en LocalStorage (no se borra al recargar)
+            name: 'nor-cart-storage',
         }
     )
 );
