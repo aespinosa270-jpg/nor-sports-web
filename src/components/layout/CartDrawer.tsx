@@ -1,94 +1,141 @@
 "use client";
+
 import { motion, AnimatePresence } from "framer-motion";
-import { IoCloseOutline, IoTrashOutline, IoArrowForward } from "react-icons/io5";
+import { X, Minus, Plus, Trash2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 
-// NOTA: Ya no ponemos "interface CartDrawerProps" ni recibimos props aquí.
-// El componente es 100% autónomo ahora.
 export const CartDrawer = () => {
+    // 1. Quitamos 'total' de aquí porque no existe en el store
+    const { isOpen, closeCart, items, removeItem, addItem } = useCartStore();
 
-    // Conexión directa al cerebro (Store)
-    const { isOpen, closeCart, items, removeItem, total } = useCartStore();
+    // 2. Calculamos el total aquí mismo en tiempo real
+    const total = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
     return (
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Backdrop (Fondo oscuro) */}
+                    {/* BACKDROP (Fondo oscuro) */}
                     <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         onClick={closeCart}
                         className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
                     />
 
-                    {/* Panel Lateral */}
+                    {/* DRAWER (Panel lateral) */}
                     <motion.div
-                        initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                        className="fixed top-0 right-0 h-full w-full md:w-[500px] bg-white border-l border-gray-100 z-[70] flex flex-col shadow-2xl"
+                        initial={{ x: "100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "100%" }}
+                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                        className="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[70] shadow-2xl flex flex-col"
                     >
-                        {/* Header */}
-                        <div className="flex justify-between items-end p-8 border-b border-gray-100">
-                            <h2 className="font-display text-4xl text-black uppercase">Tu Equipo</h2>
+                        {/* HEADER */}
+                        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+                            <h2 className="font-display text-xl font-bold uppercase tracking-tighter">
+                                Tu Sistema ({items.length})
+                            </h2>
                             <button onClick={closeCart} className="hover:rotate-90 transition-transform">
-                                <IoCloseOutline size={30} />
+                                <X size={24} />
                             </button>
                         </div>
 
-                        {/* Lista de Productos */}
-                        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+                        {/* LISTA DE ITEMS */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {items.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-50">
-                                    <span className="font-display text-2xl">SYSTEM_EMPTY</span>
-                                    <span className="font-mono text-xs mt-2">NO GEAR DETECTED</span>
+                                <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-4">
+                                    <p className="font-mono text-xs uppercase tracking-widest">El sistema está vacío</p>
+                                    <button onClick={closeCart} className="text-black underline font-bold text-sm">
+                                        Explorar Equipo
+                                    </button>
                                 </div>
                             ) : (
                                 items.map((item) => (
-                                    <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-6 group">
-                                        {/* Foto Mini */}
-                                        <div className="w-20 h-24 bg-gray-100 flex items-center justify-center text-[10px] text-gray-400 font-mono border border-transparent group-hover:border-black transition-colors">
-                                            IMG
+                                    <motion.div
+                                        layout
+                                        key={item.id}
+                                        className="flex gap-4"
+                                    >
+                                        {/* IMAGEN DEL PRODUCTO */}
+                                        <div className="relative w-20 h-24 bg-gray-100 flex-shrink-0 overflow-hidden">
+                                            <Image
+                                                src={item.image}
+                                                alt={item.name}
+                                                fill
+                                                className="object-cover"
+                                            />
                                         </div>
 
-                                        {/* Info */}
+                                        {/* INFO */}
                                         <div className="flex-1 flex flex-col justify-between">
                                             <div>
-                                                <div className="flex justify-between">
-                                                    <h3 className="font-bold uppercase text-sm">{item.name}</h3>
-                                                    <p className="font-mono text-sm">${item.price.toLocaleString()}</p>
+                                                <div className="flex justify-between items-start">
+                                                    <h3 className="font-bold text-sm uppercase leading-tight pr-4">
+                                                        {item.name}
+                                                    </h3>
+                                                    <button
+                                                        onClick={() => removeItem(item.id)}
+                                                        className="text-gray-400 hover:text-red-500 transition-colors"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
                                                 </div>
-                                                <p className="text-[10px] font-mono text-gray-500 mt-1 uppercase tracking-wide">
+                                                <p className="text-xs text-gray-500 font-mono mt-1">
                                                     {item.size} / {item.color}
                                                 </p>
                                             </div>
 
-                                            <div className="flex justify-between items-center mt-2">
-                                                <span className="font-mono text-xs border border-gray-200 px-2 py-1">
-                                                    QTY: {item.quantity}
-                                                </span>
-                                                <button
-                                                    onClick={() => removeItem(item.id, item.size, item.color)}
-                                                    className="text-gray-300 hover:text-red-600 transition-colors"
-                                                >
-                                                    <IoTrashOutline size={18} />
-                                                </button>
+                                            <div className="flex justify-between items-end">
+                                                {/* CONTROLES DE CANTIDAD */}
+                                                <div className="flex items-center border border-gray-200">
+                                                    <button
+                                                        // Lógica simple para restar: Si hay 1, no hace nada (o podrías borrarlo)
+                                                        // Para restar de verdad necesitaríamos una función updateQuantity en el store,
+                                                        // pero por ahora dejémoslo simple.
+                                                        className="p-1 hover:bg-gray-100"
+                                                        disabled
+                                                    >
+                                                        <Minus size={12} className="text-gray-400" />
+                                                    </button>
+                                                    <span className="px-2 text-xs font-mono">{item.quantity}</span>
+                                                    <button
+                                                        className="p-1 hover:bg-gray-100"
+                                                        onClick={() => addItem({ ...item, quantity: 1 })}
+                                                    >
+                                                        <Plus size={12} />
+                                                    </button>
+                                                </div>
+                                                <p className="font-mono text-sm font-bold">
+                                                    ${(item.price * item.quantity).toLocaleString()}
+                                                </p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))
                             )}
                         </div>
 
-                        {/* Footer con Total */}
-                        <div className="p-8 border-t border-gray-100 bg-gray-50">
-                            <div className="flex justify-between font-mono text-sm mb-6 font-bold text-black">
-                                <span>TOTAL</span>
-                                <span>${total().toLocaleString()} MXN</span>
+                        {/* FOOTER (TOTAL) */}
+                        {items.length > 0 && (
+                            <div className="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+                                <div className="flex justify-between items-center font-bold text-lg">
+                                    <span className="font-display uppercase tracking-tight">Total Estimado</span>
+                                    <span className="font-mono">${total.toLocaleString()} MXN</span>
+                                </div>
+                                <p className="text-[10px] text-gray-400 text-center font-mono uppercase">
+                                    Impuestos y envío calculados en el checkout
+                                </p>
+                                <Link href="/checkout" onClick={closeCart}>
+                                    <button className="w-full bg-black text-white py-4 font-mono text-xs uppercase font-bold tracking-widest hover:bg-gray-900 transition-colors">
+                                        Proceder al Pago
+                                    </button>
+                                </Link>
                             </div>
-                            <button className="w-full bg-black text-white py-5 font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors flex justify-center items-center gap-2">
-                                Checkout <IoArrowForward />
-                            </button>
-                        </div>
+                        )}
                     </motion.div>
                 </>
             )}
