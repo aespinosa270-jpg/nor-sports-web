@@ -1,55 +1,149 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
-const config: Config = {
-    content: [
-        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    ],
-    theme: {
-        extend: {
-            // 1. TIPOGRAFÍA (Conectada a layout.tsx)
-            fontFamily: {
-                display: ["var(--font-display)", "sans-serif"], // Syncopate (Títulos Gigantes)
-                mono: ["var(--font-mono)", "monospace"],       // Space Mono (Datos Técnicos)
-                body: ["var(--font-body)", "sans-serif"],       // Inter Tight (Textos Largos - NUEVO)
-            },
-
-            // 2. PALETA DE COLORES "CLINICAL BRUTALISM"
-            colors: {
-                nor: {
-                    black: "#050505",    // Negro profundo (no 000000 para evitar ghosting en OLED)
-                    dark: "#1a1a1a",     // Gris oscuro para UI secundaria
-                    concrete: "#f3f4f6", // Gris muy claro para fondos de tarjetas en tema blanco
-                    white: "#fcfcfc",    // Blanco "papel" (menos agresivo que #ffffff)
-                    accent: "#FF3333",   // Rojo industrial (opcional, para alertas o CTAs)
-                }
-            },
-
-            // 3. ANIMACIONES PERSONALIZADAS
-            animation: {
-                'blink': 'blink 1s step-end infinite', // Para el cursor "_"
-                'slow-spin': 'spin 10s linear infinite', // Para elementos decorativos
-                'marquee': 'marquee 25s linear infinite', // Para cintas de texto en movimiento
-            },
-            keyframes: {
-                blink: {
-                    '0%, 100%': { opacity: '1' },
-                    '50%': { opacity: '0' },
-                },
-                marquee: {
-                    '0%': { transform: 'translateX(0%)' },
-                    '100%': { transform: 'translateX(-100%)' },
-                }
-            },
-
-            // 4. TAMAÑOS DE FUENTE EXTREMOS
-            fontSize: {
-                '10xl': '10rem',
-                '12xl': '12rem', // Para el "NØR" gigante del Hero
-            }
-        },
+const config = {
+	darkMode: ["class"],
+	content: [
+		// Rutas para estructura con 'src'
+		'./src/pages/**/*.{ts,tsx}',
+		'./src/components/**/*.{ts,tsx}',
+		'./src/app/**/*.{ts,tsx}',
+		// Rutas para estructura sin 'src' (Raíz)
+		'./pages/**/*.{ts,tsx}',
+		'./components/**/*.{ts,tsx}',
+		'./app/**/*.{ts,tsx}',
+	],
+	prefix: "",
+	theme: {
+    	container: {
+    		center: true,
+    		padding: '2rem',
+    		screens: {
+    			'2xl': '1400px'
+    		}
+    	},
+    	extend: {
+    		fontFamily: {
+    			display: [
+    				'var(--font-display)',
+    				'sans-serif'
+    			],
+    			mono: [
+    				'var(--font-mono)',
+    				'monospace'
+    			],
+    			body: [
+    				'var(--font-body)',
+    				'sans-serif'
+    			]
+    		},
+    		colors: {
+    			nor: {
+    				black: '#050505',
+    				dark: '#1a1a1a',
+    				concrete: '#f3f4f6',
+    				white: '#fcfcfc',
+    				accent: '#FF3333'
+    			},
+    			border: 'hsl(var(--border))',
+    			input: 'hsl(var(--input))',
+    			ring: 'hsl(var(--ring))',
+    			background: 'hsl(var(--background))',
+    			foreground: 'hsl(var(--foreground))',
+    			primary: {
+    				DEFAULT: 'hsl(var(--primary))',
+    				foreground: 'hsl(var(--primary-foreground))'
+    			},
+    			secondary: {
+    				DEFAULT: 'hsl(var(--secondary))',
+    				foreground: 'hsl(var(--secondary-foreground))'
+    			},
+    			destructive: {
+    				DEFAULT: 'hsl(var(--destructive))',
+    				foreground: 'hsl(var(--destructive-foreground))'
+    			},
+    			muted: {
+    				DEFAULT: 'hsl(var(--muted))',
+    				foreground: 'hsl(var(--muted-foreground))'
+    			},
+    			accent: {
+    				DEFAULT: 'hsl(var(--accent))',
+    				foreground: 'hsl(var(--accent-foreground))'
+    			},
+    			popover: {
+    				DEFAULT: 'hsl(var(--popover))',
+    				foreground: 'hsl(var(--popover-foreground))'
+    			},
+    			card: {
+    				DEFAULT: 'hsl(var(--card))',
+    				foreground: 'hsl(var(--card-foreground))'
+    			}
+    		},
+    		borderRadius: {
+    			lg: 'var(--radius)',
+    			md: 'calc(var(--radius) - 2px)',
+    			sm: 'calc(var(--radius) - 4px)'
+    		},
+    		keyframes: {
+    			'accordion-down': {
+    				from: {
+    					height: '0'
+    				},
+    				to: {
+    					height: 'var(--radix-accordion-content-height)'
+    				}
+    			},
+    			'accordion-up': {
+    				from: {
+    					height: 'var(--radix-accordion-content-height)'
+    				},
+    				to: {
+    					height: '0'
+    				}
+    			},
+    			blink: {
+    				'0%, 100%': {
+    					opacity: '1'
+    				},
+    				'50%': {
+    					opacity: '0'
+    				}
+    			},
+    			marquee: {
+    				'0%': {
+    					transform: 'translateX(0%)'
+    				},
+    				'100%': {
+    					transform: 'translateX(-100%)'
+    				}
+    			},
+    			'accordion-down': {
+    				from: {
+    					height: '0'
+    				},
+    				to: {
+    					height: 'var(--radix-accordion-content-height)'
+    				}
+    			},
+    			'accordion-up': {
+    				from: {
+    					height: 'var(--radix-accordion-content-height)'
+    				},
+    				to: {
+    					height: '0'
+    				}
+    			}
+    		},
+    		animation: {
+    			'accordion-down': 'accordion-down 0.2s ease-out',
+    			'accordion-up': 'accordion-up 0.2s ease-out',
+    			blink: 'blink 1s step-end infinite',
+    			marquee: 'marquee 25s linear infinite',
+    			'accordion-down': 'accordion-down 0.2s ease-out',
+    			'accordion-up': 'accordion-up 0.2s ease-out'
+    		}
+    	}
     },
-    plugins: [],
-};
-export default config;
+	plugins: [require("tailwindcss-animate")],
+} satisfies Config
+
+export default config

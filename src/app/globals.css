@@ -2,34 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 245, 245, 245;
+@layer base {
+  :root {
+    /* PALETA NØR: CLINICAL WHITE */
+    --background: 0 0% 100%;
+    /* Blanco puro estéril */
+    --foreground: 0 0% 0%;
+    /* Negro absoluto */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 0 0% 0%;
+    /* Botones negros */
+    --primary-foreground: 0 0% 100%;
+    /* Texto blanco */
+
+    --secondary: 0 0% 96%;
+    /* Gris muy sutil para fondos secundarios */
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* BORDES: Un poco más oscuros que el default para que se noten las líneas */
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 0%;
+
+    /* RADIUS: CERO ABSOLUTO (La clave del brutalismo) */
+    --radius: 0px;
+  }
+
+  .dark {
+    /* PALETA DARK MODE: TACTICAL BLACK (Por si el usuario cambia) */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 80%;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-  /* Quitamos el overflow hidden global para que el scroll se sienta natural */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* ESTILO DE SELECCIÓN HIGH-FASHION */
+  ::selection {
+    background-color: #000;
+    /* Fondo negro al seleccionar */
+    color: #fff;
+    /* Texto blanco */
+  }
 }
 
-/* Scrollbar estilo Adidas/Moderno (delgada y discreta) */
+/* Scrollbar estilo Industrial (Minimalista) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  /* Más fina aún */
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000;
+  background: #d4d4d4;
+  /* Gris claro sutil */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333;
+  background: #000;
+  /* Se pone negro al interactuar */
 }

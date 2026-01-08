@@ -2,61 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { IoBagOutline, IoMenuOutline } from "react-icons/io5";
 import { CartDrawer } from "./CartDrawer";
 import { MobileMenu } from "./MobileMenu";
 import { useCartStore } from "@/store/cartStore";
 
 export const Navbar = () => {
-    // Estado local solo para menú móvil
+    // Estado local para menú móvil
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // Conexión al Store Global (Zustand)
+    // Conexión al Store Global
     const { openCart, items } = useCartStore();
 
-    // Calcular total de items
+    // Total de items
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
-
-    // Lógica de Scroll
-    const { scrollY } = useScroll();
-    const [hidden, setHidden] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious() || 0;
-        if (latest > previous && latest > 150) {
-            setHidden(true);
-        } else {
-            setHidden(false);
-        }
-        if (latest > 10) {
-            setIsScrolled(true);
-        } else {
-            setIsScrolled(false);
-        }
-    });
 
     return (
         <>
-            <motion.nav
-                variants={{
-                    visible: { y: 0 },
-                    hidden: { y: "-100%" },
-                }}
-                animate={hidden ? "hidden" : "visible"}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 flex justify-between items-center transition-all duration-300 ${isScrolled
-                    ? "bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm py-3"
-                    : "bg-transparent border-transparent py-5"
-                    }`}
-            >
-                {/* LOGO */}
-                <Link
-                    href="/"
-                    className="relative z-50 font-display text-3xl md:text-4xl font-bold tracking-tighter text-black uppercase"
-                >
-                    NØR
+            {/* NAV BLANCO, FIJO Y SÓLIDO */}
+            <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-12 flex justify-between items-center bg-white border-b border-gray-100 py-4 shadow-sm">
+
+                {/* LOGO MÁS GRANDE */}
+                <Link href="/" className="relative z-50 block">
+                    <Image
+                        src="/assets/Nor.png"
+                        alt="NØR"
+                        width={160} // <--- AUMENTADO (Antes 90)
+                        height={55} // <--- AUMENTADO PROPORCIONALMENTE
+                        // 'invert' para que se vea negro (si la imagen original es blanca)
+                        className="object-contain invert"
+                        priority
+                    />
                 </Link>
 
                 {/* MENÚ DESKTOP */}
@@ -113,9 +91,8 @@ export const Navbar = () => {
                         <IoMenuOutline />
                     </button>
                 </div>
-            </motion.nav>
+            </nav>
 
-            {/* Componentes Globales */}
             <CartDrawer />
             <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
         </>
