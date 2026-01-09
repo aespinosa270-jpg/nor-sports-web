@@ -4,94 +4,113 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { IoBagOutline, IoMenuOutline } from "react-icons/io5";
+import { IoBagOutline, IoMenuOutline, IoSearchOutline, IoHeartOutline } from "react-icons/io5";
 import { CartDrawer } from "./CartDrawer";
 import { MobileMenu } from "./MobileMenu";
 import { useCartStore } from "@/store/cartStore";
 
 export const Navbar = () => {
-    // Estado local para menú móvil
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    // Conexión al Store Global
     const { openCart, items } = useCartStore();
-
-    // Total de items
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
     return (
         <>
-            {/* NAV BLANCO, FIJO Y SÓLIDO */}
-            <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-12 flex justify-between items-center bg-white border-b border-gray-100 py-4 shadow-sm">
+            {/* WRAPPER FIJO */}
+            <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-sans">
 
-                {/* LOGO MÁS GRANDE */}
-                <Link href="/" className="relative z-50 block">
-                    <Image
-                        src="/assets/Nor.png"
-                        alt="NØR"
-                        width={160} // <--- AUMENTADO (Antes 90)
-                        height={55} // <--- AUMENTADO PROPORCIONALMENTE
-                        // 'invert' para que se vea negro (si la imagen original es blanca)
-                        className="object-contain invert"
-                        priority
-                    />
-                </Link>
-
-                {/* MENÚ DESKTOP */}
-                <div className="hidden md:flex gap-8 items-center">
-                    {[
-                        { name: "HOMBRE", href: "/shop/men" },
-                        { name: "MUJER", href: "/shop/women" },
-                        { name: "LABORATORIO", href: "/about" }
-                    ].map((item, i) => (
-                        <Link
-                            key={i}
-                            href={item.href}
-                            className="relative group font-mono text-xs font-bold tracking-widest text-black overflow-hidden"
-                        >
-                            <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">
-                                {item.name}
-                            </span>
-                            <span className="absolute left-0 top-0 inline-block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-gray-500">
-                                {item.name}
-                            </span>
-                        </Link>
-                    ))}
+                {/* 1. TOP BAR (Limpia: Solo info relevante de NØR) */}
+                <div className="hidden md:flex justify-between items-center px-12 py-2 bg-[#F5F5F5] text-[11px] font-bold text-gray-500">
+                    <div className="flex gap-4">
+                        {/* AQUI QUITAMOS JORDAN/CONVERSE */}
+                        <span className="cursor-default tracking-widest">NØR SYSTEMS // CDMX</span>
+                    </div>
+                    <div className="flex gap-4">
+                        <Link href="/help" className="hover:text-black transition-colors">Ayuda</Link>
+                        <span>|</span>
+                        <Link href="/account" className="hover:text-black transition-colors">Mi Cuenta</Link>
+                    </div>
                 </div>
 
-                {/* ÍCONOS */}
-                <div className="flex items-center gap-6 text-black">
+                {/* 2. NAVBAR PRINCIPAL */}
+                <nav className="px-6 md:px-12 h-16 flex justify-between items-center bg-white">
 
-                    {/* Botón Carrito */}
-                    <button
-                        onClick={openCart}
-                        className="relative group hover:scale-110 transition-transform"
-                    >
-                        <IoBagOutline size={22} />
+                    {/* LOGO */}
+                    <Link href="/" className="relative z-50 block">
+                        <Image
+                            src="/assets/Nor.png"
+                            alt="NØR"
+                            width={120}
+                            height={40}
+                            className="object-contain invert"
+                            priority
+                        />
+                    </Link>
 
-                        <AnimatePresence>
-                            {cartCount > 0 && (
-                                <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    exit={{ scale: 0 }}
-                                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-black text-white text-[9px] font-mono flex items-center justify-center rounded-full"
-                                >
-                                    {cartCount}
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
-                    </button>
+                    {/* MENÚ CENTRADO */}
+                    <div className="hidden md:flex gap-8 absolute left-1/2 -translate-x-1/2">
+                        {[
+                            { name: "Nuevos Lanzamientos", href: "/new" },
+                            { name: "Hombre", href: "/shop/men" },
+                            { name: "Mujer", href: "/shop/women" },
+                            { name: "Rebajas", href: "/sale" }
+                        ].map((item, i) => (
+                            <Link
+                                key={i}
+                                href={item.href}
+                                className="text-base font-bold text-black hover:border-b-2 hover:border-black py-4 transition-all"
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </div>
 
-                    {/* Botón Menú Móvil */}
-                    <button
-                        onClick={() => setIsMobileMenuOpen(true)}
-                        className="md:hidden text-2xl hover:opacity-60 transition-opacity"
-                    >
-                        <IoMenuOutline />
-                    </button>
+                    {/* ÍCONOS DERECHA */}
+                    <div className="flex items-center gap-4 md:gap-6 text-black">
+
+                        {/* Buscador */}
+                        <div className="hidden md:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2 hover:bg-[#E5E5E5] transition-colors cursor-pointer group w-44">
+                            <IoSearchOutline size={20} className="text-black group-hover:scale-110 transition-transform" />
+                            <span className="ml-2 text-xs font-bold text-gray-400 group-hover:text-gray-600">Buscar</span>
+                        </div>
+
+                        {/* Favoritos */}
+                        <button className="hidden md:block hover:scale-110 transition-transform rounded-full p-2 hover:bg-gray-100">
+                            <IoHeartOutline size={24} />
+                        </button>
+
+                        {/* Bolsa */}
+                        <button onClick={openCart} className="relative hover:scale-110 transition-transform rounded-full p-2 hover:bg-gray-100">
+                            <IoBagOutline size={24} />
+                            <AnimatePresence>
+                                {cartCount > 0 && (
+                                    <motion.span
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        exit={{ scale: 0 }}
+                                        className="absolute top-1 right-0 w-4 h-4 bg-black text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white"
+                                    >
+                                        {cartCount}
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </button>
+
+                        {/* Menú Móvil */}
+                        <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden text-2xl">
+                            <IoMenuOutline />
+                        </button>
+                    </div>
+                </nav>
+
+                {/* 3. BANNER PROMO */}
+                <div className="bg-[#F5F5F5] py-2 text-center border-t border-gray-200">
+                    <p className="text-[11px] md:text-xs font-bold text-black uppercase tracking-wide">
+                        Envíos gratis a todo México • <Link href="/sale" className="underline">Ver detalles</Link>
+                    </p>
                 </div>
-            </nav>
+
+            </header>
 
             <CartDrawer />
             <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
