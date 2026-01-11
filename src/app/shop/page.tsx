@@ -5,8 +5,8 @@ import { getAllProducts } from "@/lib/data";
 import { ProductCard } from "@/components/home/ProductCard";
 import { useState, useMemo } from "react";
 
-// Helper para quitar acentos y pasar a minúsculas (Ej: "Piqué" -> "pique")
-const normalizeText = (text) => {
+// CORRECCIÓN AQUÍ: Le decimos a TS que 'text' puede ser un string o undefined
+const normalizeText = (text: string | undefined) => {
     return text
         ? text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         : "";
@@ -15,13 +15,13 @@ const normalizeText = (text) => {
 const FILTERS = ["Todo", "Micropiqué", "Piqué Vera", "Micropanal"];
 
 export default function ShopPage() {
-    // 1. Obtener datos (asumiendo que es data estática o síncrona)
+    // 1. Obtener datos
     const allProducts = getAllProducts();
 
     // 2. Estado del filtro activo
     const [activeFilter, setActiveFilter] = useState("Todo");
 
-    // 3. Lógica de Filtrado (Optimizada con useMemo para rendimiento)
+    // 3. Lógica de Filtrado
     const displayedProducts = useMemo(() => {
         // A. Primero filtramos que sean SOLO playeras (Filtro Duro)
         const tshirts = allProducts.filter(product => {
@@ -88,7 +88,7 @@ export default function ShopPage() {
                         key={product.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.05, duration: 0.4 }} // Delay más rápido para sensación snappier
+                        transition={{ delay: i * 0.05, duration: 0.4 }}
                         className="h-full"
                     >
                         <ProductCard product={product} />
