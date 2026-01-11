@@ -7,39 +7,57 @@ export const HeroSection = () => {
     return (
         <section className="relative w-full h-screen overflow-hidden bg-nor-black">
 
-            {/* IMAGEN DE FONDO */}
-            <Image
-                src="/assets/heroman.jpg"
-                alt="NØR Campaign"
-                fill
-                className="object-cover object-center z-0"
-                priority
-                quality={100}
-            />
+            {/* --- FIX IMAGEN: ART DIRECTION --- */}
 
-            {/* OVERLAY SUTIL (Para que el texto blanco resalte sí o sí) */}
-            <div className="absolute inset-0 bg-black/10 z-10" />
+            {/* 1. IMAGEN DESKTOP (Se oculta en mobile) */}
+            <div className="hidden md:block absolute inset-0 z-0">
+                <Image
+                    src="/assets/K12.jpg" // Tu imagen horizontal original
+                    alt="NØR Campaign Desktop"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                    quality={90} // 100 es overkill y pesa mucho, 90 es sweet spot
+                    sizes="100vw" // Importante para que Next sepa qué tamaño servir
+                />
+            </div>
 
-            {/* CONTENIDO ESTILO NIKE: Izquierda Abajo */}
+            {/* 2. IMAGEN MOBILE (Solo se ve en cel) 
+               * AQUÍ es donde subes la versión vertical que editaste/mejoraste 
+               * para que tenga la densidad de píxeles correcta sin hacer zoom digital.
+            */}
+            <div className="block md:hidden absolute inset-0 z-0">
+                <Image
+                    src="/assets/B55.jpg" // <--- CRUCIAL: Usa un crop vertical nativo aquí
+                    alt="NØR Campaign Mobile"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                    quality={90}
+                    sizes="100vw"
+                />
+            </div>
+
+            {/* --- FIN FIX IMAGEN --- */}
+
+            {/* OVERLAY SUTIL */}
+            <div className="absolute inset-0 bg-black/20 z-10" /> {/* Subí un poco la opacidad a 20 para contraste móvil */}
+
+            {/* CONTENIDO */}
             <div className="absolute bottom-20 left-6 md:left-12 z-20 max-w-2xl text-white">
-
-                {/* Subtítulo pequeño */}
-                <p className="font-bold text-sm md:text-base mb-2 uppercase tracking-wide">
+                <p className="font-bold text-sm md:text-base mb-2 uppercase tracking-wide text-gray-300">
                     NØR Tech Fleece
                 </p>
 
-                {/* TÍTULO MASIVO "HEAVY" */}
-                <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.9] mb-6 drop-shadow-lg">
+                <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl">
                     IMPULSO <br />
                     INFINITO
                 </h1>
 
-                {/* DESCRIPCIÓN CORTA */}
-                <p className="font-medium text-base md:text-lg mb-8 max-w-md leading-snug drop-shadow-md">
+                <p className="font-medium text-base md:text-lg mb-8 max-w-md leading-snug drop-shadow-md text-gray-100">
                     Diseñado para el movimiento. Ingeniería térmica que se adapta a tu cuerpo en cada sprint.
                 </p>
 
-                {/* BOTONES "PILL" (REDONDEADOS) - CLAVE DEL ESTILO NIKE */}
                 <div className="flex flex-wrap gap-4">
                     <Link href="/shop/men">
                         <button className="bg-white text-black px-8 py-3 rounded-full font-bold text-sm md:text-base hover:bg-gray-200 transition-colors active:scale-95">
@@ -47,14 +65,12 @@ export const HeroSection = () => {
                         </button>
                     </Link>
                     <Link href="/shop/women">
-                        <button className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold text-sm md:text-base hover:bg-white hover:text-black transition-all active:scale-95">
+                        <button className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold text-sm md:text-base hover:bg-white hover:text-black transition-all active:scale-95 backdrop-blur-sm">
                             Comprar Mujer
                         </button>
                     </Link>
                 </div>
-
             </div>
-
         </section>
     );
 };

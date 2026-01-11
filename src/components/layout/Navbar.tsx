@@ -19,16 +19,15 @@ export const Navbar = () => {
             {/* WRAPPER FIJO */}
             <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-sans">
 
-                {/* 1. TOP BAR (Limpia: Solo info relevante de NØR) */}
+                {/* 1. TOP BAR (Información Técnica / Estado del Sistema) */}
                 <div className="hidden md:flex justify-between items-center px-12 py-2 bg-[#F5F5F5] text-[11px] font-bold text-gray-500">
                     <div className="flex gap-4">
-                        {/* AQUI QUITAMOS JORDAN/CONVERSE */}
-                        <span className="cursor-default tracking-widest">NØR SYSTEMS // CDMX</span>
+                        <span className="cursor-default tracking-widest">NØR SYSTEMS // FW25</span>
                     </div>
                     <div className="flex gap-4">
-                        <Link href="/help" className="hover:text-black transition-colors">Ayuda</Link>
+                        <Link href="/norlab" className="hover:text-black transition-colors">Estado del Sistema: ONLINE</Link>
                         <span>|</span>
-                        <Link href="/account" className="hover:text-black transition-colors">Mi Cuenta</Link>
+                        <Link href="/help" className="hover:text-black transition-colors">Soporte</Link>
                     </div>
                 </div>
 
@@ -47,18 +46,16 @@ export const Navbar = () => {
                         />
                     </Link>
 
-                    {/* MENÚ CENTRADO */}
-                    <div className="hidden md:flex gap-8 absolute left-1/2 -translate-x-1/2">
+                    {/* MENÚ CENTRADO (Simplificado: Colección + NorLab) */}
+                    <div className="hidden md:flex gap-12 absolute left-1/2 -translate-x-1/2">
                         {[
-                            { name: "Nuevos Lanzamientos", href: "/new" },
-                            { name: "Hombre", href: "/shop/men" },
-                            { name: "Mujer", href: "/shop/women" },
-                            { name: "Rebajas", href: "/sale" }
+                            { name: "Colección", href: "/shop" },    // <--- Única sección de compra
+                            { name: "Nor-Lab", href: "/norlab" }      // <--- Sección de Tecnología
                         ].map((item, i) => (
                             <Link
                                 key={i}
                                 href={item.href}
-                                className="text-base font-bold text-black hover:border-b-2 hover:border-black py-4 transition-all"
+                                className="text-base font-black uppercase tracking-tight text-black hover:text-gray-600 transition-colors"
                             >
                                 {item.name}
                             </Link>
@@ -71,7 +68,7 @@ export const Navbar = () => {
                         {/* Buscador */}
                         <div className="hidden md:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2 hover:bg-[#E5E5E5] transition-colors cursor-pointer group w-44">
                             <IoSearchOutline size={20} className="text-black group-hover:scale-110 transition-transform" />
-                            <span className="ml-2 text-xs font-bold text-gray-400 group-hover:text-gray-600">Buscar</span>
+                            <span className="ml-2 text-xs font-bold text-gray-400 group-hover:text-gray-600">Buscar ID...</span>
                         </div>
 
                         {/* Favoritos */}
@@ -103,10 +100,10 @@ export const Navbar = () => {
                     </div>
                 </nav>
 
-                {/* 3. BANNER PROMO */}
+                {/* 3. BANNER (Mensaje técnico) */}
                 <div className="bg-[#F5F5F5] py-2 text-center border-t border-gray-200">
                     <p className="text-[11px] md:text-xs font-bold text-black uppercase tracking-wide">
-                        Envíos gratis a todo México • <Link href="/sale" className="underline">Ver detalles</Link>
+                        Arquitectura modular disponible • <Link href="/shop" className="underline">Ver Sistema</Link>
                     </p>
                 </div>
 
