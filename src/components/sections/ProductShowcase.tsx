@@ -1,55 +1,15 @@
 "use client";
 
 import Link from "next/link";
-// Asegúrate de que la ruta al ProductCard sea correcta según tu estructura
-import { ProductCard } from "../home/ProductCard";
-
-// Mock Data Mejorada (Simulando variantes reales)
-const PRODUCTS = [
-    {
-        id: 1,
-        name: "AERO-DRY SHELL",
-        price: 2890,
-        tag: "WATERPROOF",
-        variants: [
-            { colorName: "Onyx", colorHex: "#111111", image: "/assets/p1-black.jpg" },
-            { colorName: "Concrete", colorHex: "#888888", image: "/assets/p1-gray.jpg" }
-        ]
-    },
-    {
-        id: 2,
-        name: "KINETIC TIGHTS",
-        price: 1200,
-        tag: "COMPRESSION",
-        variants: [
-            { colorName: "Black", colorHex: "#000000", image: "/assets/p2-black.jpg" },
-            { colorName: "Navy", colorHex: "#1a2b4b", image: "/assets/p2-navy.jpg" }
-        ]
-    },
-    {
-        id: 3,
-        name: "CORE VEST V2",
-        price: 1850,
-        tag: "THERMAL",
-        variants: [
-            { colorName: "Olive", colorHex: "#4b5320", image: "/assets/p3-olive.jpg" },
-            { colorName: "Sand", colorHex: "#d2b48c", image: "/assets/p3-sand.jpg" },
-            { colorName: "Onyx", colorHex: "#111111", image: "/assets/p3-black.jpg" }
-        ]
-    },
-    {
-        id: 4,
-        name: "TECH RUNNER",
-        price: 3200,
-        tag: "FOOTWEAR",
-        variants: [
-            { colorName: "Ghost", colorHex: "#f0f0f0", image: "/assets/p4-white.jpg" },
-            { colorName: "Volt", colorHex: "#ccff00", image: "/assets/p4-volt.jpg" }
-        ]
-    },
-];
+// Usamos el alias @ para evitar líos con los puntos ../
+import { ProductCard } from "@/components/home/ProductCard";
+import { getFeaturedProducts } from "@/lib/data"; // <--- AQUÍ ESTÁ LA MAGIA
 
 export const ProductShowcase = () => {
+    // Jalamos los productos reales desde tu archivo central
+    // Esto traerá los primeros 4 productos que definiste en data.ts
+    const products = getFeaturedProducts();
+
     return (
         <section className="px-6 md:px-12 py-24 bg-nor-white text-nor-black border-t border-nor-dark/10">
 
@@ -64,9 +24,9 @@ export const ProductShowcase = () => {
                     </h2>
                 </div>
 
-                {/* Enlace 'Ver Todo' estilo botón técnico */}
+                {/* Enlace 'Ver Todo' */}
                 <Link
-                    href="/shop"
+                    href="/shop" // Esto ya lleva a tu catálogo real
                     className="hidden md:flex items-center gap-2 font-mono text-xs border border-nor-dark/20 px-8 py-4 hover:bg-nor-black hover:text-white transition-all duration-300 uppercase tracking-widest group"
                 >
                     View Full Catalog
@@ -76,12 +36,13 @@ export const ProductShowcase = () => {
 
             {/* Grid Responsivo */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16">
-                {PRODUCTS.map((product) => (
+                {/* Ahora mapeamos 'products' que viene de la data real */}
+                {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
 
-            {/* Botón Móvil para 'Ver Todo' */}
+            {/* Botón Móvil */}
             <div className="mt-16 md:hidden">
                 <Link
                     href="/shop"

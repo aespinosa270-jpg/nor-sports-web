@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react"; // <--- 1. IMPORTANTE: Agregamos 'use'
+import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Minus, Plus, Ruler } from "lucide-react";
+import { ArrowRight, Minus, Plus, Ruler, Check } from "lucide-react";
 import {
     Accordion,
     AccordionContent,
@@ -10,51 +11,61 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useCartStore } from "@/store/cartStore";
+import { getProductBySlug } from "@/lib/data";
 
-// Mock Data
-const PRODUCT = {
-    name: "AERO-DRY SHELL",
-    price: 2890,
-    description: "Chamarra técnica ultraligera diseñada para climas inestables. Membrana hidrofóbica de 3 capas con costuras selladas térmicamente.",
-    specs: [
-        { label: "Material", value: "100% Nylon Ripstop" },
-        { label: "Weight", value: "240g" },
-        { label: "Fit", value: "Regular / Articulated" },
-        { label: "Tech", value: "DWR Coating / YKK Zippers" },
-    ],
-    images: [
-        "/assets/p1-black.jpg",
-        "/assets/p1-detail.jpg",
-        "/assets/p1-back.jpg"
-    ],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    // Agregamos un color por defecto al producto mock
-    color: "Black"
-};
+const STANDARD_SIZES = ["XS", "S", "M", "L", "XL"];
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
+// 2. IMPORTANTE: Definimos params como una Promesa
+export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+
+    // 3. IMPORTANTE: Desempaquetamos el slug usando el hook 'use'
+    const { slug } = use(params);
+
+    // Ahora sí buscamos el producto usando el slug limpio
+    const product = getProductBySlug(slug);
+
+    // Si no existe, mandamos a 404
+    if (!product) {
+        return (
+            <div className="h-screen flex items-center justify-center bg-nor-white text-nor-black font-mono">
+                PRODUCT_NOT_FOUND // SYSTEM_ERROR
+            </div>
+        );
+    }
+
+    // Unimos la imagen principal con las de las variantes
+    const galleryImages = [product.mainImage, ...product.variants.map(v => v.image)];
+
+    // ESTADOS
     const [selectedSize, setSelectedSize] = useState("");
+    const [selectedVariant, setSelectedVariant] = useState(product.variants[0]);
     const [quantity, setQuantity] = useState(1);
-    const [currentImage, setCurrentImage] = useState(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const { addItem, openCart } = useCartStore();
 
-    // --- AQUÍ ESTABA EL ERROR ---
+    useEffect(() => {
+        if (selectedVariant) {
+            const index = galleryImages.findIndex(img => img === selectedVariant.image);
+            if (index !== -1) setCurrentImageIndex(index);
+        }
+    }, [selectedVariant]);
+
     const handleAddToCart = () => {
         if (!selectedSize) return;
 
         addItem({
-            name: PRODUCT.name,
-            price: PRODUCT.price,
-            image: PRODUCT.images[0],
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: selectedVariant ? selectedVariant.image : product.mainImage,
             size: selectedSize,
             quantity: quantity,
-            color: PRODUCT.color, // <--- ¡ESTA LÍNEA ES LA CLAVE! (Ahora es obligatoria)
+            color: selectedVariant ? selectedVariant.colorName : "Standard",
         });
 
         openCart();
     };
-
     return (
         <main className="min-h-screen bg-nor-white text-nor-black pt-24 md:pt-32 pb-20">
 
@@ -63,53 +74,67 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
                     {/* --- COLUMNA IZQUIERDA: GALERÍA --- */}
                     <div className="w-full lg:w-3/5 space-y-4">
-                        <div className="relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5">
-                            <motion.div
-                                key={currentImage}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4 }}
-                                className="w-full h-full bg-nor-concrete flex items-center justify-center"
-                            >
-                                <div className="text-nor-dark/20 font-mono text-xs tracking-widest">
-                                    IMG_SOURCE_0{currentImage + 1} // RENDER_3D
-                                </div>
-                            </motion.div>
-
+                        <div className="relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5 group">
+                            <motion.img
+                                key={currentImageIndex}
+                                src={galleryImages[currentImageIndex]}
+                                alt={product.name}
+                                initial={{ opacity: 0.8, scale: 1.05 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="w-full h-full object-cover"
+                            />
                             <div className="absolute top-4 left-4 bg-nor-black text-white px-3 py-1 font-mono text-xs uppercase tracking-widest z-10">
-                                [ Waterproof ]
+                                [ {product.tag || "NØR-TECH"} ]
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-4 gap-4">
-                            {PRODUCT.images.map((img, idx) => (
+                        <div className="grid grid-cols-5 gap-4">
+                            {galleryImages.map((img, idx) => (
                                 <button
                                     key={idx}
-                                    onClick={() => setCurrentImage(idx)}
-                                    className={`aspect-square bg-nor-concrete border transition-all ${currentImage === idx ? 'border-nor-black' : 'border-transparent hover:border-nor-dark/20'
+                                    onClick={() => setCurrentImageIndex(idx)}
+                                    className={`aspect-square bg-nor-concrete border transition-all overflow-hidden ${currentImageIndex === idx ? 'border-nor-black ring-1 ring-nor-black' : 'border-transparent hover:border-nor-dark/20'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-center h-full text-[10px] text-nor-dark/30 font-mono">
-                                        0{idx + 1}
-                                    </div>
+                                    <img src={img} alt="thumbnail" className="w-full h-full object-cover opacity-80 hover:opacity-100" />
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* --- COLUMNA DERECHA: DATOS & COMPRA --- */}
+                    {/* --- COLUMNA DERECHA: INFO --- */}
                     <div className="w-full lg:w-2/5 lg:sticky lg:top-32 h-fit">
 
                         <div className="mb-8 border-b border-nor-dark/10 pb-6">
                             <h1 className="font-display text-4xl md:text-5xl uppercase font-bold tracking-tighter leading-[0.9] mb-4">
-                                {PRODUCT.name}
+                                {product.name}
                             </h1>
                             <div className="flex justify-between items-center font-mono text-lg md:text-xl">
-                                <span>${PRODUCT.price.toLocaleString()} MXN</span>
-                                <span className="text-xs text-nor-accent animate-pulse">STOCK: LOW</span>
+                                <span>${product.price.toLocaleString()} MXN</span>
+                                <span className="text-xs text-nor-accent animate-pulse">STOCK: AVAILABLE</span>
                             </div>
                         </div>
 
+                        {/* Variantes */}
+                        <div className="mb-8">
+                            <span className="font-mono text-xs uppercase tracking-widest text-nor-dark/60 block mb-3">
+                                Select Color: <span className="text-black font-bold">{selectedVariant?.colorName}</span>
+                            </span>
+                            <div className="flex gap-3">
+                                {product.variants.map((variant) => (
+                                    <button
+                                        key={variant.colorName}
+                                        onClick={() => setSelectedVariant(variant)}
+                                        className={`w-8 h-8 rounded-full border border-nor-dark/20 flex items-center justify-center transition-transform hover:scale-110 ${selectedVariant.colorName === variant.colorName ? "ring-2 ring-offset-2 ring-nor-black" : ""
+                                            }`}
+                                        style={{ backgroundColor: variant.colorHex }}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Tallas */}
                         <div className="mb-8">
                             <div className="flex justify-between mb-4">
                                 <span className="font-mono text-xs uppercase tracking-widest text-nor-dark/60">Select Size</span>
@@ -118,7 +143,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                 </button>
                             </div>
                             <div className="grid grid-cols-5 gap-2">
-                                {PRODUCT.sizes.map((size) => (
+                                {STANDARD_SIZES.map((size) => (
                                     <button
                                         key={size}
                                         onClick={() => setSelectedSize(size)}
@@ -138,7 +163,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                             )}
                         </div>
 
-                        {/* BOTONES DE ACCIÓN */}
+                        {/* Botones Compra */}
                         <div className="flex gap-4 mb-10">
                             <div className="flex items-center border border-nor-black w-32 justify-between px-4">
                                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="hover:text-nor-accent py-2"><Minus size={16} /></button>
@@ -156,6 +181,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                             </button>
                         </div>
 
+                        {/* Acordeones */}
                         <div className="border-t border-nor-dark/10">
                             <Accordion type="single" collapsible className="w-full">
                                 <AccordionItem value="description">
@@ -163,7 +189,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                         Description
                                     </AccordionTrigger>
                                     <AccordionContent className="font-body text-sm text-nor-dark/70 leading-relaxed">
-                                        {PRODUCT.description}
+                                        {product.description}
                                     </AccordionContent>
                                 </AccordionItem>
 
@@ -173,10 +199,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                     </AccordionTrigger>
                                     <AccordionContent>
                                         <ul className="space-y-2">
-                                            {PRODUCT.specs.map((spec, i) => (
-                                                <li key={i} className="flex justify-between font-mono text-[10px] uppercase border-b border-nor-dark/5 pb-1 last:border-0">
-                                                    <span className="text-nor-dark/50">{spec.label}</span>
-                                                    <span>{spec.value}</span>
+                                            {product.features && product.features.map((feature, i) => (
+                                                <li key={i} className="flex items-center gap-3 font-mono text-[10px] uppercase border-b border-nor-dark/5 pb-1 last:border-0">
+                                                    <span className="w-1.5 h-1.5 bg-nor-accent rounded-full"></span>
+                                                    <span>{feature}</span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -188,7 +214,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                         Shipping & Returns
                                     </AccordionTrigger>
                                     <AccordionContent className="font-body text-xs text-nor-dark/70">
-                                        Envíos Express a todo México (1-3 días hábiles). Devoluciones gratuitas dentro de los primeros 30 días si el producto mantiene sus etiquetas originales.
+                                        Envíos Express a todo México (1-3 días hábiles). Devoluciones gratuitas dentro de los primeros 30 días si el equipamiento mantiene sus etiquetas originales.
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
