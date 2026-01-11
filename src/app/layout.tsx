@@ -1,25 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syncopate, Inter_Tight } from "next/font/google";
 import "./globals.css";
-// Asegúrate que estos componentes existan o coméntalos si aún no los creas
-import { CustomCursor } from "@/components/CustomCursor";
 import { Navbar } from "@/components/layout/Navbar";
+import { CustomCursor } from "@/components/CustomCursor";
+// 1. IMPORTAMOS EL CARRITO
+import { CartSidebar } from "@/components/layout/CartSidebar";
 
-// 1. Títulos Impactantes
 const syncopate = Syncopate({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-display",
 });
 
-// 2. Datos Técnicos
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-mono",
 });
 
-// 3. Texto Legible
 const interTight = Inter_Tight({
   subsets: ["latin"],
   variable: "--font-body",
@@ -41,7 +39,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-// ESTE ES EL COMPONENTE QUE NEXT.JS NO ENCONTRABA
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,8 +57,13 @@ export default function RootLayout({
           style={{ backgroundImage: 'url("/assets/noise.png")' }}
         />
 
-        {/* Si aún no tienes el componente CustomCursor, comenta esta línea: */}
-        {/* <CustomCursor /> */}
+        {/* Cursor Personalizado */}
+        <CustomCursor />
+
+        {/* 2. AGREGAMOS EL CARRITO AQUÍ
+            Se coloca fuera del <main> para que se superponga a todo.
+        */}
+        <CartSidebar />
 
         <div className="relative z-50">
           <Navbar />

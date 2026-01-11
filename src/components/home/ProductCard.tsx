@@ -1,116 +1,80 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image"; // <--- Necesario para mostrar fotos reales
-import { motion, AnimatePresence } from "framer-motion";
-import { IoAdd } from "react-icons/io5";
-import { Product } from "@/lib/data"; // <--- Importamos la definición REAL
+import Image from "next/image";
+import { Product } from "@/lib/data"; // Importamos la interfaz que definiste
 
-export const ProductCard = ({ product }: { product: Product }) => {
-    // Estado para saber qué variante (color) está seleccionada visualmente
-    const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);
+interface ProductCardProps {
+    product: Product;
+}
 
-    // Determinamos qué imagen mostrar: 
-    // Si hay variantes, mostramos la del color seleccionado. Si no, la mainImage.
-    const currentImage = product.variants && product.variants.length > 0
-        ? product.variants[selectedVariantIndex].image
-        : product.mainImage;
+export const ProductCard = ({ product }: ProductCardProps) => {
+    // Formateador de moneda (MXN)
+    const formatPrice = (amount: number) => {
+        return new Intl.NumberFormat("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 0,
+        }).format(amount);
+    };
 
     return (
-        // CAMBIO CRÍTICO: Usamos product.slug para que coincida con tu data.ts
-        <Link href={`/shop/${product.slug}`} className="block h-full">
-            <div
-                className="group relative flex flex-col gap-3 cursor-pointer h-full"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                {/* --- CONTENEDOR DE IMAGEN --- */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#f5f5f5] border border-transparent group-hover:border-black/5 transition-colors">
+        <Link href={`/shop/${product.slug}`} className="group block h-full">
+            {/* --- Contenedor de Imagen --- */}
+            <div className="relative w-full aspect-[3/4] bg-neutral-900 overflow-hidden mb-4 border border-white/5">
 
-                    {/* Tag Superior */}
-                    {product.tag && (
-                        <div className="absolute top-2 left-2 z-20">
-                            <span className="bg-black text-white text-[9px] font-mono px-2 py-1 uppercase tracking-wider">
-                                [{product.tag}]
-                            </span>
-                        </div>
-                    )}
-
-                    {/* Animación de Cambio de Imagen (Framer Motion) */}
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentImage} // La clave cambia cuando cambia la imagen
-                            initial={{ opacity: 0.8 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0.8 }}
-                            transition={{ duration: 0.3 }}
-                            className="absolute inset-0"
-                        >
-                            {/* IMAGEN REAL DEL PRODUCTO */}
-                            <Image
-                                src={currentImage}
-                                alt={product.name}
-                                fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
-                        </motion.div>
-                    </AnimatePresence>
-
-                    {/* Botón Quick Add (Solo aparece en Hover) */}
-                    <div className={`absolute inset-0 bg-black/5 flex items-end justify-center pb-6 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault(); // Evita que abra la página del producto al dar click
-                                alert("Sistema de Añadido Rápido: En Desarrollo");
-                            }}
-                            className="bg-white text-black font-mono text-xs font-bold uppercase py-3 px-8 hover:bg-black hover:text-white transition-colors flex items-center gap-2 shadow-xl z-30"
-                        >
-                            <IoAdd size={14} /> Quick Add
-                        </button>
-                    </div>
-                </div>
-
-                {/* --- INFORMACIÓN DEL PRODUCTO --- */}
-                <div className="flex flex-col gap-1 px-1">
-                    <div className="flex justify-between items-start">
-                        <h3 className="font-body font-bold text-sm uppercase tracking-wide group-hover:underline underline-offset-4 decoration-black">
-                            {product.name}
-                        </h3>
-                        <span className="font-mono text-xs text-black font-medium">
-                            ${product.price.toLocaleString()}
+                {/* Badge / Tag Técnico (Ej: BREATHABLE) */}
+                {product.tag && (
+                    <div className="absolute top-2 left-2 z-10 bg-black/80 backdrop-blur-sm px-2 py-1 border border-white/10">
+                        <span className="text-[10px] font-mono text-white tracking-widest uppercase">
+                            {product.tag}
                         </span>
                     </div>
+                )}
 
-                    <div className="flex justify-between items-center mt-1">
-                        <p className="text-[10px] text-gray-500 font-mono uppercase">
-                            {product.category}
-                        </p>
+                {/* Imagen Principal */}
+                {/* Nota: Usamos 'group-hover' para un efecto de zoom suave */}
+                <Image
+                    src={product.mainImage}
+                    alt={product.name}
+                    fill
+                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
 
-                        {/* Selector de Colores (Miniaturas) */}
-                        <div className="flex gap-2 h-4 z-20 relative">
-                            {product.variants?.map((variant, index) => (
-                                <button
-                                    key={index}
-                                    // Al hacer click (o hover), cambiamos la foto pero NO navegamos
-                                    onMouseEnter={() => setSelectedVariantIndex(index)}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setSelectedVariantIndex(index);
-                                    }}
-                                    className={`w-3 h-3 rounded-full border border-gray-300 transition-all duration-200 ${selectedVariantIndex === index ? "ring-1 ring-black scale-110" : "hover:scale-110"}`}
-                                    style={{ backgroundColor: variant.colorHex }}
-                                    title={variant.colorName}
-                                />
-                            ))}
-                        </div>
-                    </div>
+                {/* Overlay sutil al hover */}
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            </div>
+
+            {/* --- Info del Producto --- */}
+            <div className="flex flex-col gap-1">
+                {/* Nombre y Precio */}
+                <div className="flex justify-between items-start gap-4">
+                    <h3 className="font-display text-lg text-white leading-tight group-hover:text-gray-300 transition-colors">
+                        {product.name}
+                    </h3>
+                    <span className="font-mono text-sm text-gray-400 whitespace-nowrap">
+                        {formatPrice(product.price)}
+                    </span>
                 </div>
+
+                {/* Categoría (Opcional, o descripción corta) */}
+                <p className="text-xs text-gray-600 font-mono uppercase tracking-wide">
+                    {product.category} // {product.features[0] || "High Performance"}
+                </p>
+
+                {/* --- Indicadores de Color (Variantes) --- */}
+                {product.variants && product.variants.length > 0 && (
+                    <div className="flex gap-2 mt-2">
+                        {product.variants.map((variant, index) => (
+                            <div
+                                key={index}
+                                className="w-3 h-3 rounded-full border border-white/20"
+                                style={{ backgroundColor: variant.colorHex }}
+                                title={variant.colorName}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </Link>
     );
 };
-
-export default ProductCard;

@@ -1,89 +1,87 @@
-import { StaticImageData } from "next/image";
-// Si usas imágenes locales importadas, descomenta arriba. 
-// Si usas strings de rutas (ej: "/images/foto.jpg"), déjalo como string.
+// src/lib/data.ts
 
-// 1. DEFINIMOS LA FORMA EXACTA DE TU PRODUCTO (Tipado fuerte)
 export interface ProductVariant {
     colorName: string;
     colorHex: string;
-    image: string; // La foto específica de ese color
-    inStock: boolean;
+    image: string;
 }
 
 export interface Product {
-    id: string; // Mejor string para IDs únicos
-    slug: string; // Vital para la URL (ej: /shop/aero-dry-shell)
+    id: string;
+    slug: string;
     name: string;
     price: number;
-    tag?: string; // Opcional (ej: NEW, SOLD OUT)
-    category: "Hoodies" | "T-Shirts" | "Pants" | "Accessories"; // Categorías fijas
+    tag?: string;
+    category: string;
     description: string;
-    features: string[]; // Lista de características (bullets)
-    mainImage: string; // Imagen principal para la tarjeta
+    features: string[];
+    mainImage: string;
     variants: ProductVariant[];
 }
 
-// 2. TU CATÁLOGO REAL (Aquí metes la data de verdad)
 export const PRODUCTS: Product[] = [
+    // --- PRODUCTO 1: MICROPIQUÉ ---
     {
         id: "1",
-        slug: "aero-dry-shell",
-        name: "AERO-DRY SHELL",
-        price: 2890,
-        tag: "WATERPROOF",
-        category: "Hoodies",
-        description: "Diseñada en los laboratorios de NØR. Membrana impermeable de 3 capas con costuras termoselladas para protección total contra elementos hostiles.",
-        features: [
-            "Membrana Gore-Tex® Pro",
-            "Cierres YKK AquaGuard®",
-            "Corte articulado para movilidad total"
-        ],
-        mainImage: "/assets/products/p1-main.jpg", // Asegúrate de que esta ruta exista
+        slug: "tech-flow-micropique",
+        name: "TECH FLOW / MICROPIQUÉ",
+        price: 850,
+        tag: "BREATHABLE",
+        category: "Playera",
+        // La descripción contiene "Micropiqué" -> Activa el filtro
+        description: "Arquitectura textil en Micropiqué diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",
+        features: ["Tejido Micropiqué 100% Poliéster", "Evaporación instantánea", "Corte Regular Fit"],
+        // Asegúrate de que esta imagen exista en public/assets/products/
+        mainImage: "/assets/products/tshirt-micropique-main.jpg",
         variants: [
-            { colorName: "Onyx", colorHex: "#111111", image: "/assets/products/p1-black.jpg", inStock: true },
-            { colorName: "Concrete", colorHex: "#888888", image: "/assets/products/p1-gray.jpg", inStock: true }
+            { colorName: "Carbon", colorHex: "#1a1a1a", image: "/assets/products/tshirt-micropique-black.jpg" },
+            { colorName: "Ghost", colorHex: "#f0f0f0", image: "/assets/products/tshirt-micropique-white.jpg" }
         ]
     },
+
+    // --- PRODUCTO 2: PIQUÉ VERA ---
     {
         id: "2",
-        slug: "kinetic-tights-v2",
-        name: "KINETIC TIGHTS V2",
-        price: 1200,
-        tag: "COMPRESSION",
-        category: "Pants",
-        description: "Compresión graduada para recuperación muscular en movimiento. Tejido técnico que regula la temperatura corporal.",
-        features: [
-            "Compresión 20-30 mmHg",
-            "Bolsillo oculto para smartphone",
-            "Secado rápido FlashDry™"
-        ],
-        mainImage: "/assets/products/p2-main.jpg",
+        slug: "titan-structure-vera",
+        name: "TITAN STRUCTURE / VERA",
+        price: 920,
+        tag: "RESISTANCE",
+        category: "Playera",
+        // La descripción contiene "Piqué Vera" -> Activa el filtro
+        description: "Construcción robusta en Piqué Vera. Un tejido con mayor cuerpo y resistencia a la abrasión sin sacrificar la movilidad.",
+        features: ["Tejido Piqué Vera texturizado", "Resistencia al desgarro", "Costuras reforzadas"],
+        mainImage: "/assets/products/tshirt-vera-main.jpg",
         variants: [
-            { colorName: "Black", colorHex: "#050505", image: "/assets/products/p2-black.jpg", inStock: true },
-            { colorName: "Navy", colorHex: "#1a2b4b", image: "/assets/products/p2-navy.jpg", inStock: false } // Ejemplo sin stock
+            { colorName: "Obsidian", colorHex: "#000000", image: "/assets/products/tshirt-vera-black.jpg" },
+            { colorName: "Navy Tech", colorHex: "#1e293b", image: "/assets/products/tshirt-vera-navy.jpg" }
         ]
     },
-    // ... AGREGA AQUÍ TUS OTROS PRODUCTOS ...
+
+    // --- PRODUCTO 3: MICROPANAL ---
+    {
+        id: "3",
+        slug: "aero-grid-micropanal",
+        name: "AERO GRID / MICROPANAL",
+        price: 890,
+        tag: "THERMAL REGULATION",
+        category: "Playera",
+        // La descripción contiene "Micropanal" -> Activa el filtro
+        description: "Ingeniería de tejido en Micropanal. Su estructura de celdas optimiza la gestión térmica corporal absorbiendo el sudor rápidamente.",
+        features: ["Matriz de Micropanal", "Secado ultra-rápido", "Tacto suave premium"],
+        mainImage: "/assets/products/tshirt-panal-main.jpg",
+        variants: [
+            { colorName: "Slate", colorHex: "#334155", image: "/assets/products/tshirt-panal-gray.jpg" },
+            { colorName: "Olive", colorHex: "#3f4d3a", image: "/assets/products/tshirt-panal-olive.jpg" }
+        ]
+    },
 ];
 
-// 3. FUNCIONES "BACKEND" (Simulamos las consultas a la BD)
+// --- Helpers para consumir los datos ---
 
-// Obtener todos los productos
-export const getAllProducts = () => {
-    return PRODUCTS;
-};
+export const getAllProducts = () => PRODUCTS;
 
-// Obtener producto por SLUG (Para la página de detalle: /shop/[slug])
-export const getProductBySlug = (slug: string) => {
-    return PRODUCTS.find((p) => p.slug === slug);
-};
+// Para la sección de "Destacados" en el Home (devuelve los primeros 3)
+export const getFeaturedProducts = () => PRODUCTS.slice(0, 3);
 
-// Obtener productos por CATEGORÍA (Para filtros)
-export const getProductsByCategory = (category: string) => {
-    return PRODUCTS.filter((p) => p.category === category);
-};
-
-// Obtener destacados (ej: los primeros 4 para el Home)
-export const getFeaturedProducts = () => {
-    return PRODUCTS.slice(0, 4);
-};
+// Para la página de detalle individual
+export const getProductBySlug = (slug: string) => PRODUCTS.find((p) => p.slug === slug);
