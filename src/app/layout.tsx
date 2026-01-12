@@ -3,7 +3,6 @@ import { Space_Mono, Syncopate, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { CustomCursor } from "@/components/CustomCursor";
-// 1. IMPORTAMOS EL CARRITO
 import { CartSidebar } from "@/components/layout/CartSidebar";
 
 const syncopate = Syncopate({
@@ -51,18 +50,13 @@ export default function RootLayout({
     >
       <body className="bg-[#fcfcfc] text-black antialiased selection:bg-black selection:text-white relative overflow-x-hidden">
 
-        {/* Textura de ruido */}
         <div
           className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.04] mix-blend-multiply"
           style={{ backgroundImage: 'url("/assets/noise.png")' }}
         />
 
-        {/* Cursor Personalizado */}
         <CustomCursor />
 
-        {/* 2. AGREGAMOS EL CARRITO AQUÍ
-            Se coloca fuera del <main> para que se superponga a todo.
-        */}
         <CartSidebar />
 
         <div className="relative z-50">

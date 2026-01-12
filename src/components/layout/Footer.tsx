@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react"; // Usamos Lucide para consistencia con el resto del sitio
+import { ArrowRight } from "lucide-react";
 
 export const Footer = () => {
     return (
         <footer className="bg-nor-white text-nor-black border-t border-nor-dark/10">
 
-            {/* 1. SECCIÓN NEWSLETTER (Alta Prioridad) */}
             <div className="px-6 md:px-12 py-20 border-b border-nor-dark/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
                 <div className="max-w-xl">
                     <h3 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 leading-none">
@@ -33,10 +32,8 @@ export const Footer = () => {
                 </div>
             </div>
 
-            {/* 2. GRID DE ENLACES (Mapa del Sitio) */}
             <div className="px-6 md:px-12 py-16 grid grid-cols-2 md:grid-cols-4 gap-12">
 
-                {/* Columna Branding */}
                 <div className="col-span-2 md:col-span-1 pr-8">
                     <Link href="/" className="font-display text-3xl font-bold uppercase tracking-tighter block mb-6 hover:opacity-50 transition-opacity">
                         NØR
@@ -48,7 +45,6 @@ export const Footer = () => {
                     </p>
                 </div>
 
-                {/* Columna Shop */}
                 <div className="flex flex-col gap-4">
                     <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Colecciones ]</h4>
                     <Link href="/shop" className="font-body text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all">Man FW25</Link>
@@ -57,7 +53,6 @@ export const Footer = () => {
                     <Link href="/shop" className="font-body text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all">Archived</Link>
                 </div>
 
-                {/* Columna Legal */}
                 <div className="flex flex-col gap-4">
                     <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Soporte ]</h4>
                     <Link href="/help" className="font-body text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all">Envíos y Devoluciones</Link>
@@ -66,7 +61,6 @@ export const Footer = () => {
                     <Link href="/help" className="font-body text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all">Política de Privacidad</Link>
                 </div>
 
-                {/* Columna Social */}
                 <div className="flex flex-col gap-4">
                     <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Social ]</h4>
                     <a href="#" className="font-body text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all">Instagram</a>
@@ -75,7 +69,6 @@ export const Footer = () => {
                 </div>
             </div>
 
-            {/* 3. SUB-FOOTER (Copyright) */}
             <div className="px-6 md:px-12 py-6 border-t border-nor-dark/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-nor-concrete/30">
                 <p className="font-mono text-[10px] text-nor-dark/40 uppercase tracking-widest">
                     © 2025 NØR SYSTEMS S.A. DE C.V.

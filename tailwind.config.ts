@@ -3,11 +3,9 @@ import type { Config } from "tailwindcss"
 const config = {
 	darkMode: ["class"],
 	content: [
-		// Rutas para estructura con 'src'
 		'./src/pages/**/*.{ts,tsx}',
 		'./src/components/**/*.{ts,tsx}',
 		'./src/app/**/*.{ts,tsx}',
-		// Rutas para estructura sin 'src' (Raíz)
 		'./pages/**/*.{ts,tsx}',
 		'./components/**/*.{ts,tsx}',
 		'./app/**/*.{ts,tsx}',
@@ -116,14 +114,12 @@ const config = {
 						transform: 'translateX(-100%)'
 					}
 				}
-				// SE ELIMINARON LOS DUPLICADOS AQUÍ
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				blink: 'blink 1s step-end infinite',
 				marquee: 'marquee 25s linear infinite'
-				// SE ELIMINARON LOS DUPLICADOS AQUÍ
 			}
 		}
 	},

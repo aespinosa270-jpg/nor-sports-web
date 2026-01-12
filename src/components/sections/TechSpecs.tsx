@@ -14,7 +14,6 @@ export const TechSpecs = () => {
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                    {/* Título Impactante */}
                     <div>
                         <h2 className="font-display text-5xl md:text-7xl tracking-tighter leading-none mb-6">
                             DISEÑADO<br />PARA LA<br />REALIDAD.
@@ -24,7 +23,6 @@ export const TechSpecs = () => {
                         </p>
                     </div>
 
-                    {/* Lista de Beneficios */}
                     <div className="space-y-6">
                         {SPECS.map((item, i) => (
                             <div key={i} className="border-b border-black/10 pb-4">

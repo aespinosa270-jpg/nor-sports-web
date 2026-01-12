@@ -7,13 +7,10 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full bg-nor-white text-nor-black selection:bg-nor-black selection:text-white">
 
-      {/* 1. HERO SECTION */}
       <HeroSection />
 
-      {/* 2. TRANSICIÓN */}
       <Marquee text="SYSTEMS ONLINE // NEW ARRIVALS // SHIPPED FROM CDMX" />
 
-      {/* 3. MANIFIESTO */}
       <section className="py-32 px-6 border-b border-nor-dark/10">
         <div className="max-w-4xl mx-auto text-center">
           <span className="font-mono text-xs text-nor-accent uppercase tracking-[0.2em] mb-6 block animate-pulse">
@@ -31,10 +28,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. CATÁLOGO */}
       <ProductShowcase />
 
-      {/* 5. FOOTER */}
       <Footer />
 
     </main>

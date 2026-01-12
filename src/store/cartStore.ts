@@ -2,13 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartItem {
-    id: string;      // El ID existe en el item...
+    id: string;
     name: string;
     price: number;
     image: string;
     size: string;
     quantity: number;
-    color: string;   // <--- AGREGAMOS COLOR
+    color: string;
 }
 
 interface CartState {
@@ -16,8 +16,6 @@ interface CartState {
     isOpen: boolean;
     openCart: () => void;
     closeCart: () => void;
-    // AQUÍ ESTÁ EL TRUCO: Usamos Omit<CartItem, 'id'>
-    // Esto le dice a TS: "Pídeme todo MENOS el id, ese lo pongo yo".
     addItem: (item: Omit<CartItem, 'id'>) => void;
     removeItem: (id: string) => void;
     clearCart: () => void;
@@ -33,7 +31,6 @@ export const useCartStore = create<CartState>()(
             closeCart: () => set({ isOpen: false }),
 
             addItem: (newItem) => set((state) => {
-                // Generamos ID único combinando nombre, talla y color
                 const uniqueId = `${newItem.name}-${newItem.size}-${newItem.color}`;
 
                 const existingItem = state.items.find((i) => i.id === uniqueId);
@@ -47,7 +44,6 @@ export const useCartStore = create<CartState>()(
                     };
                 }
 
-                // Aquí agregamos el ID generado al objeto final
                 return {
                     items: [...state.items, { ...newItem, id: uniqueId }],
                     isOpen: true,

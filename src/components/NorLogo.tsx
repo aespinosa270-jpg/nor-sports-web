@@ -6,7 +6,6 @@ export const NorLogo = () => {
     return (
         <div className="relative z-20 flex items-center justify-center gap-2 md:gap-4 select-none">
 
-            {/* LETRA N */}
             <motion.span
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -16,11 +15,9 @@ export const NorLogo = () => {
                 N
             </motion.span>
 
-            {/* EL SÍMBOLO CENTRAL (SVG para precisión perfecta) */}
             <div className="relative flex items-center justify-center w-[5rem] h-[5rem] md:w-[10rem] md:h-[10rem]">
                 <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
 
-                    {/* Círculo */}
                     <motion.circle
                         cx="50" cy="50" r="45"
                         stroke="white" strokeWidth="6" fill="transparent"
@@ -29,9 +26,8 @@ export const NorLogo = () => {
                         transition={{ duration: 1, delay: 0.4, ease: "easeInOut" }}
                     />
 
-                    {/* La Línea Diagonal (El Corte) */}
                     <motion.line
-                        x1="-10" y1="-10" x2="110" y2="110" // Coordenadas que se salen del círculo
+                        x1="-10" y1="-10" x2="110" y2="110"
                         stroke="white" strokeWidth="4"
                         initial={{ pathLength: 0, opacity: 0 }}
                         animate={{ pathLength: 1, opacity: 1 }}
@@ -40,7 +36,6 @@ export const NorLogo = () => {
                 </svg>
             </div>
 
-            {/* LETRA R */}
             <motion.span
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}

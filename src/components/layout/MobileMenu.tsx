@@ -23,10 +23,9 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "100%" }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} // Curva Bezier "High-End"
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     className="fixed inset-0 z-[60] bg-nor-black text-white flex flex-col p-6 overflow-hidden"
                 >
-                    {/* Header del Menú */}
                     <div className="flex justify-between items-center mb-12 border-b border-white/20 pb-4">
                         <span className="font-mono text-xs uppercase tracking-widest text-gray-400">
                             System_Nav
@@ -35,8 +34,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                             <IoCloseOutline />
                         </button>
                     </div>
-
-                    {/* Links Gigantes */}
                     <div className="flex flex-col gap-6">
                         {menuItems.map((item, index) => (
                             <motion.div
@@ -56,7 +53,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                         ))}
                     </div>
 
-                    {/* Footer Técnico */}
                     <div className="mt-auto grid grid-cols-2 gap-4 font-mono text-xs text-gray-500">
                         <div>
                             <p className="text-white mb-2 font-bold">ASISTENCIA</p>
@@ -70,7 +66,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                         </div>
                     </div>
 
-                    {/* Textura de Fondo (Opcional pero recomendada) */}
                     <div className="absolute inset-0 z-[-1] opacity-10 pointer-events-none mix-blend-overlay"
                         style={{ backgroundImage: 'url("/assets/noise.png")' }}>
                     </div>

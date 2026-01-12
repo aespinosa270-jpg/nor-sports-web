@@ -7,28 +7,23 @@ export const HeroSection = () => {
     return (
         <section className="relative w-full h-screen overflow-hidden bg-nor-black">
 
-            {/* --- FIX IMAGEN: ART DIRECTION --- */}
 
-            {/* 1. IMAGEN DESKTOP (Se oculta en mobile) */}
             <div className="hidden md:block absolute inset-0 z-0">
                 <Image
-                    src="/assets/K12.jpg" // Tu imagen horizontal original
+                    src="/assets/K12.jpg"
                     alt="NØR Campaign Desktop"
                     fill
                     className="object-cover object-center"
                     priority
-                    quality={90} // 100 es overkill y pesa mucho, 90 es sweet spot
-                    sizes="100vw" // Importante para que Next sepa qué tamaño servir
+                    quality={90}
+                    sizes="100vw"
                 />
             </div>
 
-            {/* 2. IMAGEN MOBILE (Solo se ve en cel) 
-               * AQUÍ es donde subes la versión vertical que editaste/mejoraste 
-               * para que tenga la densidad de píxeles correcta sin hacer zoom digital.
-            */}
+
             <div className="block md:hidden absolute inset-0 z-0">
                 <Image
-                    src="/assets/B55.jpg" // <--- CRUCIAL: Usa un crop vertical nativo aquí
+                    src="/assets/B55.jpg"
                     alt="NØR Campaign Mobile"
                     fill
                     className="object-cover object-center"
@@ -38,12 +33,8 @@ export const HeroSection = () => {
                 />
             </div>
 
-            {/* --- FIN FIX IMAGEN --- */}
 
-            {/* OVERLAY SUTIL */}
-            <div className="absolute inset-0 bg-black/20 z-10" /> {/* Subí un poco la opacidad a 20 para contraste móvil */}
-
-            {/* CONTENIDO */}
+            <div className="absolute inset-0 bg-black/20 z-10" />
             <div className="absolute bottom-20 left-6 md:left-12 z-20 max-w-2xl text-white">
                 <p className="font-bold text-sm md:text-base mb-2 uppercase tracking-wide text-gray-300">
                     NØR Tech Fleece

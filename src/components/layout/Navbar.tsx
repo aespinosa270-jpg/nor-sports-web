@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoBagOutline, IoMenuOutline, IoSearchOutline, IoHeartOutline } from "react-icons/io5";
-import { Truck } from "lucide-react"; // <--- Importamos el camión
+import { Truck } from "lucide-react";
 import { MobileMenu } from "./MobileMenu";
 import { useCartStore } from "@/store/cartStore";
 
@@ -23,10 +23,8 @@ export const Navbar = () => {
 
     return (
         <>
-            {/* WRAPPER FIJO */}
             <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-sans">
 
-                {/* 1. TOP BAR */}
                 <div className="hidden md:flex justify-between items-center px-12 py-2 bg-[#F5F5F5] text-[11px] font-bold text-gray-500">
                     <div className="flex gap-4">
                         <span className="cursor-default tracking-widest">NØR SYSTEMS // FW25</span>
@@ -38,10 +36,8 @@ export const Navbar = () => {
                     </div>
                 </div>
 
-                {/* 2. NAVBAR PRINCIPAL */}
                 <nav className="px-6 md:px-12 h-16 flex justify-between items-center bg-white">
 
-                    {/* LOGO */}
                     <Link href="/" className="relative z-50 block hover:opacity-80 transition-opacity">
                         <Image
                             src="/assets/Nor.png"
@@ -53,7 +49,6 @@ export const Navbar = () => {
                         />
                     </Link>
 
-                    {/* MENÚ CENTRADO */}
                     <div className="hidden md:flex gap-12 absolute left-1/2 -translate-x-1/2">
                         <Link
                             href="/shop"
@@ -77,21 +72,17 @@ export const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* ÍCONOS DERECHA */}
                     <div className="flex items-center gap-4 md:gap-6 text-black">
 
-                        {/* Buscador */}
-                        <div className="hidden md:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2 hover:bg-[#E5E5E5] transition-colors cursor-pointer group w-44">
+                        ¡                        <div className="hidden md:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2 hover:bg-[#E5E5E5] transition-colors cursor-pointer group w-44">
                             <IoSearchOutline size={20} className="text-black group-hover:scale-110 transition-transform" />
                             <span className="ml-2 text-xs font-bold text-gray-400 group-hover:text-gray-600">Buscar ID...</span>
                         </div>
 
-                        {/* Favoritos */}
                         <button className="hidden md:block hover:scale-110 transition-transform rounded-full p-2 hover:bg-gray-100">
                             <IoHeartOutline size={24} />
                         </button>
 
-                        {/* Bolsa */}
                         <button
                             onClick={openCart}
                             className="relative hover:scale-110 transition-transform rounded-full p-2 hover:bg-gray-100"
@@ -117,9 +108,7 @@ export const Navbar = () => {
                     </div>
                 </nav>
 
-                {/* 3. BANNER INFERIOR - ENVÍOS */}
                 <div className="bg-[#F5F5F5] py-2 border-t border-gray-200 flex justify-center items-center gap-2">
-                    {/* Icono del camión */}
                     <Truck size={14} className="text-black" />
                     <p className="text-[11px] md:text-xs font-bold text-black uppercase tracking-wide">
                         Envíos a toda la República Mexicana
