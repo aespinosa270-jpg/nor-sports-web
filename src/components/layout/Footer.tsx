@@ -1,7 +1,8 @@
 "use client";
 
+import { useActionState } from "react"; // <--- ACTUALIZADO: De 'react-dom' a 'react'
+import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useFormState, useFormStatus } from "react-dom";
 import { subscribeToNewsletter } from "@/app/actions/newsletter";
 import { ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
@@ -10,7 +11,6 @@ import { motion } from "framer-motion";
 const WA_NUMBER = "525617500002";
 const URL_ENVIOS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola NØR, tengo dudas sobre Envíos y Devoluciones.")}`;
 const URL_TALLAS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola NØR, necesito ayuda con la Guía de Tallas.")}`;
-
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -31,7 +31,11 @@ function SubmitButton() {
 }
 
 export const Footer = () => {
-    const [state, formAction] = useFormState(subscribeToNewsletter, null);
+    // ACTUALIZADO: useActionState es el nuevo estándar
+    const [state, formAction, isPending] = useActionState(
+        subscribeToNewsletter,
+        null
+    );
 
     return (
         <footer className="bg-nor-white text-nor-black border-t border-nor-dark/10">
@@ -64,8 +68,9 @@ export const Footer = () => {
                                 name="email"
                                 type="email"
                                 required
+                                disabled={isPending}
                                 placeholder="CORREO ELECTRÓNICO"
-                                className="bg-transparent w-full outline-none font-mono text-xs placeholder:text-nor-dark/40 uppercase tracking-widest text-nor-black"
+                                className="bg-transparent w-full outline-none font-mono text-xs placeholder:text-nor-dark/40 uppercase tracking-widest text-nor-black disabled:opacity-50"
                             />
                             <SubmitButton />
                         </form>
@@ -116,7 +121,6 @@ export const Footer = () => {
                 <div className="flex flex-col gap-4">
                     <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Soporte ]</h4>
 
-                    {/* WhatsApp Links */}
                     <a
                         href={URL_ENVIOS}
                         target="_blank"
@@ -135,12 +139,10 @@ export const Footer = () => {
                         Guía de Tallas
                     </a>
 
-                    {/* Enlaces Internos Correctos */}
                     <Link href="/help" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
                         Términos y Condiciones
                     </Link>
 
-                    {/* CORRECCIÓN AQUÍ: Apunta a /privacy */}
                     <Link href="/privacy" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
                         Política de Privacidad
                     </Link>

@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syncopate, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
-import { CustomCursor } from "@/components/CustomCursor";
+// Se elimina la importación de CustomCursor
 import { CartSidebar } from "@/components/layout/CartSidebar";
-import { CookieBanner } from "@/components/layout/CookieBanner"; // <--- IMPORTANTE
+import { CookieBanner } from "@/components/layout/CookieBanner";
 
 const syncopate = Syncopate({
   subsets: ["latin"],
@@ -57,8 +57,7 @@ export default function RootLayout({
           style={{ backgroundImage: 'url("/assets/noise.png")' }}
         />
 
-        <CustomCursor />
-
+        {/* Se eliminó <CustomCursor /> */}
         <CartSidebar />
 
         <div className="relative z-50">
@@ -69,7 +68,6 @@ export default function RootLayout({
           {children}
         </main>
 
-        {/* Banner de Cookies al final */}
         <CookieBanner />
 
       </body>

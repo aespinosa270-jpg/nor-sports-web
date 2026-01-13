@@ -6,7 +6,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoBagOutline, IoMenuOutline } from "react-icons/io5";
 import { Truck } from "lucide-react";
-import { MobileMenu } from "./MobileMenu";
+import { MobileMenu } from "./MobileMenu"; // Asegúrate de que la ruta sea correcta
 import { useCartStore } from "@/store/cartStore";
 
 const WHATSAPP_NUMBER = "525617500002";
@@ -113,6 +113,7 @@ export const Navbar = () => {
 
             </header>
 
+            {/* Conexión con tu MobileMenu optimizado */}
             <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
         </>
     );

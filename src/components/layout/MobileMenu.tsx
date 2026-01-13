@@ -1,73 +1,118 @@
 "use client";
+
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { IoCloseOutline } from "react-icons/io5";
+import { X, ArrowUpRight, MessageSquare } from "lucide-react";
 
 interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const menuItems = [
-    { title: "HOMBRE", href: "/shop/men" },
-    { title: "MUJER", href: "/shop/women" },
-    { title: "COLECCIÓN_01", href: "/shop/collection" },
-    { title: "LABORATORIO", href: "/about" },
-];
+const WHATSAPP_NUMBER = "525617500002";
+const WHATSAPP_MESSAGE = "Hola NØR, requiero asistencia técnica / información sobre un pedido.";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+    }, [isOpen]);
+
+    const navLinks = [
+        { name: "COLECCIÓN", href: "/shop", label: "CATÁLOGO COMPLETO" },
+        { name: "OFERTAS", href: "/offers", label: "ARCHIVE SALE // DESCUENTOS", highlight: true },
+        { name: "NOR-LAB", href: "/norlab", label: "CONCEPTO & EXPERIMENTACIÓN" },
+    ];
+
     return (
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    exit={{ y: "100%" }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed inset-0 z-[60] bg-nor-black text-white flex flex-col p-6 overflow-hidden"
+                    initial={{ x: "100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="fixed inset-0 z-[100] bg-black text-white flex flex-col"
                 >
-                    <div className="flex justify-between items-center mb-12 border-b border-white/20 pb-4">
-                        <span className="font-mono text-xs uppercase tracking-widest text-gray-400">
-                            System_Nav
+                    {/* Textura de Ruido */}
+                    <div
+                        className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none mix-blend-overlay"
+                        style={{ backgroundImage: 'url("/assets/noise.png")' }}
+                    />
+
+                    {/* Header del Menú */}
+                    <div className="relative z-10 flex justify-between items-center p-6 border-b border-white/10">
+                        <span className="font-mono text-[10px] tracking-[0.3em] text-white/50">
+                            MENU
                         </span>
-                        <button onClick={onClose} className="text-3xl text-white hover:rotate-90 transition-transform duration-300">
-                            <IoCloseOutline />
+                        <button
+                            onClick={onClose}
+                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        >
+                            <X size={28} />
                         </button>
                     </div>
-                    <div className="flex flex-col gap-6">
-                        {menuItems.map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                initial={{ opacity: 0, x: -50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.1 + index * 0.1 }}
+
+                    {/* Enlaces Principales */}
+                    <div className="relative z-10 flex-1 flex flex-col justify-center px-8 gap-8">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.name}
+                                href={link.href}
+                                onClick={onClose}
+                                className="group flex flex-col"
                             >
-                                <Link
-                                    href={item.href}
-                                    onClick={onClose}
-                                    className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter text-white hover:text-gray-400 transition-colors"
-                                >
-                                    {item.title}
-                                </Link>
-                            </motion.div>
+                                <div className="flex items-center justify-between">
+                                    <span className={`font-display text-4xl font-bold tracking-tighter ${link.highlight ? 'text-[#FF3333]' : 'text-white'}`}>
+                                        {link.name}
+                                    </span>
+                                    <ArrowUpRight className="text-white/20 group-hover:text-white transition-colors" size={24} />
+                                </div>
+                                <span className="font-mono text-[9px] tracking-[0.2em] text-white/40 mt-1 uppercase">
+                                    {link.label}
+                                </span>
+                            </a>
                         ))}
+
+                        {/* Enlace Especial de Soporte (WhatsApp) */}
+                        <a
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex flex-col mt-4 p-4 border border-white/10 bg-white/5"
+                        >
+                            <div className="flex items-center justify-between">
+                                <span className="font-display text-2xl font-bold tracking-tighter text-white">
+                                    SOPORTE TÉCNICO
+                                </span>
+                                <MessageSquare className="text-green-500" size={20} />
+                            </div>
+                            <span className="font-mono text-[9px] tracking-[0.2em] text-green-500/70 mt-1 uppercase">
+                                CHAT DIRECTO // WHATSAPP
+                            </span>
+                        </a>
                     </div>
 
-                    <div className="mt-auto grid grid-cols-2 gap-4 font-mono text-xs text-gray-500">
-                        <div>
-                            <p className="text-white mb-2 font-bold">ASISTENCIA</p>
-                            <p className="hover:text-white cursor-pointer transition-colors">ENVIOS / DEVOLUCIONES</p>
-                            <p className="hover:text-white cursor-pointer transition-colors">GARANTÍA NØR</p>
+                    {/* Footer del Menú */}
+                    <div className="relative z-10 p-8 border-t border-white/10 bg-black">
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
+                                <span className="font-mono text-[9px] text-white/30 block mb-3 tracking-widest">LEGAL</span>
+                                <div className="flex flex-col gap-2">
+                                    <a href="/help" className="font-mono text-[10px] text-white/60 hover:text-white uppercase">Términos</a>
+                                    <a href="/privacy" className="font-mono text-[10px] text-white/60 hover:text-white uppercase">Privacidad</a>
+                                </div>
+                            </div>
+                            <div className="flex flex-col justify-end items-end text-right">
+                                <span className="font-mono text-[9px] text-white/20">EST. 2026</span>
+                                <span className="font-mono text-[9px] text-white/20 uppercase tracking-tighter">CDMX // MÉXICO</span>
+                            </div>
                         </div>
-                        <div className="text-right">
-                            <p className="text-white mb-2 font-bold">SOCIAL</p>
-                            <p className="hover:text-white cursor-pointer transition-colors">INSTAGRAM</p>
-                            <p className="hover:text-white cursor-pointer transition-colors">TIKTOK</p>
-                        </div>
-                    </div>
-
-                    <div className="absolute inset-0 z-[-1] opacity-10 pointer-events-none mix-blend-overlay"
-                        style={{ backgroundImage: 'url("/assets/noise.png")' }}>
                     </div>
                 </motion.div>
             )}
