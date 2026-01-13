@@ -9,6 +9,8 @@ export interface Product {
     slug: string;
     name: string;
     price: number;
+    originalPrice?: number; // <--- NUEVO: Precio anterior (activa la oferta)
+    discountTag?: string;   // <--- NUEVO: Etiqueta visual (ej: "-30%")
     tag?: string;
     category: string;
     description: string;
@@ -22,7 +24,9 @@ export const PRODUCTS: Product[] = [
         id: "1",
         slug: "tech-flow-micropique",
         name: "TECH FLOW / MICROPIQUÉ",
-        price: 850,
+        price: 595, // <--- PRECIO REBAJADO
+        originalPrice: 850, // <--- PRECIO REAL (Esto activa la lógica de oferta)
+        discountTag: "-30%", // <--- ETIQUETA VISUAL
         tag: "BREATHABLE",
         category: "Playera",
         description: "Arquitectura textil en Micropiqué diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",
@@ -39,6 +43,7 @@ export const PRODUCTS: Product[] = [
         slug: "titan-structure-vera",
         name: "TITAN STRUCTURE / VERA",
         price: 920,
+        // Sin originalPrice, por lo tanto NO está en oferta
         tag: "RESISTANCE",
         category: "Playera",
         description: "Construcción robusta en Piqué Vera. Un tejido con mayor cuerpo y resistencia a la abrasión sin sacrificar la movilidad.",
@@ -67,8 +72,14 @@ export const PRODUCTS: Product[] = [
     },
 ];
 
-
+// Obtener TODO el catálogo (Para Shop Page)
 export const getAllProducts = () => PRODUCTS;
+
+// Obtener SOLO ofertas (Para Offers Page)
+// Filtra automáticamente los productos que tienen descuento
+export const getSaleProducts = () => {
+    return PRODUCTS.filter((p) => p.originalPrice && p.originalPrice > p.price);
+};
 
 export const getFeaturedProducts = () => PRODUCTS.slice(0, 3);
 

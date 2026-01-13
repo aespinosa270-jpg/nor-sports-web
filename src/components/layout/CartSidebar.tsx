@@ -2,8 +2,9 @@
 
 import { useCartStore } from "@/store/cartStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react"; // Agregué ArrowRight
 import Image from "next/image";
+import Link from "next/link"; // IMPORTANTE: Importamos Link
 import { useEffect, useState } from "react";
 
 export const CartSidebar = () => {
@@ -52,6 +53,9 @@ export const CartSidebar = () => {
                                 <div className="h-full flex flex-col items-center justify-center text-nor-dark/40 space-y-4">
                                     <ShoppingBag size={48} strokeWidth={1} />
                                     <p className="font-mono text-sm uppercase tracking-widest">System Empty</p>
+                                    <button onClick={closeCart} className="text-xs underline hover:text-nor-accent">
+                                        Return to Catalog
+                                    </button>
                                 </div>
                             ) : (
                                 items.map((item) => (
@@ -121,11 +125,18 @@ export const CartSidebar = () => {
                                     <span className="text-nor-dark/60">Subtotal</span>
                                     <span className="font-bold text-lg">${total.toLocaleString()} MXN</span>
                                 </div>
-                                <button className="w-full bg-nor-black text-white py-4 font-mono text-xs uppercase font-bold tracking-[0.2em] hover:bg-nor-dark active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                                    Proceed to Checkout
-                                </button>
+
+                                {/* AQUÍ ESTÁ EL CAMBIO CLAVE: Convertimos button a Link */}
+                                <Link
+                                    href="/checkout"
+                                    onClick={closeCart}
+                                    className="w-full bg-nor-black text-white py-4 font-mono text-xs uppercase font-bold tracking-[0.2em] hover:bg-nor-dark active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                >
+                                    Pasar al Checkout <ArrowRight size={16} />
+                                </Link>
+
                                 <p className="text-center mt-3 text-[10px] text-nor-dark/40 font-mono uppercase">
-                                    Shipping & Taxes calculated at checkout
+                                    impuestos y gastos de envío se calculan en el checkout
                                 </p>
                             </div>
                         )}

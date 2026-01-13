@@ -3,12 +3,17 @@
 interface MarqueeProps {
     text: string;
     repeat?: number;
+    duration?: string; // Nueva prop para velocidad
 }
 
-export const Marquee = ({ text, repeat = 4 }: MarqueeProps) => {
+export const Marquee = ({ text, repeat = 4, duration = "40s" }: MarqueeProps) => {
     return (
         <div className="relative w-full overflow-hidden border-y border-nor-black/10 bg-nor-concrete py-3">
-            <div className="flex w-max animate-marquee">
+            {/* Aplicamos inline style para sobreescribir la velocidad de Tailwind */}
+            <div
+                className="flex w-max animate-marquee"
+                style={{ animationDuration: duration }}
+            >
 
                 <div className="flex shrink-0 items-center">
                     {Array.from({ length: repeat }).map((_, i) => (

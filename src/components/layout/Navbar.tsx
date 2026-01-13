@@ -4,14 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { IoBagOutline, IoMenuOutline, IoSearchOutline, IoHeartOutline } from "react-icons/io5";
+import { IoBagOutline, IoMenuOutline } from "react-icons/io5";
 import { Truck } from "lucide-react";
 import { MobileMenu } from "./MobileMenu";
 import { useCartStore } from "@/store/cartStore";
 
+const WHATSAPP_NUMBER = "525617500002";
+const WHATSAPP_MESSAGE = "Hola NØR, requiero asistencia técnica / información sobre un pedido.";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
 export const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
     const [mounted, setMounted] = useState(false);
     const { openCart, items } = useCartStore();
 
@@ -25,14 +28,16 @@ export const Navbar = () => {
         <>
             <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-sans">
 
-                <div className="hidden md:flex justify-between items-center px-12 py-2 bg-[#F5F5F5] text-[11px] font-bold text-gray-500">
+                <div className="hidden md:flex justify-end items-center px-12 py-2 bg-[#F5F5F5] text-[11px] font-bold text-gray-500">
                     <div className="flex gap-4">
-                        <span className="cursor-default tracking-widest">NØR SYSTEMS // FW25</span>
-                    </div>
-                    <div className="flex gap-4">
-                        <Link href="/norlab" className="hover:text-black transition-colors">Estado del Sistema: ONLINE</Link>
-                        <span>|</span>
-                        <Link href="/help" className="hover:text-black transition-colors">Soporte</Link>
+                        <a
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-black transition-colors cursor-pointer flex items-center gap-1"
+                        >
+                            Soporte
+                        </a>
                     </div>
                 </div>
 
@@ -73,15 +78,6 @@ export const Navbar = () => {
                     </div>
 
                     <div className="flex items-center gap-4 md:gap-6 text-black">
-
-                        ¡                        <div className="hidden md:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2 hover:bg-[#E5E5E5] transition-colors cursor-pointer group w-44">
-                            <IoSearchOutline size={20} className="text-black group-hover:scale-110 transition-transform" />
-                            <span className="ml-2 text-xs font-bold text-gray-400 group-hover:text-gray-600">Buscar ID...</span>
-                        </div>
-
-                        <button className="hidden md:block hover:scale-110 transition-transform rounded-full p-2 hover:bg-gray-100">
-                            <IoHeartOutline size={24} />
-                        </button>
 
                         <button
                             onClick={openCart}

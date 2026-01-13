@@ -1,51 +1,43 @@
 'use server'
-import { estafetaRequest } from '@/lib/estafeta';
-import { supabaseAdmin } from '@/lib/supabase-admin';
 
+// Eliminamos todas las importaciones de APIs externas (Estafeta/Envia)
+// Solo necesitamos devolver precios fijos.
 
-export async function createLabel(
-    serviceId: string,
-    addressData: any,
-    priceInfo: { cost: number, price: number },
-    userEmail: string = 'guest'
-) {
-    try {
-        const payload = {
-            serviceTypeId: serviceId,
-            origin: {
-                customerNumber: process.env.ESTAFETA_CUSTOMER_NUMBER
-            },
-            destination: { /* addressData.dest... */ },
-            contentDescription: "NØR SYSTEMS LOGISTICS",
-            reference: "NOR-WEB"
-        };
+// --- COTIZACIÓN (Simulada / Tarifa Fija) ---
+export async function getQuote(zipOrigin: string, zipDest: string, weight: number = 1) {
+    // Simulamos un pequeño delay para que la UI se sienta "pensando"
+    await new Promise(resolve => setTimeout(resolve, 600));
 
-        const response = await estafetaRequest('/v1/waybills', 'POST', payload);
-
-        const { error: dbError } = await supabaseAdmin
-            .from('shipping_labels')
-            .insert({
-                tracking_number: response.waybill,
-                pdf_url: response.labelUrl,
-                service_type: serviceId,
-                origin_zip: addressData.originZip,
-                dest_zip: addressData.destZip,
-                status: 'created',
-                cost_provider: priceInfo.cost,
-                price_charged: priceInfo.price,
-            });
-
-        if (dbError) {
-            console.error('DATABASE ERROR (CRITICAL):', dbError);
+    // AQUÍ CONFIGURAS TUS PRECIOS DE VENTA
+    // Como usas guías pre-pagadas, tú decides cuánto cobrar.
+    const services = [
+        {
+            serviceTypeId: 'standard',
+            serviceDescription: 'ENVÍO ESTÁNDAR (ESTAFETA/FEDEX)',
+            deliveryType: '3-5 Días Hábiles',
+            totalAmount: 180.00, // <--- Ajusta este precio a lo que quieras cobrar
+            estimatedDelivery: '3-5 días'
+        },
+        {
+            serviceTypeId: 'express',
+            serviceDescription: 'ENVÍO EXPRESS (DÍA SIGUIENTE)',
+            deliveryType: 'Día Siguiente',
+            totalAmount: 290.00, // <--- Precio premium
+            estimatedDelivery: '24-48 hrs'
         }
+    ];
 
-        return {
-            success: true,
-            pdfUrl: response.labelUrl,
-            trackingNumber: response.waybill
-        };
+    return { success: true, services };
+}
 
-    } catch (error: any) {
-        return { success: false, error: error.message };
-    }
+// --- GENERACIÓN DE GUÍA (Placeholder) ---
+export async function createLabel(serviceId: string, addressData: any, priceInfo: any, userEmail: string = 'guest') {
+    // Como la guía es pre-comprada, no la generamos aquí.
+    // Retornamos un estado "Pendiente de Asignación" para que la orden se guarde en Supabase.
+
+    return {
+        success: true,
+        pdfUrl: null, // No hay PDF automático, tú lo pegas en la caja
+        trackingNumber: 'PENDIENTE' // Esto le indica al sistema que falta asignar guía
+    };
 }

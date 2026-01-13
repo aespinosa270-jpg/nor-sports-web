@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { CustomCursor } from "@/components/CustomCursor";
 import { CartSidebar } from "@/components/layout/CartSidebar";
+import { CookieBanner } from "@/components/layout/CookieBanner"; // <--- IMPORTANTE
 
 const syncopate = Syncopate({
   subsets: ["latin"],
@@ -26,9 +27,9 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: {
     template: "%s | NØR Systems",
-    default: "NØR | High-Vanguard Sportswear",
+    default: "NØR | Ropa Deportiva de Alta Vanguardia",
   },
-  description: "Advanced athletic gear designed in CDMX.",
+  description: "Equipo atlético avanzado diseñado en CDMX.",
 };
 
 export const viewport: Viewport = {
@@ -50,6 +51,7 @@ export default function RootLayout({
     >
       <body className="bg-[#fcfcfc] text-black antialiased selection:bg-black selection:text-white relative overflow-x-hidden">
 
+        {/* Textura de Ruido Global */}
         <div
           className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.04] mix-blend-multiply"
           style={{ backgroundImage: 'url("/assets/noise.png")' }}
@@ -66,6 +68,10 @@ export default function RootLayout({
         <main className="relative z-10 min-h-screen flex flex-col">
           {children}
         </main>
+
+        {/* Banner de Cookies al final */}
+        <CookieBanner />
+
       </body>
     </html>
   );

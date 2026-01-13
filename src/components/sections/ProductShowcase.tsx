@@ -13,10 +13,10 @@ export const ProductShowcase = () => {
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-nor-dark/10 pb-6">
                 <div>
                     <span className="font-mono text-xs text-nor-accent uppercase tracking-widest mb-3 block animate-pulse">
-                        [ New_Arrivals ]
+                        [ NUEVOS_INGRESOS ]
                     </span>
                     <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-none">
-                        System Essentials
+                        ESENCIALES DE ENTRENAMIENTO
                     </h2>
                 </div>
 
@@ -24,7 +24,7 @@ export const ProductShowcase = () => {
                     href="/shop"
                     className="hidden md:flex items-center gap-2 font-mono text-xs border border-nor-dark/20 px-8 py-4 hover:bg-nor-black hover:text-white transition-all duration-300 uppercase tracking-widest group"
                 >
-                    View Full Catalog
+                    VER Colección
                     <span className="group-hover:translate-x-1 transition-transform">-&gt;</span>
                 </Link>
             </div>
@@ -40,7 +40,7 @@ export const ProductShowcase = () => {
                     href="/shop"
                     className="block w-full text-center font-mono text-xs border border-nor-black px-6 py-4 bg-nor-black text-white hover:bg-nor-white hover:text-nor-black transition-colors uppercase font-bold tracking-widest"
                 >
-                    View Full Catalog
+                    VER TODAS LAS PLAYERAS
                 </Link>
             </div>
         </section>
