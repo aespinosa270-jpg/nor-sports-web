@@ -1,13 +1,12 @@
 "use client";
 
-import { useActionState } from "react"; // <--- ACTUALIZADO: De 'react-dom' a 'react'
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { subscribeToNewsletter } from "@/app/actions/newsletter";
 import { ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
 
-// --- CONFIGURACIÓN WHATSAPP ---
 const WA_NUMBER = "525617500002";
 const URL_ENVIOS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola NØR, tengo dudas sobre Envíos y Devoluciones.")}`;
 const URL_TALLAS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola NØR, necesito ayuda con la Guía de Tallas.")}`;
@@ -19,157 +18,152 @@ function SubmitButton() {
         <button
             type="submit"
             disabled={pending}
-            className="text-nor-black hover:text-nor-accent transition-colors disabled:opacity-50"
+            className="h-12 w-12 flex items-center justify-center bg-black text-white hover:bg-red-600 transition-colors duration-300 disabled:opacity-50"
         >
             {pending ? (
-                <div className="h-5 w-5 border-2 border-nor-black border-t-transparent rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
-                <ArrowRight size={20} strokeWidth={1.5} />
+                <ArrowRight size={20} />
             )}
         </button>
     );
 }
 
 export const Footer = () => {
-    // ACTUALIZADO: useActionState es el nuevo estándar
     const [state, formAction, isPending] = useActionState(
         subscribeToNewsletter,
         null
     );
 
     return (
-        <footer className="bg-nor-white text-nor-black border-t border-nor-dark/10">
+        <footer className="bg-white text-black border-t-8 border-red-600 selection:bg-red-600 selection:text-white relative overflow-hidden">
 
-            {/* SECCIÓN NEWSLETTER */}
-            <div className="px-6 md:px-12 py-20 border-b border-nor-dark/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-                <div className="max-w-xl">
-                    <h3 className="font-display text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-none">
-                        JOIN NOR-LAB
-                    </h3>
-                    <p className="font-mono text-xs md:text-sm text-nor-dark/60 max-w-md">
-                        Acceso anticipado a drops limitados, ingeniería experimental y eventos en CDMX.
-                        <span className="text-nor-black font-bold block mt-1"> SIN SPAM, SOLO VANGUARDIA.</span>
-                    </p>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-black">
 
-                <div className="w-full md:w-auto flex flex-col gap-2 relative">
-                    {state?.success ? (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center gap-2 text-nor-accent py-2 border-b border-nor-accent w-full md:w-[400px]"
-                        >
-                            <Check size={18} />
-                            <span className="font-mono text-xs font-bold uppercase tracking-widest">{state.message}</span>
-                        </motion.div>
-                    ) : (
-                        <form action={formAction} className="flex border-b border-nor-black pb-2 w-full md:w-[400px] group focus-within:border-nor-accent transition-colors duration-300 relative">
-                            <input
-                                name="email"
-                                type="email"
-                                required
-                                disabled={isPending}
-                                placeholder="CORREO ELECTRÓNICO"
-                                className="bg-transparent w-full outline-none font-mono text-xs placeholder:text-nor-dark/40 uppercase tracking-widest text-nor-black disabled:opacity-50"
-                            />
-                            <SubmitButton />
-                        </form>
-                    )}
-
-                    {!state?.success && state?.message && (
-                        <span className="absolute -bottom-6 left-0 text-[10px] text-red-500 font-mono font-bold">
-                            {state.message}
+                <div className="lg:col-span-7 p-8 md:p-16 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-between min-h-[400px]">
+                    <div>
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-red-600 block mb-6">
+                            /// JOIN THE CLUB
                         </span>
-                    )}
-                </div>
-            </div>
-
-            {/* ENLACES Y NAVEGACIÓN */}
-            <div className="px-6 md:px-12 py-16 grid grid-cols-2 md:grid-cols-4 gap-12">
-
-                {/* COLUMNA 1 */}
-                <div className="col-span-2 md:col-span-1 pr-8">
-                    <Link href="/" className="font-display text-4xl font-black uppercase tracking-tighter block mb-6 hover:opacity-50 transition-opacity">
-                        NØR
-                    </Link>
-                    <p className="font-mono text-[10px] text-nor-dark/50 uppercase tracking-widest leading-relaxed mb-6">
-                        High-Performance Sportswear.<br />
-                        Envios a todo México.
-                    </p>
-
-                    <address className="font-mono text-xs font-bold text-nor-black uppercase tracking-widest leading-relaxed not-italic border-l-2 border-nor-accent pl-4 py-1">
-                        República de Guatemala 114 Local C<br />
-                        Cuauhtémoc, México
-                    </address>
-                </div>
-
-                {/* COLUMNA 2 */}
-                <div className="flex flex-col gap-4">
-                    <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Colecciones ]</h4>
-                    <Link href="/shop" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
-                        Colección Dry-Fit
-                    </Link>
-                    <Link href="/norlab" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
-                        Nor-Lab
-                    </Link>
-                    <Link href="/offers" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
-                        Ofertas
-                    </Link>
-                </div>
-
-                {/* COLUMNA 3 - SOPORTE */}
-                <div className="flex flex-col gap-4">
-                    <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Soporte ]</h4>
-
-                    <a
-                        href={URL_ENVIOS}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium"
-                    >
-                        Envíos y Devoluciones
-                    </a>
-
-                    <a
-                        href={URL_TALLAS}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium"
-                    >
-                        Guía de Tallas
-                    </a>
-
-                    <Link href="/help" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
-                        Términos y Condiciones
-                    </Link>
-
-                    <Link href="/privacy" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">
-                        Política de Privacidad
-                    </Link>
-                </div>
-
-                {/* COLUMNA 4 */}
-                <div className="flex flex-col gap-4">
-                    <h4 className="font-mono text-xs font-bold uppercase text-nor-black tracking-widest mb-2">[ Social ]</h4>
-                    <a href="#" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">Instagram</a>
-                    <a href="#" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">TikTok</a>
-                    <a href="#" className="font-sans text-sm text-nor-dark/60 hover:text-nor-black hover:translate-x-1 transition-all font-medium">Twitter / X</a>
-                </div>
-            </div>
-
-            {/* STATUS BAR */}
-            <div className="px-6 md:px-12 py-6 border-t border-nor-dark/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-nor-concrete/30">
-                <p className="font-mono text-[10px] text-nor-dark/40 uppercase tracking-widest">
-                    © 2026 NØR SPORTS S.A. DE C.V.
-                </p>
-                <div className="flex gap-3 items-center">
-                    <div className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        <h3 className="font-display text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-8">
+                            NO TE PIERDAS <br />
+                            <span className="text-transparent text-stroke-black hover:text-black transition-colors duration-500">EL FUTURO.</span>
+                        </h3>
                     </div>
-                    <span className="font-mono text-[10px] text-nor-dark/40 uppercase tracking-widest">
-                        ONLINE
+
+                    <div className="w-full max-w-md relative">
+                        {state?.success ? (
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="flex items-center gap-3 text-red-600 py-4 border-2 border-red-600 px-6 bg-red-50"
+                            >
+                                <Check size={20} />
+                                <span className="font-mono text-xs font-bold uppercase tracking-widest">{state.message}</span>
+                            </motion.div>
+                        ) : (
+                            <form action={formAction} className="flex flex-col gap-4">
+                                <div className="flex items-end gap-0 border-b-2 border-black focus-within:border-red-600 transition-colors duration-300">
+                                    <input
+                                        name="email"
+                                        type="email"
+                                        required
+                                        disabled={isPending}
+                                        placeholder="TU EMAIL AQUÍ"
+                                        className="bg-transparent w-full py-4 outline-none font-mono text-sm placeholder:text-gray-400 uppercase tracking-widest text-black disabled:opacity-50"
+                                    />
+                                    <SubmitButton />
+                                </div>
+                                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wide mt-2">
+                                    Sin spam. Solo lanzamientos exclusivos.
+                                </p>
+                            </form>
+                        )}
+                        {!state?.success && state?.message && (
+                            <span className="absolute -bottom-8 left-0 text-[10px] text-red-600 font-mono font-bold">
+                                {state.message}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                <div className="lg:col-span-5 grid grid-cols-2">
+
+                    <div className="p-8 md:p-12 border-r border-black flex flex-col gap-8">
+                        <h4 className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest">
+                            CATÁLOGO
+                        </h4>
+                        <nav className="flex flex-col gap-4">
+                            {['Colección Dry-Fit', 'Nor-Lab', 'Ofertas', 'Nuevos Drops'].map((item) => (
+                                <Link
+                                    key={item}
+                                    href="/shop"
+                                    className="font-display text-xl md:text-2xl font-bold uppercase tracking-tight hover:text-red-600 hover:translate-x-2 transition-all"
+                                >
+                                    {item}
+                                </Link>
+                            ))}
+                        </nav>
+                    </div>
+
+                    <div className="p-8 md:p-12 flex flex-col gap-8 bg-gray-50/50">
+                        <h4 className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest">
+                            AYUDA
+                        </h4>
+                        <nav className="flex flex-col gap-4">
+                            <a href={URL_ENVIOS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                                Envíos y Devoluciones
+                            </a>
+                            <a href={URL_TALLAS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                                Guía de Tallas
+                            </a>
+
+                            <Link href="/help" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                                Términos y Condiciones
+                            </Link>
+
+                            <Link href="/privacy" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                                Política de Privacidad
+                            </Link>
+                        </nav>
+
+                        <div className="mt-auto pt-8">
+                            <h4 className="font-mono text-[10px] font-bold uppercase text-gray-400 mb-4 tracking-widest">SOCIAL</h4>
+                            <div className="flex gap-4">
+                                {['IG', 'TW', 'TK'].map((social) => (
+                                    <a key={social} href="#" className="h-8 w-8 border border-black flex items-center justify-center font-mono text-[10px] font-bold hover:bg-black hover:text-white hover:border-black transition-all rounded-full">
+                                        {social}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="border-b border-black bg-white relative overflow-hidden group cursor-default">
+                <h1 className="text-[12vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center select-none group-hover:text-red-600 transition-colors duration-700">
+                    NØR SPORTS
+                </h1>
+            </div>
+
+            <div className="px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 bg-black text-white">
+                <p className="font-mono text-[10px] uppercase tracking-widest opacity-60">
+                    © 2026 NØR SPORTS S.A. DE C.V. // MX-CDMX
+                </p>
+                <div className="flex gap-6 items-center">
+                    <span className="font-mono text-[10px] uppercase tracking-widest opacity-60 hidden md:block">
+                        DESIGNED BY HUUP
                     </span>
+                    <div className="flex gap-2 items-center px-3 py-1 border border-white/20 rounded-full">
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </div>
+                        <span className="font-mono text-[9px] uppercase tracking-widest font-bold text-white">
+                            SYSTEM ONLINE
+                        </span>
+                    </div>
                 </div>
             </div>
         </footer>

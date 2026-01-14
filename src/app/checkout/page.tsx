@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cartStore';
 import { getQuote } from '@/app/actions/shipping';
 import { createOrder } from '@/app/actions/order';
-import { createPaymentPreference } from '@/app/actions/payment';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiLock, FiChevronRight, FiTag, FiCheckCircle } from 'react-icons/fi';
 import { SiMercadopago } from 'react-icons/si';
+
+// Importamos el componente de pago transparente
+import { PaymentComponent } from '@/components/checkout/PaymentComponent';
 
 // --- INPUT TÉCNICO NØR ---
 const InputField = ({ label, name, type = "text", value, onChange, placeholder, className = "" }: any) => (
@@ -28,20 +30,18 @@ const InputField = ({ label, name, type = "text", value, onChange, placeholder, 
     </div>
 );
 
-// --- LOGOS REALES (Corregido: American Express) ---
+// --- LOGOS VISUALES ---
 const PaymentLogos = ({ grayscale = false }: { grayscale?: boolean }) => (
-    <div className={`flex justify-center items-center gap-6 py-4 ${grayscale ? 'opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all' : ''}`}>
+    <div className={`flex justify-center items-center gap-6 py-4 border-b border-gray-100 mb-4 ${grayscale ? 'opacity-60' : ''}`}>
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4 w-auto object-contain" />
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6 w-auto object-contain" />
-        {/* Aquí la corrección explícita en el alt */}
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_%282018%29.svg" alt="American Express" className="h-4 w-auto object-contain" />
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Oxxo_Logo.svg" alt="OXXO" className="h-6 w-auto object-contain" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_%282018%29.svg" alt="AMEX" className="h-4 w-auto object-contain" />
     </div>
 );
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { items, clearCart } = useCartStore();
+    const { items } = useCartStore();
 
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -49,18 +49,18 @@ export default function CheckoutPage() {
     const [selectedShipping, setSelectedShipping] = useState<any>(null);
     const [promoCode, setPromoCode] = useState('');
 
+    const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
+
     const [form, setForm] = useState({
         email: '', firstName: '', lastName: '', address: '',
         colonia: '', city: '', state: '', zipCode: '', phone: ''
     });
 
-    // --- CÁLCULOS MATEMÁTICOS (IVA 16%) ---
+    // --- CÁLCULOS ---
     const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const taxRate = 0.16;
     const taxAmount = subtotal * taxRate;
     const shippingCost = selectedShipping?.totalAmount || 0;
-
-    // Total Final = Subtotal + IVA + Envío
     const grandTotal = subtotal + taxAmount + shippingCost;
 
     useEffect(() => {
@@ -71,6 +71,7 @@ export default function CheckoutPage() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    // PASO 1 -> 2: Calcular Envío
     const handleCalculateShipping = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -86,26 +87,21 @@ export default function CheckoutPage() {
         setLoading(false);
     };
 
-    const handlePlaceOrder = async () => {
+    // PASO 2 -> 3: Crear Orden
+    const handlePreparePayment = async () => {
         if (!selectedShipping) return;
         setLoading(true);
 
         try {
             const orderRes = await createOrder(form, items, selectedShipping?.serviceTypeId || 'standard');
-
             if (!orderRes.success) throw new Error(orderRes.error);
 
-            const paymentRes = await createPaymentPreference(orderRes.orderId);
-
-            if (paymentRes.success && paymentRes.url) {
-                clearCart();
-                window.location.href = paymentRes.url;
-            } else {
-                throw new Error("Error generando link de pago.");
-            }
+            setCurrentOrderId(orderRes.orderId);
+            setStep(3);
         } catch (error: any) {
             console.error(error);
-            alert(error.message);
+            alert("Error preparando la orden: " + error.message);
+        } finally {
             setLoading(false);
         }
     };
@@ -115,52 +111,51 @@ export default function CheckoutPage() {
     return (
         <div className="min-h-screen bg-white text-nor-black font-sans selection:bg-nor-black selection:text-white pt-24 pb-20">
 
-            {/* HEADER TÉCNICO */}
+            {/* HEADER */}
             <div className="fixed top-0 left-0 w-full bg-white z-40 border-b-2 border-nor-black h-16 flex items-center justify-between px-6 md:px-12">
                 <div className="font-bold tracking-[0.2em] text-sm flex items-center gap-2 font-syncopate">
                     NØR // CHECKOUT
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-nor-black font-mono uppercase bg-nor-black text-white px-3 py-1">
-                    <FiLock size={10} /> SISTEMA SEGURO
+                    <FiLock size={10} /> PAGOS CIFRADOS SSL
                 </div>
             </div>
 
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 px-4 md:px-8 mt-8">
 
-                {/* === COLUMNA IZQUIERDA (FORMULARIOS) === */}
+                {/* === COLUMNA IZQUIERDA === */}
                 <div className="lg:col-span-7 space-y-8">
 
-                    <AnimatePresence mode="wait">
+                    {/* HE ELIMINADO EL ANIMATEPRESENCE QUE ENVOLVÍA TODO AQUÍ, ESO CAUSABA EL ERROR */}
 
-                        {/* PASO 1: DATOS DE ENVÍO */}
-                        <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
-                            <div className="border-2 border-nor-black p-6 md:p-8">
-                                <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
-                                    <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
-                                        <span className="text-nor-black">01 //</span> DATOS DE ENVÍO
-                                    </h2>
-                                    {step > 1 && <button onClick={() => setStep(1)} className="text-[10px] font-bold underline uppercase tracking-widest hover:text-nor-accent font-mono">Editar</button>}
-                                </div>
+                    {/* PASO 1: DATOS */}
+                    <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                        <div className="border-2 border-nor-black p-6 md:p-8">
+                            <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
+                                <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
+                                    <span className="text-nor-black">01 //</span> DATOS DE ENVÍO
+                                </h2>
+                                {step > 1 && <button type="button" onClick={() => setStep(1)} className="text-[10px] font-bold underline font-mono">EDITAR</button>}
+                            </div>
 
+                            <AnimatePresence>
                                 {step === 1 && (
                                     <motion.form
-                                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                        key="step1-form"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, height: 0 }}
                                         onSubmit={handleCalculateShipping}
                                         className="grid grid-cols-1 md:grid-cols-2 gap-6"
                                     >
-                                        <InputField label="Correo Electrónico" name="email" type="email" value={form.email} onChange={handleChange} className="md:col-span-2" placeholder="ejemplo@email.com" />
-
-                                        <InputField label="Nombre(s)" name="firstName" value={form.firstName} onChange={handleChange} placeholder="Tu Nombre" />
-                                        <InputField label="Apellidos" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Tus Apellidos" />
-
-                                        <InputField label="Calle y Número" name="address" value={form.address} onChange={handleChange} className="md:col-span-2" placeholder="Av. Principal #123" />
-
-                                        <InputField label="Colonia" name="colonia" value={form.colonia} onChange={handleChange} placeholder="Colonia Centro" />
-                                        <InputField label="Código Postal" name="zipCode" value={form.zipCode} onChange={handleChange} placeholder="00000" />
-
+                                        <InputField label="Email" name="email" type="email" value={form.email} onChange={handleChange} className="md:col-span-2" placeholder="cliente@email.com" />
+                                        <InputField label="Nombre" name="firstName" value={form.firstName} onChange={handleChange} placeholder="Nombre" />
+                                        <InputField label="Apellidos" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Apellidos" />
+                                        <InputField label="Calle y Núm" name="address" value={form.address} onChange={handleChange} className="md:col-span-2" placeholder="Calle, Número Ext/Int" />
+                                        <InputField label="Colonia" name="colonia" value={form.colonia} onChange={handleChange} placeholder="Colonia" />
+                                        <InputField label="C.P." name="zipCode" value={form.zipCode} onChange={handleChange} placeholder="00000" />
                                         <InputField label="Ciudad" name="city" value={form.city} onChange={handleChange} placeholder="Ciudad" />
                                         <InputField label="Estado" name="state" value={form.state} onChange={handleChange} placeholder="Estado" />
-
                                         <InputField label="Teléfono" name="phone" value={form.phone} onChange={handleChange} className="md:col-span-2" placeholder="10 dígitos" />
 
                                         <div className="md:col-span-2 pt-6">
@@ -169,26 +164,34 @@ export default function CheckoutPage() {
                                                 type="submit"
                                                 className="w-full bg-nor-black text-white h-14 text-sm font-bold uppercase tracking-[0.2em] hover:bg-nor-accent transition-colors flex items-center justify-center gap-3 font-syncopate"
                                             >
-                                                {loading ? "VERIFICANDO..." : <>CONTINUAR A LOGÍSTICA <FiChevronRight /></>}
+                                                {loading ? "PROCESANDO..." : <>CONTINUAR A LOGÍSTICA <FiChevronRight /></>}
                                             </button>
                                         </div>
                                     </motion.form>
                                 )}
-                            </div>
+                            </AnimatePresence>
                         </div>
+                    </div>
 
-                        {/* PASO 2: MÉTODO DE ENVÍO */}
-                        <div className={`transition-all duration-500 ${step === 2 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
-                            <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
-                                <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
-                                    <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
-                                        <span className="text-nor-black">02 //</span> LOGÍSTICA
-                                    </h2>
-                                    {step > 2 && <button onClick={() => setStep(2)} className="text-[10px] font-bold underline uppercase tracking-widest hover:text-nor-accent font-mono">Editar</button>}
-                                </div>
+                    {/* PASO 2: LOGÍSTICA */}
+                    <div className={`transition-all duration-500 ${step === 2 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                        <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
+                            <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
+                                <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
+                                    <span className="text-nor-black">02 //</span> MÉTODO DE ENVÍO
+                                </h2>
+                                {step > 2 && <button type="button" onClick={() => setStep(2)} className="text-[10px] font-bold underline font-mono">EDITAR</button>}
+                            </div>
 
+                            <AnimatePresence>
                                 {step === 2 && (
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                                    <motion.div
+                                        key="step2-options"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="space-y-4"
+                                    >
                                         {shippingOptions.map((opt) => (
                                             <div
                                                 key={opt.serviceTypeId}
@@ -213,66 +216,67 @@ export default function CheckoutPage() {
 
                                         <div className="pt-6 flex gap-4 font-syncopate">
                                             <button onClick={() => setStep(1)} className="w-1/3 border-2 border-nor-black text-sm font-bold uppercase tracking-widest hover:bg-gray-50">
-                                                Atrás
+                                                ATRÁS
                                             </button>
                                             <button
-                                                disabled={!selectedShipping}
-                                                onClick={() => setStep(3)}
+                                                disabled={!selectedShipping || loading}
+                                                onClick={handlePreparePayment}
                                                 className="w-2/3 bg-nor-black text-white h-14 text-sm font-bold uppercase tracking-[0.2em] hover:bg-nor-accent transition-colors disabled:opacity-50"
                                             >
-                                                Ir al Pago
+                                                {loading ? "CREANDO ORDEN..." : "IR A PAGAR"}
                                             </button>
                                         </div>
                                     </motion.div>
                                 )}
-                            </div>
+                            </AnimatePresence>
                         </div>
+                    </div>
 
-                        {/* PASO 3: PAGO */}
-                        <div className={`transition-all duration-500 ${step === 3 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
-                            <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
-                                <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
-                                    <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
-                                        <span className="text-nor-black">03 //</span> PASARELA DE PAGO
-                                    </h2>
-                                </div>
+                    {/* PASO 3: CHECKOUT TRANSPARENTE */}
+                    <div className={`transition-all duration-500 ${step === 3 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                        <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
+                            <div className="flex justify-between items-baseline mb-6 border-b-2 border-nor-black pb-4 font-syncopate">
+                                <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
+                                    <span className="text-nor-black">03 //</span> TARJETA DE CRÉDITO/DÉBITO
+                                </h2>
+                            </div>
 
+                            <AnimatePresence>
                                 {step === 3 && (
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-
-                                        <div className="bg-nor-black text-white p-6 mb-6 flex items-start gap-4 border-2 border-nor-black font-mono">
-                                            <div className="p-2 bg-white text-nor-black rounded-none">
-                                                <SiMercadopago size={24} />
+                                    <motion.div
+                                        key="step3-payment"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                    >
+                                        <div className="bg-gray-50 p-4 mb-6 border border-gray-200 flex items-center gap-3">
+                                            <div className="bg-nor-black text-white p-2">
+                                                <SiMercadopago size={20} />
                                             </div>
-                                            <div>
-                                                <h4 className="font-bold uppercase text-sm">Procesado por Mercado Pago</h4>
-                                                <p className="text-xs text-gray-300 mt-1 leading-relaxed">
-                                                    Serás redirigido para completar tu compra de forma segura.
-                                                    Aceptamos tarjetas, SPEI y efectivo (OXXO).
-                                                </p>
-                                            </div>
+                                            <p className="font-mono text-[10px] text-gray-500 uppercase leading-tight">
+                                                Tus datos viajan encriptados directamente a Mercado Pago.
+                                                NØR no almacena tu tarjeta.
+                                            </p>
                                         </div>
 
                                         <PaymentLogos />
 
-                                        <div className="space-y-4 font-syncopate mt-6">
-                                            <button
-                                                onClick={handlePlaceOrder}
-                                                disabled={loading}
-                                                className="w-full bg-nor-black text-white h-16 text-sm font-bold uppercase tracking-[0.2em] hover:bg-nor-accent transition-all flex items-center justify-center gap-3 border-2 border-nor-black"
-                                            >
-                                                {loading ? "CONECTANDO..." : `PAGAR $${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })} MXN`} <SiMercadopago />
-                                            </button>
+                                        <div className="mt-6">
+                                            <PaymentComponent
+                                                amount={grandTotal}
+                                                description={`Orden NØR #${currentOrderId?.slice(0, 8) || 'TEMP'}`}
+                                                email={form.email}
+                                            />
                                         </div>
                                     </motion.div>
                                 )}
-                            </div>
+                            </AnimatePresence>
                         </div>
+                    </div>
 
-                    </AnimatePresence>
                 </div>
 
-                {/* === COLUMNA DERECHA (TICKET SUMMARY) === */}
+                {/* === COLUMNA DERECHA (TICKET) === */}
                 <div className="hidden lg:block lg:col-span-5">
                     <div className="sticky top-28">
                         <div className="bg-white border-2 border-nor-black p-0 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -302,19 +306,16 @@ export default function CheckoutPage() {
                                     ))}
                                 </div>
 
-                                {/* Desglose de Totales (CON IVA) */}
+                                {/* Desglose */}
                                 <div className="space-y-3 text-sm mb-6">
                                     <div className="flex justify-between">
                                         <span className="uppercase font-bold">Subtotal</span>
                                         <span className="font-bold">${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                     </div>
-
-                                    {/* IVA DESGLOSADO */}
                                     <div className="flex justify-between text-nor-black/70">
                                         <span className="uppercase font-bold">IVA (16%)</span>
                                         <span className="font-bold">${taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                     </div>
-
                                     <div className="flex justify-between">
                                         <span className="uppercase font-bold">Envío</span>
                                         <span className="font-bold">
@@ -323,7 +324,7 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
 
-                                {/* Promo Input */}
+                                {/* Promo Code */}
                                 <div className="mb-6">
                                     <div className="flex border-2 border-nor-black">
                                         <div className="bg-nor-black flex items-center justify-center px-3 text-white">
@@ -336,12 +337,12 @@ export default function CheckoutPage() {
                                             className="flex-1 bg-white py-3 px-3 text-xs uppercase tracking-widest outline-none font-bold placeholder:text-gray-400 font-mono"
                                         />
                                         <button className="bg-nor-black text-white h-auto px-4 text-[10px] font-bold uppercase hover:bg-nor-accent transition-colors">
-                                            Aplicar
+                                            APLICAR
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Total Final */}
+                                {/* Total */}
                                 <div className="flex justify-between items-end border-t-2 border-nor-black pt-6 mt-6">
                                     <span className="font-syncopate font-bold text-xl tracking-tighter uppercase">TOTAL</span>
                                     <div className="text-right text-nor-accent">
@@ -352,11 +353,11 @@ export default function CheckoutPage() {
                             </div>
                         </div>
 
-                        {/* Garantía Footer */}
+                        {/* Footer Ticket */}
                         <div className="mt-6 flex gap-3 text-xs text-nor-black items-center px-4 font-mono border-2 border-nor-black p-4 bg-white">
                             <FiCheckCircle className="shrink-0 text-nor-accent" size={20} />
                             <p className="leading-tight text-[10px] uppercase font-bold">
-                                ¡Muy bien! Pedido seguro. Aplican términos y condiciones.
+                                Transacción protegida. Envíos asegurados a todo México.
                             </p>
                         </div>
                     </div>

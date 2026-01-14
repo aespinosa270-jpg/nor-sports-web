@@ -3,13 +3,15 @@
 interface MarqueeProps {
     text: string;
     repeat?: number;
-    duration?: string; // Nueva prop para velocidad
+    duration?: string;
+    className?: string; // <--- 1. Agregamos la prop opcional
 }
 
-export const Marquee = ({ text, repeat = 4, duration = "40s" }: MarqueeProps) => {
+export const Marquee = ({ text, repeat = 4, duration = "40s", className = "" }: MarqueeProps) => {
     return (
-        <div className="relative w-full overflow-hidden border-y border-nor-black/10 bg-nor-concrete py-3">
-            {/* Aplicamos inline style para sobreescribir la velocidad de Tailwind */}
+        // 2. Inyectamos {className} en el contenedor principal y quitamos colores fijos (bg-nor-concrete)
+        <div className={`relative w-full overflow-hidden py-3 ${className}`}>
+
             <div
                 className="flex w-max animate-marquee"
                 style={{ animationDuration: duration }}
@@ -19,10 +21,12 @@ export const Marquee = ({ text, repeat = 4, duration = "40s" }: MarqueeProps) =>
                     {Array.from({ length: repeat }).map((_, i) => (
                         <span
                             key={`a-${i}`}
-                            className="mx-6 font-display text-2xl md:text-4xl font-bold uppercase tracking-tighter text-nor-black select-none flex items-center"
+                            // 3. Quitamos 'text-nor-black' y 'text-2xl' para que herede el color y tamaño que tú le digas desde fuera
+                            className="mx-6 font-display font-bold uppercase tracking-tighter select-none flex items-center"
                         >
                             {text}
-                            <span className="text-nor-accent mx-6 text-sm">///</span>
+                            {/* El separador lo dejamos sutil */}
+                            <span className="opacity-50 mx-6 text-sm">///</span>
                         </span>
                     ))}
                 </div>
@@ -31,10 +35,10 @@ export const Marquee = ({ text, repeat = 4, duration = "40s" }: MarqueeProps) =>
                     {Array.from({ length: repeat }).map((_, i) => (
                         <span
                             key={`b-${i}`}
-                            className="mx-6 font-display text-2xl md:text-4xl font-bold uppercase tracking-tighter text-nor-black select-none flex items-center"
+                            className="mx-6 font-display font-bold uppercase tracking-tighter select-none flex items-center"
                         >
                             {text}
-                            <span className="text-nor-accent mx-6 text-sm">///</span>
+                            <span className="opacity-50 mx-6 text-sm">///</span>
                         </span>
                     ))}
                 </div>
