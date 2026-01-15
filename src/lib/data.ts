@@ -1,3 +1,5 @@
+// src/lib/data.ts
+
 export interface ProductVariant {
     colorName: string;
     colorHex: string;
@@ -9,32 +11,46 @@ export interface Product {
     slug: string;
     name: string;
     price: number;
-    originalPrice?: number; // <--- NUEVO: Precio anterior (activa la oferta)
-    discountTag?: string;   // <--- NUEVO: Etiqueta visual (ej: "-30%")
+    originalPrice?: number;
+    discountTag?: string;
     tag?: string;
     category: string;
     description: string;
     features: string[];
     mainImage: string;
     variants: ProductVariant[];
+    gallery?: string[]; // <--- NUEVA PROPIEDAD OPCIONAL PARA FORZAR IMÁGENES
 }
 
 export const PRODUCTS: Product[] = [
     {
         id: "1",
-        slug: "tech-flow-micropique",
-        name: "TECH FLOW / MICROPIQUÉ",
-        price: 595, // <--- PRECIO REBAJADO
-        originalPrice: 850, // <--- PRECIO REAL (Esto activa la lógica de oferta)
-        discountTag: "-30%", // <--- ETIQUETA VISUAL
+        slug: "nor-one",
+        name: "NOR ONE",
+        price: 50,
+        originalPrice: 70,
+        discountTag: "-29%",
         tag: "BREATHABLE",
         category: "Playera",
-        description: "Arquitectura textil en Micropiqué diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",
+        description: "Arquitectura textil en Micropiqué 100% Poliéster diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",
         features: ["Tejido Micropiqué 100% Poliéster", "Evaporación instantánea", "Corte Regular Fit"],
-        mainImage: "/assets/products/tshirt-micropique-main.jpg",
+
+        mainImage: "/assets/products/NORONE.png",
+
+        // AQUÍ DEFINIMOS LAS 3 IMÁGENES MANUALMENTE PARA QUE NO DEPENDAN DE LOS COLORES
+        gallery: [
+            "/assets/products/NORONE.png",  // 1. Principal
+            "/assets/products/NORONE2.png", // 2. Espalda (Ghost Variant)
+            "/assets/products/NORONE3.png"  // 3. Detalle (Extra)
+        ],
+
         variants: [
-            { colorName: "Carbon", colorHex: "#1a1a1a", image: "/assets/products/tshirt-micropique-black.jpg" },
-            { colorName: "Ghost", colorHex: "#f0f0f0", image: "/assets/products/tshirt-micropique-white.jpg" }
+            {
+                colorName: "Ghost",
+                colorHex: "#f0f0f0",
+                image: "/assets/products/NORONE2.png"
+            }
+            // Ya no está Carbon, pero las imágenes siguen arriba en "gallery"
         ]
     },
 
@@ -43,7 +59,6 @@ export const PRODUCTS: Product[] = [
         slug: "titan-structure-vera",
         name: "TITAN STRUCTURE / VERA",
         price: 920,
-        // Sin originalPrice, por lo tanto NO está en oferta
         tag: "RESISTANCE",
         category: "Playera",
         description: "Construcción robusta en Piqué Vera. Un tejido con mayor cuerpo y resistencia a la abrasión sin sacrificar la movilidad.",
@@ -72,11 +87,8 @@ export const PRODUCTS: Product[] = [
     },
 ];
 
-// Obtener TODO el catálogo (Para Shop Page)
 export const getAllProducts = () => PRODUCTS;
 
-// Obtener SOLO ofertas (Para Offers Page)
-// Filtra automáticamente los productos que tienen descuento
 export const getSaleProducts = () => {
     return PRODUCTS.filter((p) => p.originalPrice && p.originalPrice > p.price);
 };
