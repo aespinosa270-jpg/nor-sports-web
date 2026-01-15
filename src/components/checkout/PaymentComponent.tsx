@@ -2,15 +2,15 @@
 import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react';
 import { useRouter } from 'next/navigation';
 
-// Inicializamos con la Public Key
-initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!);
+// 🔴 CORRECCIÓN AQUÍ: Usamos el nombre largo que tienes en Vercel
+initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY!);
 
 export const PaymentComponent = ({ amount, description, email }: { amount: number, description: string, email: string }) => {
     const router = useRouter();
 
     const initialization = {
         amount: amount,
-        payer: { email: email }, // Pre-llenamos el email del formulario anterior
+        payer: { email: email },
     };
 
     const onSubmit = async (formData: any) => {
@@ -39,7 +39,7 @@ export const PaymentComponent = ({ amount, description, email }: { amount: numbe
                 customization={{
                     visual: {
                         style: {
-                            theme: 'default', // Puedes usar 'flat' o 'bootstrap'
+                            theme: 'default',
                         }
                     }
                 }}
