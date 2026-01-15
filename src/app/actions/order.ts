@@ -1,6 +1,9 @@
 'use server'
 
-import { supabaseAdmin } from '@/lib/supabase-admin';
+// 🔴 ANTES: import { supabaseAdmin } from '@/lib/supabase-admin';
+// 🟢 AHORA (Correcto):
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+
 import { getQuote } from '@/app/actions/shipping';
 
 export async function createOrder(formData: any, cartItems: any[], shippingServiceId: string) {
@@ -44,8 +47,8 @@ export async function createOrder(formData: any, cartItems: any[], shippingServi
                 subtotal,
                 shipping_cost: shippingCost,
                 total,
-                status: 'pending_payment', // Aquí cambiaría a 'paid' si integras Stripe directo
-                payment_method: 'manual_transfer' // O el que uses
+                status: 'pending_payment',
+                payment_method: 'manual_transfer'
             })
             .select()
             .single();
