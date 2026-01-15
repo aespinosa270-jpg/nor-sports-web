@@ -1,5 +1,5 @@
 // 🔴 CORRECCIÓN AQUÍ: Quitamos el guion en la importación
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseAdmin } from '@/lib/db';
 
 import Link from 'next/link';
 import { FiPrinter, FiPackage, FiActivity, FiExternalLink, FiAlertCircle } from 'react-icons/fi';

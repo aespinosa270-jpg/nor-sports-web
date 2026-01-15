@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { sendOrderConfirmation } from '@/lib/notifications';
-import { supabaseAdmin } from '@/lib/supabaseAdmin'; // 👈 IMPORTANTE: Importamos el cliente admin
+import { supabaseAdmin } from '@/lib/db';
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 

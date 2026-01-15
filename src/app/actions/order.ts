@@ -1,8 +1,6 @@
 'use server'
 
-// 🔴 ANTES: import { supabaseAdmin } from '@/lib/supabase-admin';
-// 🟢 AHORA (Correcto):
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseAdmin } from '@/lib/db';
 
 import { getQuote } from '@/app/actions/shipping';
 
