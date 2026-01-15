@@ -1,8 +1,7 @@
 'use server'
 
 import { MercadoPagoConfig, Preference } from 'mercadopago';
-import { supabaseAdmin } from '@/lib/supabase-admin';
-
+import { supabaseAdmin } from '@/lib/db';
 // Inicializamos el cliente con tu Token
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 
