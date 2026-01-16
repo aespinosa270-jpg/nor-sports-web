@@ -45,8 +45,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // 👇 AQUÍ AGREGAMOS LA SOLUCIÓN: data-scroll-behavior="smooth"
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       className={`${syncopate.variable} ${spaceMono.variable} ${interTight.variable} scroll-smooth`}
     >
       <body className="bg-[#fcfcfc] text-black antialiased selection:bg-black selection:text-white relative overflow-x-hidden">

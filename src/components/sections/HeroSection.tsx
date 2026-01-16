@@ -14,9 +14,10 @@ export const HeroSection = () => {
                     src="/assets/K12.jpg"
                     alt="NØR Campaign Desktop"
                     fill
-                    className="object-cover object-center opacity-90" // Reducimos ligeramente la opacidad para mejorar el contraste
+                    className="object-cover object-center opacity-90"
                     priority
                     quality={95}
+                    sizes="100vw" // 👈 AGREGADO: Obligatorio para imágenes full-screen
                 />
             </div>
 
@@ -28,6 +29,7 @@ export const HeroSection = () => {
                     className="object-cover object-center opacity-90"
                     priority
                     quality={95}
+                    sizes="100vw" // 👈 AGREGADO: Obligatorio para imágenes full-screen
                 />
             </div>
 
@@ -73,12 +75,11 @@ export const HeroSection = () => {
                 {/* CONTENIDO PRINCIPAL (Bottom) */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0 items-end">
 
-                    {/* TITULAR GIGANTE (Izquierda) - TEXTO SÓLIDO Y LEGIBLE */}
+                    {/* TITULAR GIGANTE (Izquierda) */}
                     <div className="lg:col-span-7">
                         <h1 className="font-display font-black text-7xl md:text-8xl lg:text-[9.5rem] uppercase tracking-tighter leading-[0.8] text-white mb-4 drop-shadow-2xl">
                             IMPULSO
                             <br />
-                            {/* Texto infinito ahora es sólido y rojo para máximo impacto */}
                             <span className="text-red-600">
                                 INFINITO.
                             </span>
@@ -101,7 +102,7 @@ export const HeroSection = () => {
                                 <ArrowDownRight size={22} className="group-hover:rotate-45 transition-transform duration-300" />
                             </div>
 
-                            {/* Hover Fill Animation (Rojo intenso) */}
+                            {/* Hover Fill Animation */}
                             <div className="absolute inset-0 bg-red-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                         </Link>
                     </div>

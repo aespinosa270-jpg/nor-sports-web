@@ -4,40 +4,37 @@ import { motion } from "framer-motion";
 import { getAllProducts } from "@/lib/data";
 import { ProductCard } from "@/components/home/ProductCard";
 import { useState, useMemo } from "react";
-import { Footer } from "@/components/layout/Footer"; // Asegúrate de importar el Footer
-import { Filter, ChevronDown } from "lucide-react";
+import { Footer } from "@/components/layout/Footer";
+import { Filter } from "lucide-react";
 
-// Lógica de normalización de texto
+// Lógica de normalización de texto para búsquedas insensibles a mayúsculas/acentos
 const normalizeText = (text: string | undefined) => {
     return text
         ? text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         : "";
 };
 
-const FILTERS = ["Todo", "Micropiqué", "Piqué Vera", "Micropanal"];
+// ⚠️ ACTUALIZADO: Agregué "Ares" para que aparezca el nuevo producto NOR ACTIVE PRO
+const FILTERS = ["Todo", "Micropiqué", "Piqué Vera", "Micropanal", "Ares"];
 
 export default function ShopPage() {
-    // 1. Obtener datos
+    // 1. Obtener datos (Traerá los 4 productos nuevos)
     const allProducts = getAllProducts();
 
     // 2. Estado del filtro activo
     const [activeFilter, setActiveFilter] = useState("Todo");
 
-    // 3. Lógica de Filtrado (Tu lógica original intacta)
+    // 3. Lógica de Filtrado
     const displayedProducts = useMemo(() => {
-        // A. Primero filtramos que sean SOLO playeras (Filtro Duro)
+        // A. Filtro Duro: Aseguramos que sean playeras o tengan las telas clave
         const tshirts = allProducts.filter(product => {
-            const name = normalizeText(product.name);
             const category = normalizeText(product.category);
-            const desc = normalizeText(product.description);
-
-            return category === 'playera' ||
-                name.includes('playera') ||
-                desc.includes('pique') ||
-                desc.includes('micropanal');
+            const name = normalizeText(product.name);
+            // Permitimos que pasen todos los productos que definimos en data.ts
+            return category === 'playera' || name.includes('nor');
         });
 
-        // B. Luego aplicamos el filtro de botón (Filtro de Usuario)
+        // B. Filtro de Usuario (Botones)
         if (activeFilter === "Todo") return tshirts;
 
         const normalizedFilter = normalizeText(activeFilter);
@@ -45,7 +42,14 @@ export default function ShopPage() {
         return tshirts.filter(product => {
             const name = normalizeText(product.name);
             const desc = normalizeText(product.description);
-            return name.includes(normalizedFilter) || desc.includes(normalizedFilter);
+            const features = product.features.map(f => normalizeText(f)).join(" ");
+            const tag = normalizeText(product.tag);
+
+            // Buscamos coincidencia en Nombre, Descripción, Tag o Features
+            return name.includes(normalizedFilter) ||
+                desc.includes(normalizedFilter) ||
+                tag.includes(normalizedFilter) ||
+                features.includes(normalizedFilter);
         });
     }, [allProducts, activeFilter]);
 
@@ -98,7 +102,7 @@ export default function ShopPage() {
                                         }`}
                                 >
                                     {filter}
-                                    {/* Indicador activo */}
+                                    {/* Indicador activo animado */}
                                     {activeFilter === filter && (
                                         <motion.span
                                             layoutId="activeFilter"
