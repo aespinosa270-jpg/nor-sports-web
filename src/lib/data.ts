@@ -23,7 +23,6 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
-    // 1. NOR ONE (INTACTO - NO SE TOCÓ)
     {
         id: "1",
         slug: "nor-one",
@@ -39,7 +38,7 @@ export const PRODUCTS: Product[] = [
         gallery: [
             "/assets/products/NORONE.png",
             "/assets/products/NORONE2.png",
-            "/assets/products/NORONE3.png"
+            "/assets/products/NOR4.png"
         ],
         variants: [
             {
@@ -50,12 +49,11 @@ export const PRODUCTS: Product[] = [
         ]
     },
 
-    // 2. NOR PULSE (Tela Micropanal) - PRECIO ACTUALIZADO
     {
         id: "2",
         slug: "nor-pulse",
         name: "NOR PULSE",
-        price: 70, // 👈 Cuestan 70 pesos
+        price: 70,
         tag: "MICROPANAL",
         category: "Playera",
         description: "Ingeniería de tejido en Micropanal. Su estructura de celdas optimiza la gestión térmica corporal absorbiendo el sudor rápidamente.",
@@ -67,12 +65,11 @@ export const PRODUCTS: Product[] = [
         ]
     },
 
-    // 3. NOR ACTIVE PRO (Tela Ares) - PRECIO ACTUALIZADO
     {
         id: "3",
         slug: "nor-active-pro",
         name: "NOR ACTIVE PRO",
-        price: 70, // 👈 Cuestan 70 pesos
+        price: 70,
         tag: "ARES TECH",
         category: "Playera",
         description: "Diseñada en Tela Ares de alto rendimiento. Una fibra suave al tacto pero extremadamente resistente, ideal para entrenamientos de fuerza y uso rudo.",
@@ -84,12 +81,11 @@ export const PRODUCTS: Product[] = [
         ]
     },
 
-    // 4. NOR ACTIVE VENT (Tela Piqué Vera) - PRECIO ACTUALIZADO
     {
         id: "4",
         slug: "nor-active-vent",
         name: "NOR ACTIVE VENT",
-        price: 70, // 👈 Cuestan 70 pesos
+        price: 70,
         tag: "PIQUE VERA",
         category: "Playera",
         description: "Construcción robusta en Piqué Vera texturizado. Un tejido con mayor cuerpo y caída estética que define la silueta atlética.",
