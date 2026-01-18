@@ -27,7 +27,6 @@ export async function createOrder(formData: any, cartItems: any[], shippingServi
 
         const total = subtotal + shippingCost;
 
-        // 3. Guardar en Supabase
         const { data, error } = await supabaseAdmin
             .from('orders')
             .insert({

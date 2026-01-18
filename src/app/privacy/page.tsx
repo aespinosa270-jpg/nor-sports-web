@@ -57,7 +57,6 @@ export default function PrivacyPage() {
     return (
         <main className="min-h-screen w-full bg-nor-white text-nor-black pt-20 selection:bg-nor-black selection:text-white">
 
-            {/* HEADER TIPO PROTOCOLO DE SEGURIDAD */}
             <header className="border-b border-nor-black bg-nor-white">
                 <div className="max-w-[1000px] mx-auto px-6 md:px-12 py-16 md:py-24">
                     <span className="font-mono text-[10px] font-bold text-nor-dark/40 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -74,7 +73,6 @@ export default function PrivacyPage() {
                 </div>
             </header>
 
-            {/* CUERPO DEL DOCUMENTO */}
             <section className="max-w-[1000px] mx-auto px-6 md:px-12 py-16 pb-32">
                 <div className="flex flex-col gap-12">
 
@@ -111,7 +109,6 @@ export default function PrivacyPage() {
                         </motion.div>
                     ))}
 
-                    {/* CONTACTO */}
                     <div className="mt-12 bg-nor-black text-white p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8">
                         <div>
                             <h3 className="font-display text-2xl font-bold uppercase tracking-tight mb-2">
@@ -122,7 +119,6 @@ export default function PrivacyPage() {
                             </p>
                         </div>
                         <a
-                            // Enlace directo a WA para temas de privacidad
                             href="https://wa.me/525617500002?text=Hola%20N%C3%98R%2C%20tengo%20una%20consulta%20sobre%20Privacidad%20y%20Datos."
                             target="_blank"
                             rel="noopener noreferrer"

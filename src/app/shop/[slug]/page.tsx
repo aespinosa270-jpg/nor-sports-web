@@ -28,29 +28,22 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         );
     }
 
-    // --- CORRECCIÓN CLAVE: useMemo ---
-    // Usamos useMemo para que este array sea estable y no cambie de referencia en cada render.
-    // Esto evita el error de "dependency changed size" en el useEffect.
     const galleryImages = useMemo(() => {
         return product.gallery && product.gallery.length > 0
             ? product.gallery
             : [product.mainImage, ...product.variants.map(v => v.image)];
     }, [product]);
 
-    // --- ESTADOS ---
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedVariant, setSelectedVariant] = useState(product.variants[0]);
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Estados Zoom
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
     const { addItem, openCart } = useCartStore();
 
-    // --- EFECTO CORREGIDO ---
-    // Ahora galleryImages es estable gracias a useMemo.
     useEffect(() => {
         if (selectedVariant) {
             const index = galleryImages.findIndex(img => img === selectedVariant.image);
@@ -58,7 +51,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         }
     }, [selectedVariant, galleryImages]);
 
-    // Handler Zoom
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
         const x = ((e.clientX - left) / width) * 100;
@@ -66,7 +58,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         setMousePosition({ x, y });
     };
 
-    // Handler Carrito
     const handleAddToCart = () => {
         if (!selectedSize) return;
 
@@ -87,7 +78,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
             <div className="container mx-auto px-6 md:px-12">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
-                    {/* --- GALERÍA --- */}
                     <div className="w-full lg:w-3/5 space-y-4">
                         <div
                             className="relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5 group cursor-crosshair"
@@ -120,7 +110,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             </div>
                         </div>
 
-                        {/* Miniaturas */}
                         <div className="grid grid-cols-5 gap-2 md:gap-4">
                             {galleryImages.map((img, idx) => (
                                 <button
@@ -141,7 +130,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
                     </div>
 
-                    {/* --- INFO --- */}
                     <div className="w-full lg:w-2/5 lg:sticky lg:top-32 h-fit">
                         <div className="mb-8 border-b border-nor-dark/10 pb-6">
                             <h1 className="font-display text-4xl md:text-5xl uppercase font-bold tracking-tighter leading-[0.9] mb-4">
@@ -161,7 +149,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             </div>
                         </div>
 
-                        {/* Color */}
                         <div className="mb-8">
                             <span className="font-mono text-[10px] uppercase tracking-widest text-nor-dark/60 block mb-3">
                                 Color: <span className="text-nor-black font-bold">{selectedVariant?.colorName}</span>
@@ -182,7 +169,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             </div>
                         </div>
 
-                        {/* Talla */}
                         <div className="mb-8">
                             <div className="flex justify-between mb-4">
                                 <span className="font-mono text-[10px] uppercase tracking-widest text-nor-dark/60">
@@ -213,7 +199,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             )}
                         </div>
 
-                        {/* Botones */}
                         <div className="flex gap-4 mb-10">
                             <div className="flex items-center border border-nor-dark/20 w-32 justify-between px-2 bg-white">
                                 <button
@@ -246,7 +231,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             </button>
                         </div>
 
-                        {/* Detalles */}
                         <div className="border-t border-nor-dark/10">
                             <Accordion type="single" collapsible className="w-full">
                                 <AccordionItem value="description">

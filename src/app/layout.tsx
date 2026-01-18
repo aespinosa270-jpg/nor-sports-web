@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Space_Mono, Syncopate, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
-// Se elimina la importación de CustomCursor
 import { CartSidebar } from "@/components/layout/CartSidebar";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 
@@ -45,7 +44,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // 👇 AQUÍ AGREGAMOS LA SOLUCIÓN: data-scroll-behavior="smooth"
     <html
       lang="es"
       data-scroll-behavior="smooth"
@@ -53,13 +51,11 @@ export default function RootLayout({
     >
       <body className="bg-[#fcfcfc] text-black antialiased selection:bg-black selection:text-white relative overflow-x-hidden">
 
-        {/* Textura de Ruido Global */}
         <div
           className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.04] mix-blend-multiply"
           style={{ backgroundImage: 'url("/assets/noise.png")' }}
         />
 
-        {/* Se eliminó <CustomCursor /> */}
         <CartSidebar />
 
         <div className="relative z-50">

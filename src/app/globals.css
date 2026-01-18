@@ -4,11 +4,8 @@
 
 @layer base {
   :root {
-    /* PALETA NØR: CLINICAL WHITE */
     --background: 0 0% 100%;
-    /* Blanco puro estéril */
     --foreground: 0 0% 0%;
-    /* Negro absoluto */
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
@@ -17,12 +14,9 @@
     --popover-foreground: 0 0% 0%;
 
     --primary: 0 0% 0%;
-    /* Botones negros */
     --primary-foreground: 0 0% 100%;
-    /* Texto blanco */
 
     --secondary: 0 0% 96%;
-    /* Gris muy sutil para fondos secundarios */
     --secondary-foreground: 0 0% 0%;
 
     --muted: 0 0% 96%;
@@ -34,17 +28,14 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    /* BORDES: Un poco más oscuros que el default para que se noten las líneas */
     --border: 0 0% 85%;
     --input: 0 0% 85%;
     --ring: 0 0% 0%;
 
-    /* RADIUS: CERO ABSOLUTO (La clave del brutalismo) */
     --radius: 0px;
   }
 
   .dark {
-    /* PALETA DARK MODE: TACTICAL BLACK (Por si el usuario cambia) */
     --background: 0 0% 5%;
     --foreground: 0 0% 98%;
     --card: 0 0% 5%;
@@ -76,19 +67,14 @@
     @apply bg-background text-foreground;
   }
 
-  /* ESTILO DE SELECCIÓN HIGH-FASHION */
   ::selection {
-    background-color: #000;
-    /* Fondo negro al seleccionar */
+    background-color: #cc0000;
     color: #fff;
-    /* Texto blanco */
   }
 }
 
-/* Scrollbar estilo Industrial (Minimalista) */
 ::-webkit-scrollbar {
   width: 6px;
-  /* Más fina aún */
   height: 6px;
 }
 
@@ -98,9 +84,46 @@
 
 ::-webkit-scrollbar-thumb {
   background: #d4d4d4;
-  /* Gris claro sutil */
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #000;
+}
+
+
+.nor-mp-wrapper,
+.nor-mp-wrapper * {
+  font-family: 'Courier New', Courier, monospace !important;
+  letter-spacing: -0.5px;
+}
+
+.svelte-1w2t27s,
+.svelte-32085k {
+  border-radius: 0px !important;
+}
+
+.nor-mp-wrapper button[type="submit"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 0px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+  border: 1px solid #000000 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  text-transform: uppercase !important;
+  height: 54px !important;
+  font-size: 14px !important;
+}
+
+.nor-mp-wrapper button[type="submit"]:hover {
+  background-color: #ffffff !important;
+  color: #cc0000 !important;
+  border-color: #cc0000 !important;
+  box-shadow: 6px 6px 0px #cc0000 !important;
+  transform: translate(-2px, -2px);
+}
+
+.nor-mp-wrapper input:focus {
+  border-color: #cc0000 !important;
+  outline: none !important;
 }

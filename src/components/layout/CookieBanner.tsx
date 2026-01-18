@@ -9,10 +9,8 @@ export const CookieBanner = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        // Verificar si ya aceptó las cookies anteriormente
         const consent = localStorage.getItem("nor-cookie-consent");
         if (!consent) {
-            // Pequeño delay para que no sea intrusivo al instante
             const timer = setTimeout(() => setIsVisible(true), 1500);
             return () => clearTimeout(timer);
         }
@@ -36,7 +34,6 @@ export const CookieBanner = () => {
                     <div className="max-w-screen-xl mx-auto">
                         <div className="bg-nor-white border border-nor-black shadow-2xl p-6 md:flex justify-between items-center gap-8 relative">
 
-                            {/* Decoración Técnica */}
                             <div className="absolute top-0 left-0 w-full h-1 bg-nor-black/5" />
                             <div className="absolute top-0 left-0 w-16 h-1 bg-red-600 animate-pulse" />
 

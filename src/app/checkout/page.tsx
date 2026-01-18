@@ -9,10 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiLock, FiChevronRight, FiTag, FiCheckCircle } from 'react-icons/fi';
 import { SiMercadopago } from 'react-icons/si';
 
-// Importamos el componente de pago transparente
 import { PaymentComponent } from '@/components/checkout/PaymentComponent';
 
-// --- INPUT TÉCNICO NØR ---
 const InputField = ({ label, name, type = "text", value, onChange, placeholder, className = "" }: any) => (
     <div className={`relative group ${className}`}>
         <label className="block text-[10px] font-bold text-nor-black uppercase tracking-widest mb-2 font-syncopate">
@@ -30,7 +28,6 @@ const InputField = ({ label, name, type = "text", value, onChange, placeholder, 
     </div>
 );
 
-// --- LOGOS VISUALES ---
 const PaymentLogos = ({ grayscale = false }: { grayscale?: boolean }) => (
     <div className={`flex justify-center items-center gap-6 py-4 border-b border-gray-100 mb-4 ${grayscale ? 'opacity-60' : ''}`}>
         <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4 w-auto object-contain" />
@@ -56,7 +53,6 @@ export default function CheckoutPage() {
         colonia: '', city: '', state: '', zipCode: '', phone: ''
     });
 
-    // --- CÁLCULOS ---
     const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const taxRate = 0.16;
     const taxAmount = subtotal * taxRate;
@@ -71,7 +67,6 @@ export default function CheckoutPage() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // PASO 1 -> 2: Calcular Envío
     const handleCalculateShipping = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -87,7 +82,6 @@ export default function CheckoutPage() {
         setLoading(false);
     };
 
-    // PASO 2 -> 3: Crear Orden
     const handlePreparePayment = async () => {
         if (!selectedShipping) return;
         setLoading(true);
@@ -111,7 +105,6 @@ export default function CheckoutPage() {
     return (
         <div className="min-h-screen bg-white text-nor-black font-sans selection:bg-nor-black selection:text-white pt-24 pb-20">
 
-            {/* HEADER */}
             <div className="fixed top-0 left-0 w-full bg-white z-40 border-b-2 border-nor-black h-16 flex items-center justify-between px-6 md:px-12">
                 <div className="font-bold tracking-[0.2em] text-sm flex items-center gap-2 font-syncopate">
                     NØR // CHECKOUT
@@ -123,12 +116,9 @@ export default function CheckoutPage() {
 
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 px-4 md:px-8 mt-8">
 
-                {/* === COLUMNA IZQUIERDA === */}
                 <div className="lg:col-span-7 space-y-8">
 
-                    {/* HE ELIMINADO EL ANIMATEPRESENCE QUE ENVOLVÍA TODO AQUÍ, ESO CAUSABA EL ERROR */}
 
-                    {/* PASO 1: DATOS */}
                     <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                         <div className="border-2 border-nor-black p-6 md:p-8">
                             <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
@@ -232,7 +222,6 @@ export default function CheckoutPage() {
                         </div>
                     </div>
 
-                    {/* PASO 3: CHECKOUT TRANSPARENTE */}
                     <div className={`transition-all duration-500 ${step === 3 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                         <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
                             <div className="flex justify-between items-baseline mb-6 border-b-2 border-nor-black pb-4 font-syncopate">
@@ -276,7 +265,6 @@ export default function CheckoutPage() {
 
                 </div>
 
-                {/* === COLUMNA DERECHA (TICKET) === */}
                 <div className="hidden lg:block lg:col-span-5">
                     <div className="sticky top-28">
                         <div className="bg-white border-2 border-nor-black p-0 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -285,7 +273,6 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className="p-8 font-mono">
-                                {/* Items List */}
                                 <div className="space-y-6 mb-8 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar border-b-2 border-nor-black pb-6">
                                     {items.map((item) => (
                                         <div key={item.id} className="flex gap-5 items-start">
@@ -306,7 +293,6 @@ export default function CheckoutPage() {
                                     ))}
                                 </div>
 
-                                {/* Desglose */}
                                 <div className="space-y-3 text-sm mb-6">
                                     <div className="flex justify-between">
                                         <span className="uppercase font-bold">Subtotal</span>
@@ -324,7 +310,6 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
 
-                                {/* Promo Code */}
                                 <div className="mb-6">
                                     <div className="flex border-2 border-nor-black">
                                         <div className="bg-nor-black flex items-center justify-center px-3 text-white">
@@ -342,7 +327,6 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
 
-                                {/* Total */}
                                 <div className="flex justify-between items-end border-t-2 border-nor-black pt-6 mt-6">
                                     <span className="font-syncopate font-bold text-xl tracking-tighter uppercase">TOTAL</span>
                                     <div className="text-right text-nor-accent">
@@ -353,7 +337,6 @@ export default function CheckoutPage() {
                             </div>
                         </div>
 
-                        {/* Footer Ticket */}
                         <div className="mt-6 flex gap-3 text-xs text-nor-black items-center px-4 font-mono border-2 border-nor-black p-4 bg-white">
                             <FiCheckCircle className="shrink-0 text-nor-accent" size={20} />
                             <p className="leading-tight text-[10px] uppercase font-bold">

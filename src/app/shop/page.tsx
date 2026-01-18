@@ -7,34 +7,26 @@ import { useState, useMemo } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Filter } from "lucide-react";
 
-// Lógica de normalización de texto para búsquedas insensibles a mayúsculas/acentos
 const normalizeText = (text: string | undefined) => {
     return text
         ? text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         : "";
 };
 
-// ⚠️ ACTUALIZADO: Agregué "Ares" para que aparezca el nuevo producto NOR ACTIVE PRO
 const FILTERS = ["Todo", "Micropiqué", "Piqué Vera", "Micropanal", "Ares"];
 
 export default function ShopPage() {
-    // 1. Obtener datos (Traerá los 4 productos nuevos)
     const allProducts = getAllProducts();
 
-    // 2. Estado del filtro activo
     const [activeFilter, setActiveFilter] = useState("Todo");
 
-    // 3. Lógica de Filtrado
     const displayedProducts = useMemo(() => {
-        // A. Filtro Duro: Aseguramos que sean playeras o tengan las telas clave
         const tshirts = allProducts.filter(product => {
             const category = normalizeText(product.category);
             const name = normalizeText(product.name);
-            // Permitimos que pasen todos los productos que definimos en data.ts
             return category === 'playera' || name.includes('nor');
         });
 
-        // B. Filtro de Usuario (Botones)
         if (activeFilter === "Todo") return tshirts;
 
         const normalizedFilter = normalizeText(activeFilter);
@@ -45,7 +37,6 @@ export default function ShopPage() {
             const features = product.features.map(f => normalizeText(f)).join(" ");
             const tag = normalizeText(product.tag);
 
-            // Buscamos coincidencia en Nombre, Descripción, Tag o Features
             return name.includes(normalizedFilter) ||
                 desc.includes(normalizedFilter) ||
                 tag.includes(normalizedFilter) ||
@@ -56,7 +47,6 @@ export default function ShopPage() {
     return (
         <main className="min-h-screen w-full bg-nor-white text-nor-black pt-20 selection:bg-nor-black selection:text-white">
 
-            {/* HEADER DEL CATÁLOGO */}
             <header className="border-b border-nor-black bg-nor-white">
                 <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-16 md:py-20">
                     <div className="flex flex-col md:flex-row justify-between items-end gap-6">
@@ -80,11 +70,9 @@ export default function ShopPage() {
                 </div>
             </header>
 
-            {/* BARRA DE HERRAMIENTAS / FILTROS (STICKY) */}
             <div className="border-b border-nor-black bg-nor-white sticky top-20 z-30">
                 <div className="max-w-[1800px] mx-auto px-6 md:px-12 h-14 flex justify-between items-center overflow-x-auto no-scrollbar">
 
-                    {/* Lista de Filtros */}
                     <div className="flex items-center gap-6 md:gap-8">
                         <span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-nor-dark/40">
                             <Filter size={14} />
@@ -102,7 +90,6 @@ export default function ShopPage() {
                                         }`}
                                 >
                                     {filter}
-                                    {/* Indicador activo animado */}
                                     {activeFilter === filter && (
                                         <motion.span
                                             layoutId="activeFilter"
@@ -114,7 +101,6 @@ export default function ShopPage() {
                         </div>
                     </div>
 
-                    {/* Contador (Solo Desktop) */}
                     <div className="hidden md:flex items-center gap-2">
                         <span className="font-mono text-[10px] text-nor-dark/40 uppercase tracking-widest">
                             {displayedProducts.length} RESULTADOS
@@ -123,7 +109,6 @@ export default function ShopPage() {
                 </div>
             </div>
 
-            {/* GRID DE PRODUCTOS */}
             <section className="min-h-[60vh] border-b border-nor-black">
                 <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-16">
 
@@ -139,7 +124,6 @@ export default function ShopPage() {
                             </motion.div>
                         ))}
 
-                        {/* ESTADO VACÍO (FALLBACK) */}
                         {displayedProducts.length === 0 && (
                             <div className="col-span-full flex flex-col items-center justify-center py-32 border border-dashed border-nor-black/20 bg-[#FAFAFA]">
                                 <div className="w-12 h-12 border-2 border-nor-dark/20 rounded-full flex items-center justify-center mb-4">

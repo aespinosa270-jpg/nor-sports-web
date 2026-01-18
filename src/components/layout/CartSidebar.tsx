@@ -2,9 +2,9 @@
 
 import { useCartStore } from "@/store/cartStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react"; // Agregué ArrowRight
+import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link"; // IMPORTANTE: Importamos Link
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export const CartSidebar = () => {
@@ -126,7 +126,6 @@ export const CartSidebar = () => {
                                     <span className="font-bold text-lg">${total.toLocaleString()} MXN</span>
                                 </div>
 
-                                {/* AQUÍ ESTÁ EL CAMBIO CLAVE: Convertimos button a Link */}
                                 <Link
                                     href="/checkout"
                                     onClick={closeCart}

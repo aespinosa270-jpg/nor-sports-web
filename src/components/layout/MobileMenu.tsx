@@ -39,13 +39,11 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="fixed inset-0 z-[100] bg-black text-white flex flex-col"
                 >
-                    {/* Textura de Ruido */}
                     <div
                         className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none mix-blend-overlay"
                         style={{ backgroundImage: 'url("/assets/noise.png")' }}
                     />
 
-                    {/* Header del Menú */}
                     <div className="relative z-10 flex justify-between items-center p-6 border-b border-white/10">
                         <span className="font-mono text-[10px] tracking-[0.3em] text-white/50">
                             MENU
@@ -58,7 +56,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                         </button>
                     </div>
 
-                    {/* Enlaces Principales */}
                     <div className="relative z-10 flex-1 flex flex-col justify-center px-8 gap-8">
                         {navLinks.map((link) => (
                             <a
@@ -79,7 +76,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                             </a>
                         ))}
 
-                        {/* Enlace Especial de Soporte (WhatsApp) */}
                         <a
                             href={WHATSAPP_URL}
                             target="_blank"
@@ -98,7 +94,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                         </a>
                     </div>
 
-                    {/* Footer del Menú */}
                     <div className="relative z-10 p-8 border-t border-white/10 bg-black">
                         <div className="grid grid-cols-2 gap-8">
                             <div>

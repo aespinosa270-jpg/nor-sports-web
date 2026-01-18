@@ -9,8 +9,8 @@ export const sendOrderConfirmation = async (paymentData: any) => {
     const { id, transaction_amount, payer, description } = paymentData;
 
     await resend.emails.send({
-      from: 'NØR SYSTEMS <ventas@huup.com.mx>', // TU DOMINIO VERIFICADO
-      to: ['tu-correo-admin@gmail.com', payer.email], // Se lo mandamos al admin y al cliente
+      from: 'NØR SYSTEMS <ventas@huup.com.mx>',
+      to: ['tu-correo-admin@gmail.com', payer.email],
       subject: `NØR: CONFIRMACIÓN DE PEDIDO #${id}`,
       html: `
         <div style="font-family: monospace; background: #000; color: #fff; padding: 20px;">

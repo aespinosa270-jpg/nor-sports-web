@@ -9,10 +9,8 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full bg-white text-black selection:bg-red-600 selection:text-white overflow-x-hidden">
 
-      {/* 01. HERO SECTION */}
       <HeroSection />
 
-      {/* 02. CINTA DE ALTA VELOCIDAD (B.N.R) */}
       <div className="bg-black py-5 border-y-4 border-red-600 relative z-20">
         <Marquee
           text="TECNOLOGÍA DRY-FIT // CALIDAD GOLD // READY OR NOT? // "
@@ -21,13 +19,10 @@ export default function Home() {
         />
       </div>
 
-      {/* 03. MANIFIESTO DE MARCA (DISEÑO EDITORIAL / GRID) */}
       <section className="border-b border-black">
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[80vh]">
 
-          {/* COLUMNA IZQUIERDA: TITULAR MASIVO (8 COLUMNAS) */}
           <div className="lg:col-span-8 p-8 md:p-16 lg:p-24 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center relative overflow-hidden">
-            {/* Fondo decorativo sutil */}
             <span className="absolute -left-10 top-20 text-[20vw] opacity-[0.02] font-black select-none pointer-events-none">
               NØR
             </span>
@@ -51,10 +46,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* COLUMNA DERECHA: DATOS TÉCNICOS (4 COLUMNAS) */}
           <div className="lg:col-span-4 bg-gray-50 flex flex-col">
 
-            {/* Bloque Superior: Descripción */}
             <div className="p-8 md:p-12 flex-1 flex flex-col justify-center border-b border-gray-200">
               <span className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest mb-6">
                 // SPEC_SHEET
@@ -69,7 +62,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Bloque Inferior: CTA */}
             <div className="p-8 md:p-12 bg-white flex flex-col justify-center items-start gap-6">
               <div className="w-full h-px bg-black/10 mb-2"></div>
               <Link
@@ -80,10 +72,8 @@ export default function Home() {
                   VER COLECCIÓN
                 </span>
 
-                {/* Animación de fondo al hacer hover (Relleno blanco) */}
                 <div className="absolute inset-0 bg-red-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
 
-                {/* Flecha */}
                 <span className="relative z-10 text-white group-hover:text-black transition-colors duration-300">
                   →
                 </span>
@@ -97,7 +87,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 04. VISUAL BREAK (IMAGEN LIMPIA - SIN CUADRÍCULA) */}
       <div className="relative w-full h-[70vh] border-b border-black overflow-hidden group bg-black">
         <Image
           src="/assets/NOR2.png"
@@ -107,9 +96,7 @@ export default function Home() {
           priority
         />
 
-        {/* --- AQUÍ ELIMINÉ EL DIV DEL GRADIENTE GRID --- */}
 
-        {/* UI Overlay (Textos sobre la imagen) */}
         <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-between pointer-events-none">
           <div className="flex justify-between items-start">
             <span className="font-mono text-[10px] text-white bg-red-600 px-2 py-1 font-bold uppercase tracking-widest">
@@ -134,10 +121,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 05. ESCAPARATE DE PRODUCTOS */}
       <ProductShowcase />
 
-      {/* 06. FOOTER */}
       <Footer />
 
     </main>

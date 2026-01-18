@@ -4,7 +4,6 @@ import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { FileText, Truck, RefreshCcw, ShieldAlert, CreditCard } from "lucide-react";
 
-// DATOS DE LAS SECCIONES PARA MANTENER EL CÓDIGO LIMPIO
 const SECTIONS = [
     {
         id: "envios",
@@ -54,7 +53,6 @@ export default function HelpPage() {
     return (
         <main className="min-h-screen w-full bg-nor-white text-nor-black pt-20 selection:bg-nor-black selection:text-white">
 
-            {/* HEADER TIPO EXPEDIENTE */}
             <header className="border-b border-nor-black bg-nor-white">
                 <div className="max-w-[1000px] mx-auto px-6 md:px-12 py-16 md:py-24">
                     <span className="font-mono text-[10px] font-bold text-nor-dark/40 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -71,7 +69,6 @@ export default function HelpPage() {
                 </div>
             </header>
 
-            {/* CUERPO DEL DOCUMENTO */}
             <section className="max-w-[1000px] mx-auto px-6 md:px-12 py-16 pb-32">
                 <div className="flex flex-col gap-12">
 
@@ -108,13 +105,11 @@ export default function HelpPage() {
                         </motion.div>
                     ))}
 
-                    {/* DISCLAIMER FINAL */}
                     <div className="text-center pt-12 border-t border-nor-black/10">
                         <p className="font-mono text-[10px] text-nor-dark/40 uppercase tracking-widest mb-4">
                             ¿NECESITAS ASISTENCIA ADICIONAL?
                         </p>
                         <a
-                            // Recuerda poner aquí tu número real si usas la constante o importarla
                             href="https://wa.me/525617500002?text=Hola%20N%C3%98R%2C%20tengo%20una%20duda%20legal%20sobre%20mi%20compra."
                             target="_blank"
                             rel="noopener noreferrer"

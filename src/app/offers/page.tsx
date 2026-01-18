@@ -1,11 +1,10 @@
 "use client";
 
 import { Footer } from "@/components/layout/Footer";
-import { ProductCard } from "@/components/home/ProductCard"; // Usamos la tarjeta compartida
-import { getSaleProducts } from "@/lib/data"; // Usamos la lógica centralizada
+import { ProductCard } from "@/components/home/ProductCard";
+import { getSaleProducts } from "@/lib/data";
 
 export default function OffersPage() {
-    // Obtenemos dinámicamente solo los productos que tienen 'originalPrice' definido en data.ts
     const saleProducts = getSaleProducts();
 
     return (
@@ -35,19 +34,16 @@ export default function OffersPage() {
                 </div>
             </header>
 
-            {/* GRID DE PRODUCTOS */}
             <section className="min-h-[60vh] border-b border-nor-black">
                 <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-16">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16">
 
-                        {/* Mapeamos los productos reales filtrados por oferta */}
                         {saleProducts.length > 0 ? (
                             saleProducts.map((product) => (
                                 <ProductCard key={product.id} product={product} />
                             ))
                         ) : (
-                            // Mensaje opcional por si no hay ofertas activas en data.ts
                             <div className="col-span-full py-10 text-center border border-dashed border-nor-black/20">
                                 <p className="font-mono text-xs text-nor-dark/50 uppercase">
                                     NO HAY OFERTAS ACTIVAS EN ESTE MOMENTO.
@@ -55,7 +51,6 @@ export default function OffersPage() {
                             </div>
                         )}
 
-                        {/* Placeholders visuales para mantener la estructura del grid (Opcionales) */}
                         <div className="hidden lg:flex items-center justify-center aspect-[3/4] border border-dashed border-nor-black/10">
                             <span className="font-mono text-[10px] text-nor-dark/30 uppercase tracking-widest">ESPACIO DISPONIBLE</span>
                         </div>
@@ -70,7 +65,6 @@ export default function OffersPage() {
                 </div>
             </section>
 
-            {/* FOOTER DE SECCIÓN */}
             <section className="py-12 px-6 border-b border-nor-black/10 bg-[#FAFAFA] text-center">
                 <p className="font-mono text-[10px] text-nor-dark/50 uppercase tracking-widest">
                     FIN DEL INVENTARIO PROMOCIONAL
