@@ -1,4 +1,3 @@
-// src/lib/data.ts
 
 export interface ProductVariant {
     colorName: string;
@@ -20,6 +19,7 @@ export interface Product {
     mainImage: string;
     variants: ProductVariant[];
     gallery?: string[];
+    inStock?: boolean;
 }
 
 export const PRODUCTS: Product[] = [
@@ -35,6 +35,7 @@ export const PRODUCTS: Product[] = [
         description: "Arquitectura textil en Micropiqué 100% Poliéster diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",
         features: ["Tejido Micropiqué 100% Poliéster", "Evaporación instantánea", "Corte Regular Fit"],
         mainImage: "/assets/products/NORONE.png",
+        inStock: true,
         gallery: [
             "/assets/products/NORONE.png",
             "/assets/products/NORONE2.png",
@@ -59,9 +60,9 @@ export const PRODUCTS: Product[] = [
         description: "Ingeniería de tejido en Micropanal. Su estructura de celdas optimiza la gestión térmica corporal absorbiendo el sudor rápidamente.",
         features: ["Matriz de Micropanal", "Secado ultra-rápido", "Tacto suave premium"],
         mainImage: "/assets/products/NORONE.png",
+        inStock: false,
         variants: [
-            { colorName: "Slate", colorHex: "#334155", image: "/assets/products/NORONE.png" },
-            { colorName: "Olive", colorHex: "#3f4d3a", image: "/assets/products/NORONE.png" }
+            { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
     },
 
@@ -75,9 +76,9 @@ export const PRODUCTS: Product[] = [
         description: "Diseñada en Tela Ares de alto rendimiento. Una fibra suave al tacto pero extremadamente resistente, ideal para entrenamientos de fuerza y uso rudo.",
         features: ["Tecnología textil Ares", "Resistencia superior", "Elasticidad mecánica"],
         mainImage: "/assets/products/NORONE.png",
+        inStock: false,
         variants: [
-            { colorName: "Obsidian", colorHex: "#000000", image: "/assets/products/NORONE.png" },
-            { colorName: "Navy", colorHex: "#1e293b", image: "/assets/products/NORONE.png" }
+            { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
     },
 
@@ -91,8 +92,8 @@ export const PRODUCTS: Product[] = [
         description: "Construcción robusta en Piqué Vera texturizado. Un tejido con mayor cuerpo y caída estética que define la silueta atlética.",
         features: ["Tejido Piqué Vera texturizado", "Ventilación estructurada", "Costuras reforzadas"],
         mainImage: "/assets/products/NORONE.png",
+        inStock: false,
         variants: [
-            { colorName: "Iron", colorHex: "#4b5563", image: "/assets/products/NORONE.png" },
             { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, MouseEvent, useMemo } from "react"; // <--- IMPORTANTE: Importar useMemo
+import { useState, useEffect, use, MouseEvent, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Minus, Plus, Ruler } from "lucide-react";
 import {
@@ -18,6 +18,8 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
     const { slug } = use(params);
     const product = getProductBySlug(slug);
+
+    const isOutOfStock = product?.inStock === false;
 
     if (!product) {
         return (
@@ -59,7 +61,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
     };
 
     const handleAddToCart = () => {
-        if (!selectedSize) return;
+        if (!selectedSize || isOutOfStock) return;
 
         addItem({
             name: product.name,
@@ -80,10 +82,10 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
                     <div className="w-full lg:w-3/5 space-y-4">
                         <div
-                            className="relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5 group cursor-crosshair"
-                            onMouseEnter={() => setIsHovering(true)}
+                            className={`relative aspect-[4/5] bg-nor-concrete overflow-hidden w-full border border-nor-dark/5 group ${isOutOfStock ? 'grayscale opacity-90' : 'cursor-crosshair'}`}
+                            onMouseEnter={() => !isOutOfStock && setIsHovering(true)}
                             onMouseLeave={() => setIsHovering(false)}
-                            onMouseMove={handleMouseMove}
+                            onMouseMove={!isOutOfStock ? handleMouseMove : undefined}
                         >
                             <AnimatePresence mode="wait">
                                 <motion.img
@@ -104,9 +106,15 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             </AnimatePresence>
 
                             <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
-                                <span className="bg-nor-black text-white px-3 py-1 font-mono text-[10px] uppercase tracking-widest">
-                                    {product.tag || "NØR-TECH"}
-                                </span>
+                                {isOutOfStock ? (
+                                    <span className="bg-red-600 text-white px-3 py-1 font-mono text-[10px] uppercase tracking-widest font-bold">
+                                        AGOTADO
+                                    </span>
+                                ) : (
+                                    <span className="bg-nor-black text-white px-3 py-1 font-mono text-[10px] uppercase tracking-widest">
+                                        {product.tag || "NØR-TECH"}
+                                    </span>
+                                )}
                             </div>
                         </div>
 
@@ -124,7 +132,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                         : 'border-transparent hover:border-nor-dark/20 opacity-60 hover:opacity-100'
                                         }`}
                                 >
-                                    <img src={img} alt={`vista-${idx}`} className="w-full h-full object-cover" />
+                                    <img src={img} alt={`vista-${idx}`} className={`w-full h-full object-cover ${isOutOfStock ? 'grayscale' : ''}`} />
                                 </button>
                             ))}
                         </div>
@@ -136,16 +144,24 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                 {product.name}
                             </h1>
                             <div className="flex justify-between items-end font-mono">
-                                <span className="text-xl md:text-2xl font-medium">
+                                <span className={`text-xl md:text-2xl font-medium ${isOutOfStock ? 'text-gray-400 line-through' : ''}`}>
                                     ${product.price.toLocaleString()} MXN
                                 </span>
-                                <div className="flex items-center gap-2 text-xs text-green-600">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                    </span>
-                                    SISTEMA_LISTO
-                                </div>
+
+                                {isOutOfStock ? (
+                                    <div className="flex items-center gap-2 text-xs text-red-600 font-bold uppercase tracking-wider">
+                                        <span className="w-2 h-2 bg-red-600 rounded-full"></span>
+                                        AGOTADO / OFFLINE
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-2 text-xs text-green-600">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        </span>
+                                        SISTEMA_LISTO
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -161,7 +177,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                         className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${selectedVariant.colorName === variant.colorName
                                             ? "ring-2 ring-offset-2 ring-nor-black border-nor-black"
                                             : "border-nor-dark/20 hover:scale-110"
-                                            }`}
+                                            } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         style={{ backgroundColor: variant.colorHex }}
                                         title={variant.colorName}
                                     />
@@ -182,17 +198,20 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                 {STANDARD_SIZES.map((size) => (
                                     <button
                                         key={size}
-                                        onClick={() => setSelectedSize(size)}
-                                        className={`h-12 border font-mono text-sm transition-all ${selectedSize === size
-                                            ? "bg-nor-black text-white border-nor-black"
-                                            : "bg-transparent text-nor-dark border-nor-dark/20 hover:border-nor-black hover:bg-nor-concrete"
+                                        onClick={() => !isOutOfStock && setSelectedSize(size)}
+                                        disabled={isOutOfStock}
+                                        className={`h-12 border font-mono text-sm transition-all ${isOutOfStock
+                                            ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed decoration-slice"
+                                            : selectedSize === size
+                                                ? "bg-nor-black text-white border-nor-black"
+                                                : "bg-transparent text-nor-dark border-nor-dark/20 hover:border-nor-black hover:bg-nor-concrete"
                                             }`}
                                     >
                                         {size}
                                     </button>
                                 ))}
                             </div>
-                            {!selectedSize && (
+                            {!selectedSize && !isOutOfStock && (
                                 <p className="mt-2 font-mono text-[10px] text-nor-dark/40">
                                     * CAMPO_REQUERIDO
                                 </p>
@@ -200,34 +219,41 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         <div className="flex gap-4 mb-10">
-                            <div className="flex items-center border border-nor-dark/20 w-32 justify-between px-2 bg-white">
-                                <button
-                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    className="p-2 hover:text-nor-accent transition-colors"
-                                >
-                                    <Minus size={14} />
-                                </button>
-                                <span className="font-mono text-sm">{quantity}</span>
-                                <button
-                                    onClick={() => setQuantity(quantity + 1)}
-                                    className="p-2 hover:text-nor-accent transition-colors"
-                                >
-                                    <Plus size={14} />
-                                </button>
-                            </div>
+                            {!isOutOfStock && (
+                                <div className="flex items-center border border-nor-dark/20 w-32 justify-between px-2 bg-white">
+                                    <button
+                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                        className="p-2 hover:text-nor-accent transition-colors"
+                                    >
+                                        <Minus size={14} />
+                                    </button>
+                                    <span className="font-mono text-sm">{quantity}</span>
+                                    <button
+                                        onClick={() => setQuantity(quantity + 1)}
+                                        className="p-2 hover:text-nor-accent transition-colors"
+                                    >
+                                        <Plus size={14} />
+                                    </button>
+                                </div>
+                            )}
 
                             <button
                                 onClick={handleAddToCart}
-                                disabled={!selectedSize}
+                                disabled={!selectedSize || isOutOfStock}
                                 className={`flex-1 flex items-center justify-center gap-3 py-4 font-mono text-xs uppercase font-bold tracking-[0.15em] transition-all
-                                    ${!selectedSize
-                                        ? "bg-nor-dark/10 text-nor-dark/40 cursor-not-allowed"
-                                        : "bg-nor-black text-white hover:bg-nor-dark hover:scale-[1.02] active:scale-[0.98]"
+                                    ${isOutOfStock
+                                        ? "bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed"
+                                        : !selectedSize
+                                            ? "bg-nor-dark/10 text-nor-dark/40 cursor-not-allowed"
+                                            : "bg-nor-black text-white hover:bg-nor-dark hover:scale-[1.02] active:scale-[0.98]"
                                     }
                                 `}
                             >
-                                {selectedSize ? "INICIAR SISTEMA" : "SELECCIONAR TALLA"}
-                                {selectedSize && <ArrowRight size={16} />}
+                                {isOutOfStock
+                                    ? "AGOTADO / SOLD OUT"
+                                    : (selectedSize ? "INICIAR SISTEMA" : "SELECCIONAR TALLA")
+                                }
+                                {!isOutOfStock && selectedSize && <ArrowRight size={16} />}
                             </button>
                         </div>
 

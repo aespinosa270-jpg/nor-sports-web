@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useCartStore } from '@/store/cartStore';
 import { getQuote } from '@/app/actions/shipping';
 import { createOrder } from '@/app/actions/order';
@@ -276,9 +277,16 @@ export default function CheckoutPage() {
                                 <div className="space-y-6 mb-8 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar border-b-2 border-nor-black pb-6">
                                     {items.map((item) => (
                                         <div key={item.id} className="flex gap-5 items-start">
-                                            <div className="w-16 h-20 bg-nor-black border-2 border-nor-black relative shrink-0">
-                                                <div className="absolute inset-0 flex items-center justify-center text-white text-[10px] font-bold">ITEM</div>
+
+                                            <div className="relative w-16 h-20 bg-white border-2 border-nor-black shrink-0 overflow-hidden">
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
                                             </div>
+
                                             <div className="flex-1 flex flex-col justify-between">
                                                 <div>
                                                     <p className="font-bold text-sm uppercase tracking-wide leading-tight">{item.name}</p>
