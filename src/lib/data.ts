@@ -20,6 +20,7 @@ export interface Product {
     variants: ProductVariant[];
     gallery?: string[];
     inStock?: boolean;
+    unavailableSizes?: string[];
 }
 
 export const PRODUCTS: Product[] = [
@@ -36,6 +37,7 @@ export const PRODUCTS: Product[] = [
         features: ["Tejido Micropiqué 100% Poliéster", "Evaporación instantánea", "Corte Regular Fit"],
         mainImage: "/assets/products/NORONE.png",
         inStock: true,
+        unavailableSizes: ["XS"],
         gallery: [
             "/assets/products/NORONE.png",
             "/assets/products/NORONE2.png",

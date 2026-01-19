@@ -194,23 +194,36 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                     <Ruler size={12} /> Guía de Tallas
                                 </button>
                             </div>
+
                             <div className="grid grid-cols-5 gap-2">
-                                {STANDARD_SIZES.map((size) => (
-                                    <button
-                                        key={size}
-                                        onClick={() => !isOutOfStock && setSelectedSize(size)}
-                                        disabled={isOutOfStock}
-                                        className={`h-12 border font-mono text-sm transition-all ${isOutOfStock
-                                            ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed decoration-slice"
-                                            : selectedSize === size
-                                                ? "bg-nor-black text-white border-nor-black"
-                                                : "bg-transparent text-nor-dark border-nor-dark/20 hover:border-nor-black hover:bg-nor-concrete"
-                                            }`}
-                                    >
-                                        {size}
-                                    </button>
-                                ))}
+                                {STANDARD_SIZES.map((size) => {
+                                    const isSizeUnavailable = product.unavailableSizes?.includes(size);
+                                    const isDisabled = isOutOfStock || isSizeUnavailable;
+
+                                    return (
+                                        <button
+                                            key={size}
+                                            onClick={() => !isDisabled && setSelectedSize(size)}
+                                            disabled={isDisabled}
+                                            className={`h-12 border font-mono text-sm transition-all relative overflow-hidden ${isDisabled
+                                                ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed decoration-slice"
+                                                : selectedSize === size
+                                                    ? "bg-nor-black text-white border-nor-black"
+                                                    : "bg-transparent text-nor-dark border-nor-dark/20 hover:border-nor-black hover:bg-nor-concrete"
+                                                }`}
+                                        >
+                                            <span className={isDisabled ? "line-through decoration-1" : ""}>
+                                                {size}
+                                            </span>
+
+                                            {isDisabled && (
+                                                <span className="absolute inset-0 border-t border-gray-300 -rotate-45 transform origin-center scale-150 opacity-50 pointer-events-none" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
                             </div>
+
                             {!selectedSize && !isOutOfStock && (
                                 <p className="mt-2 font-mono text-[10px] text-nor-dark/40">
                                     * CAMPO_REQUERIDO
@@ -288,7 +301,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                     </AccordionTrigger>
                                     <AccordionContent className="font-body text-xs text-nor-dark/70 pb-4">
                                         <p className="mb-2">Envío estándar gratuito en pedidos superiores a $2,000 MXN.</p>
-                                        <p>Se aceptan devoluciones dentro de los 30 días posteriores a la entrega.</p>
+                                        <p>Se aceptan devoluciones dentro de los 15 días posteriores a la entrega.</p>
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
