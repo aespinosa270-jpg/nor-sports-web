@@ -63,6 +63,13 @@ export const Navbar = () => {
                         </Link>
 
                         <Link
+                            href="/about"
+                            className="text-base font-black uppercase tracking-tight text-black hover:text-gray-600 transition-colors"
+                        >
+                            Nosotros
+                        </Link>
+
+                        <Link
                             href="/norlab"
                             className="text-base font-black uppercase tracking-tight text-black hover:text-gray-600 transition-colors"
                         >

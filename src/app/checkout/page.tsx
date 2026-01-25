@@ -7,7 +7,7 @@ import { useCartStore } from '@/store/cartStore';
 import { getQuote } from '@/app/actions/shipping';
 import { createOrder } from '@/app/actions/order';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiLock, FiChevronRight, FiTag, FiCheckCircle } from 'react-icons/fi';
+import { FiLock, FiChevronRight, FiTag, FiCheckCircle, FiChevronDown } from 'react-icons/fi';
 import { SiMercadopago } from 'react-icons/si';
 
 import { PaymentComponent } from '@/components/checkout/PaymentComponent';
@@ -24,7 +24,7 @@ const InputField = ({ label, name, type = "text", value, onChange, placeholder, 
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            className="w-full bg-white border-2 border-nor-black px-4 py-3 text-sm text-nor-black outline-none focus:bg-gray-50 transition-all font-medium placeholder:text-gray-400 font-mono"
+            className="w-full bg-white border-2 border-nor-black px-4 py-3 text-sm text-nor-black outline-none focus:bg-gray-50 transition-all font-medium placeholder:text-gray-400 font-mono rounded-none"
         />
     </div>
 );
@@ -43,10 +43,12 @@ export default function CheckoutPage() {
 
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
+
     const [shippingOptions, setShippingOptions] = useState<any[]>([]);
     const [selectedShipping, setSelectedShipping] = useState<any>(null);
-    const [promoCode, setPromoCode] = useState('');
+    const [salesPerson, setSalesPerson] = useState<string>('');
 
+    const [promoCode, setPromoCode] = useState('');
     const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
 
     const [form, setForm] = useState({
@@ -84,15 +86,17 @@ export default function CheckoutPage() {
     };
 
     const handlePreparePayment = async () => {
-        if (!selectedShipping) return;
+        if (!selectedShipping || !salesPerson) return;
         setLoading(true);
 
         try {
-            const orderRes = await createOrder(form, items, selectedShipping?.serviceTypeId || 'standard');
+            const orderData = { ...form, salesPerson: salesPerson === 'organic' ? 'Sitio Web' : salesPerson };
+
+            const orderRes = await createOrder(orderData, items, selectedShipping?.serviceTypeId || 'standard');
             if (!orderRes.success) throw new Error(orderRes.error);
 
             setCurrentOrderId(orderRes.orderId);
-            setStep(3);
+            setStep(4);
         } catch (error: any) {
             console.error(error);
             alert("Error preparando la orden: " + error.message);
@@ -118,7 +122,6 @@ export default function CheckoutPage() {
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 px-4 md:px-8 mt-8">
 
                 <div className="lg:col-span-7 space-y-8">
-
 
                     <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                         <div className="border-2 border-nor-black p-6 md:p-8">
@@ -164,7 +167,6 @@ export default function CheckoutPage() {
                         </div>
                     </div>
 
-                    {/* PASO 2: LOGÍSTICA */}
                     <div className={`transition-all duration-500 ${step === 2 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                         <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
                             <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
@@ -210,7 +212,65 @@ export default function CheckoutPage() {
                                                 ATRÁS
                                             </button>
                                             <button
-                                                disabled={!selectedShipping || loading}
+                                                disabled={!selectedShipping}
+                                                onClick={() => setStep(3)}
+                                                className="w-2/3 bg-nor-black text-white h-14 text-sm font-bold uppercase tracking-[0.2em] hover:bg-nor-accent transition-colors disabled:opacity-50"
+                                            >
+                                                CONTINUAR
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </div>
+
+                    <div className={`transition-all duration-500 ${step === 3 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                        <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
+                            <div className="flex justify-between items-baseline mb-8 border-b-2 border-nor-black pb-4 font-syncopate">
+                                <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
+                                    <span className="text-nor-black">03 //</span> ATENCIÓN
+                                </h2>
+                                {step > 3 && <button type="button" onClick={() => setStep(3)} className="text-[10px] font-bold underline font-mono">EDITAR</button>}
+                            </div>
+
+                            <AnimatePresence>
+                                {step === 3 && (
+                                    <motion.div
+                                        key="step3-salesperson"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="space-y-6"
+                                    >
+                                        <div className="relative group">
+                                            <label className="block text-[10px] font-bold text-nor-black uppercase tracking-widest mb-2 font-syncopate">
+                                                ¿QUIÉN TE ATENDIÓ?
+                                            </label>
+                                            <div className="relative">
+                                                <select
+                                                    value={salesPerson}
+                                                    onChange={(e) => setSalesPerson(e.target.value)}
+                                                    className="w-full bg-white border-2 border-nor-black px-4 py-3 text-sm text-nor-black outline-none focus:bg-gray-50 transition-all font-bold font-mono appearance-none rounded-none cursor-pointer uppercase"
+                                                >
+                                                    <option value="" disabled>SELECCIONA UNA OPCIÓN</option>
+                                                    <option value="organic">NADIE - LO ENCONTRÉ EN LA WEB</option>
+                                                </select>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-nor-black">
+                                                    <FiChevronDown size={18} />
+                                                </div>
+                                            </div>
+                                            <p className="mt-2 text-[10px] text-gray-500 font-mono uppercase">
+                                                Por favor indícanos si recibiste asesoría personalizada.
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-6 flex gap-4 font-syncopate">
+                                            <button onClick={() => setStep(2)} className="w-1/3 border-2 border-nor-black text-sm font-bold uppercase tracking-widest hover:bg-gray-50">
+                                                ATRÁS
+                                            </button>
+                                            <button
+                                                disabled={!salesPerson || loading}
                                                 onClick={handlePreparePayment}
                                                 className="w-2/3 bg-nor-black text-white h-14 text-sm font-bold uppercase tracking-[0.2em] hover:bg-nor-accent transition-colors disabled:opacity-50"
                                             >
@@ -223,18 +283,18 @@ export default function CheckoutPage() {
                         </div>
                     </div>
 
-                    <div className={`transition-all duration-500 ${step === 3 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                    <div className={`transition-all duration-500 ${step === 4 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                         <div className="border-2 border-nor-black p-6 md:p-8 mt-8">
                             <div className="flex justify-between items-baseline mb-6 border-b-2 border-nor-black pb-4 font-syncopate">
                                 <h2 className="text-xl font-bold tracking-tighter flex items-center gap-3">
-                                    <span className="text-nor-black">03 //</span> TARJETA DE CRÉDITO/DÉBITO
+                                    <span className="text-nor-black">04 //</span> PAGO SEGURO
                                 </h2>
                             </div>
 
                             <AnimatePresence>
-                                {step === 3 && (
+                                {step === 4 && (
                                     <motion.div
-                                        key="step3-payment"
+                                        key="step4-payment"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0, height: 0 }}
@@ -244,8 +304,8 @@ export default function CheckoutPage() {
                                                 <SiMercadopago size={20} />
                                             </div>
                                             <p className="font-mono text-[10px] text-gray-500 uppercase leading-tight">
-                                                Tus datos viajan encriptados directamente a Mercado Pago.
-                                                NØR no almacena tu tarjeta.
+                                                Procesado por Mercado Pago. <br />
+                                                No almacenamos tus datos bancarios.
                                             </p>
                                         </div>
 
@@ -316,6 +376,15 @@ export default function CheckoutPage() {
                                             {selectedShipping ? `$${selectedShipping.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '--'}
                                         </span>
                                     </div>
+
+                                    {salesPerson && (
+                                        <div className="flex justify-between text-nor-accent">
+                                            <span className="uppercase font-bold">Atención</span>
+                                            <span className="font-bold uppercase text-[10px]">
+                                                {salesPerson === 'organic' ? 'WEB' : 'ASESOR'}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mb-6">
