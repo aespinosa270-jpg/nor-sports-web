@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { subscribeToNewsletter } from "@/app/actions/newsletter";
 import { ArrowRight, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const WA_NUMBER = "525617500002";
 const URL_ENVIOS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola NØR, tengo dudas sobre Envíos y Devoluciones.")}`;
@@ -29,6 +29,41 @@ function SubmitButton() {
     );
 }
 
+// --- Variantes de Animación para el Logo HUUP ---
+const logoContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.5,
+        }
+    },
+    hover: {
+        scale: 1.05,
+        transition: { duration: 0.3 }
+    }
+};
+
+const logoLetterVariants: Variants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: { type: "spring", damping: 12, stiffness: 100 }
+    }
+};
+
+const logoDotVariants: Variants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+        scale: 1,
+        opacity: 1,
+        transition: { type: "spring", damping: 10, stiffness: 200 }
+    }
+};
+// -----------------------------------------------
+
 export const Footer = () => {
     const [state, formAction, isPending] = useActionState(
         subscribeToNewsletter,
@@ -40,6 +75,7 @@ export const Footer = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-black">
 
+                {/* --- NEWSLETTER SECTION --- */}
                 <div className="lg:col-span-7 p-8 md:p-16 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-between min-h-[400px]">
                     <div>
                         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-red-600 block mb-6">
@@ -87,8 +123,8 @@ export const Footer = () => {
                     </div>
                 </div>
 
+                {/* --- LINKS SECTION --- */}
                 <div className="lg:col-span-5 grid grid-cols-2">
-
                     <div className="p-8 md:p-12 border-r border-black flex flex-col gap-8">
                         <h4 className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest">
                             CATÁLOGO
@@ -117,11 +153,9 @@ export const Footer = () => {
                             <a href={URL_TALLAS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
                                 Guía de Tallas
                             </a>
-
                             <Link href="/help" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
                                 Términos y Condiciones
                             </Link>
-
                             <Link href="/privacy" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
                                 Política de Privacidad
                             </Link>
@@ -141,20 +175,49 @@ export const Footer = () => {
                 </div>
             </div>
 
+            {/* --- BIG LOGO --- */}
             <div className="border-b border-black bg-white relative overflow-hidden group cursor-default">
                 <h1 className="text-[12vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center select-none group-hover:text-red-600 transition-colors duration-700">
                     NØR SPORTS
                 </h1>
             </div>
 
+            {/* --- BOTTOM BAR --- */}
             <div className="px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 bg-black text-white">
                 <p className="font-mono text-[10px] uppercase tracking-widest opacity-60">
                     © 2026 NØR SPORTS S.A. DE C.V. // MX-CDMX
                 </p>
-                <div className="flex gap-6 items-center">
-                    <span className="font-mono text-[10px] uppercase tracking-widest opacity-60 hidden md:block">
-                        DESIGNED BY HUUP
-                    </span>
+
+                {/* --- HUUP SECTION (LARGE VERSION) --- */}
+                <div className="flex gap-8 items-center">
+                    <motion.a
+                        href="https://huup.com.mx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hidden md:flex items-center gap-3 opacity-70 hover:opacity-100 transition-all group"
+                        initial="hidden"
+                        whileInView="visible"
+                        whileHover="hover"
+                        viewport={{ once: true }}
+                    >
+                        {/* Aumentado a text-xs (antes 9px) */}
+                        <span className="font-mono text-xs uppercase tracking-widest opacity-60 group-hover:text-white transition-colors">
+                            DESIGNED BY
+                        </span>
+
+                        {/* Aumentado a text-4xl (antes 2xl) */}
+                        <motion.div
+                            className="flex items-baseline font-sans font-bold text-4xl leading-none select-none"
+                            variants={logoContainerVariants}
+                        >
+                            <motion.span variants={logoLetterVariants}>h</motion.span>
+                            <motion.span variants={logoLetterVariants}>u</motion.span>
+                            <motion.span variants={logoLetterVariants}>u</motion.span>
+                            <motion.span variants={logoLetterVariants}>p</motion.span>
+                            <motion.span variants={logoDotVariants} className="text-[#FF5722]">.</motion.span>
+                        </motion.div>
+                    </motion.a>
+
                     <div className="flex gap-2 items-center px-3 py-1 border border-white/20 rounded-full">
                         <div className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
