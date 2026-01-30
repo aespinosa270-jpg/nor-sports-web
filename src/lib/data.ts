@@ -1,4 +1,3 @@
-
 export interface ProductVariant {
     colorName: string;
     colorHex: string;
@@ -28,9 +27,7 @@ export const PRODUCTS: Product[] = [
         id: "1",
         slug: "nor-one",
         name: "NOR ONE",
-        price: 50,
-        originalPrice: 70,
-        discountTag: "-29%",
+        price: 70,
         tag: "BREATHABLE",
         category: "Playera",
         description: "Arquitectura textil en Micropiqué 100% Poliéster diseñada para maximizar el flujo de aire. Ligereza absoluta para sesiones de alta intensidad.",

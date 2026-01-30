@@ -89,7 +89,7 @@ export default function Home() {
 
       <div className="relative w-full h-[70vh] border-b border-black overflow-hidden group bg-black">
         <Image
-          src="/assets/NOR2.png"
+          src="/assets/nor34.png"
           alt="NØR Campaign Visual"
           fill
           className="object-cover object-center grayscale contrast-125 opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-1000 ease-in-out"

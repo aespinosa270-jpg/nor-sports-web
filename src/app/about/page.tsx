@@ -52,11 +52,12 @@ export default function AboutPage() {
                         className="relative h-[500px] md:h-auto min-h-[600px] w-full bg-gray-200"
                     >
                         <Image
-                            src="/assets/about-origin.jpg"
-                            alt="El origen de NØR"
+                            src="/assets/nor35.png"
+                            alt="El origen de NØR - Entrenamiento real"
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover"
+                            priority
                         />
                     </motion.div>
 
@@ -117,8 +118,8 @@ export default function AboutPage() {
                     className="absolute inset-0 w-full h-full"
                 >
                     <Image
-                        src="/assets/about-texture.jpg"
-                        alt="Detalle y Calidad"
+                        src="/assets/nor36.png"
+                        alt="Detalle y Calidad Técnica NØR"
                         fill
                         sizes="100vw"
                         className="object-cover opacity-80"
@@ -127,7 +128,6 @@ export default function AboutPage() {
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                     <h2 className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter text-center px-4">
-                        Ingeniería <br /> Invisible.
                     </h2>
                 </div>
             </section>
@@ -196,8 +196,8 @@ export default function AboutPage() {
                         className="relative h-[500px] md:h-auto min-h-[600px] w-full bg-gray-200 order-1 md:order-2"
                     >
                         <Image
-                            src="/assets/about-manifesto.jpg"
-                            alt="Comunidad NØR"
+                            src="/assets/nor37.png"
+                            alt="Comunidad y Estilo de Vida NØR"
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover"
