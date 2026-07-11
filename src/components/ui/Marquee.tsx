@@ -5,15 +5,19 @@ interface MarqueeProps {
     repeat?: number;
     duration?: string;
     className?: string;
+    reverse?: boolean;
 }
 
-export const Marquee = ({ text, repeat = 4, duration = "40s", className = "" }: MarqueeProps) => {
+export const Marquee = ({ text, repeat = 4, duration = "40s", className = "", reverse = false }: MarqueeProps) => {
     return (
         <div className={`relative w-full overflow-hidden py-3 ${className}`}>
 
             <div
                 className="flex w-max animate-marquee"
-                style={{ animationDuration: duration }}
+                style={{
+                    animationDuration: duration,
+                    animationDirection: reverse ? "reverse" : "normal",
+                }}
             >
 
                 <div className="flex shrink-0 items-center">

@@ -13,15 +13,14 @@ const URL_TALLAS = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola N
 
 function SubmitButton() {
     const { pending } = useFormStatus();
-
     return (
         <button
             type="submit"
             disabled={pending}
-            className="h-12 w-12 flex items-center justify-center bg-black text-white hover:bg-red-600 transition-colors duration-300 disabled:opacity-50"
+            className="h-12 w-12 flex items-center justify-center bg-red-600 text-black hover:bg-white transition-colors duration-300 disabled:opacity-50"
         >
             {pending ? (
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
             ) : (
                 <ArrowRight size={20} />
             )}
@@ -29,61 +28,37 @@ function SubmitButton() {
     );
 }
 
-// --- Variantes de Animación para el Logo HUUP ---
 const logoContainerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.5,
-        }
-    },
-    hover: {
-        scale: 1.05,
-        transition: { duration: 0.3 }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
+    hover: { scale: 1.05, transition: { duration: 0.3 } }
 };
-
 const logoLetterVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: { type: "spring", damping: 12, stiffness: 100 }
-    }
+    visible: { y: 0, opacity: 1, transition: { type: "spring", damping: 12, stiffness: 100 } }
 };
-
 const logoDotVariants: Variants = {
     hidden: { scale: 0, opacity: 0 },
-    visible: {
-        scale: 1,
-        opacity: 1,
-        transition: { type: "spring", damping: 10, stiffness: 200 }
-    }
+    visible: { scale: 1, opacity: 1, transition: { type: "spring", damping: 10, stiffness: 200 } }
 };
-// -----------------------------------------------
 
 export const Footer = () => {
-    const [state, formAction, isPending] = useActionState(
-        subscribeToNewsletter,
-        null
-    );
+    const [state, formAction, isPending] = useActionState(subscribeToNewsletter, null);
 
     return (
-        <footer className="bg-white text-black border-t-8 border-red-600 selection:bg-red-600 selection:text-white relative overflow-hidden">
+        <footer className="bg-black text-white border-t-4 border-red-600 selection:bg-red-600 selection:text-white relative overflow-hidden">
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-black">
+            <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-white/10">
 
-                {/* --- NEWSLETTER SECTION --- */}
-                <div className="lg:col-span-7 p-8 md:p-16 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-between min-h-[400px]">
+                {/* NEWSLETTER */}
+                <div className="lg:col-span-7 p-8 md:p-16 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-between min-h-[400px]">
                     <div>
                         <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-red-600 block mb-6">
                             /// JOIN THE CLUB
                         </span>
                         <h3 className="font-display text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-8">
                             NO TE PIERDAS <br />
-                            <span className="text-transparent text-stroke-black hover:text-black transition-colors duration-500">EL FUTURO.</span>
+                            <span className="text-transparent [-webkit-text-stroke:1.5px_#fff] italic -skew-x-[9deg] inline-block">EL FUTURO.</span>
                         </h3>
                     </div>
 
@@ -92,25 +67,25 @@ export const Footer = () => {
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="flex items-center gap-3 text-red-600 py-4 border-2 border-red-600 px-6 bg-red-50"
+                                className="flex items-center gap-3 text-red-600 py-4 border-2 border-red-600 px-6 bg-red-600/10"
                             >
                                 <Check size={20} />
                                 <span className="font-mono text-xs font-bold uppercase tracking-widest">{state.message}</span>
                             </motion.div>
                         ) : (
                             <form action={formAction} className="flex flex-col gap-4">
-                                <div className="flex items-end gap-0 border-b-2 border-black focus-within:border-red-600 transition-colors duration-300">
+                                <div className="flex items-end gap-0 border-b-2 border-white/30 focus-within:border-red-600 transition-colors duration-300">
                                     <input
                                         name="email"
                                         type="email"
                                         required
                                         disabled={isPending}
                                         placeholder="TU EMAIL AQUÍ"
-                                        className="bg-transparent w-full py-4 outline-none font-mono text-sm placeholder:text-gray-400 uppercase tracking-widest text-black disabled:opacity-50"
+                                        className="bg-transparent w-full py-4 outline-none font-mono text-sm placeholder:text-white/30 uppercase tracking-widest text-white disabled:opacity-50"
                                     />
                                     <SubmitButton />
                                 </div>
-                                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wide mt-2">
+                                <p className="font-mono text-[10px] text-white/40 uppercase tracking-wide mt-2">
                                     Sin spam. Solo lanzamientos exclusivos.
                                 </p>
                             </form>
@@ -123,10 +98,10 @@ export const Footer = () => {
                     </div>
                 </div>
 
-                {/* --- LINKS SECTION --- */}
+                {/* LINKS */}
                 <div className="lg:col-span-5 grid grid-cols-2">
-                    <div className="p-8 md:p-12 border-r border-black flex flex-col gap-8">
-                        <h4 className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest">
+                    <div className="p-8 md:p-12 border-r border-white/10 flex flex-col gap-8">
+                        <h4 className="font-mono text-[10px] font-bold uppercase bg-red-600 text-black inline-block px-2 py-1 w-fit tracking-widest">
                             CATÁLOGO
                         </h4>
                         <nav className="flex flex-col gap-4">
@@ -142,30 +117,30 @@ export const Footer = () => {
                         </nav>
                     </div>
 
-                    <div className="p-8 md:p-12 flex flex-col gap-8 bg-gray-50/50">
-                        <h4 className="font-mono text-[10px] font-bold uppercase bg-black text-white inline-block px-2 py-1 w-fit tracking-widest">
+                    <div className="p-8 md:p-12 flex flex-col gap-8">
+                        <h4 className="font-mono text-[10px] font-bold uppercase bg-red-600 text-black inline-block px-2 py-1 w-fit tracking-widest">
                             AYUDA
                         </h4>
                         <nav className="flex flex-col gap-4">
-                            <a href={URL_ENVIOS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                            <a href={URL_ENVIOS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-white/10 pb-2">
                                 Envíos y Devoluciones
                             </a>
-                            <a href={URL_TALLAS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                            <a href={URL_TALLAS} className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-white/10 pb-2">
                                 Guía de Tallas
                             </a>
-                            <Link href="/help" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                            <Link href="/help" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-white/10 pb-2">
                                 Términos y Condiciones
                             </Link>
-                            <Link href="/privacy" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-gray-200 pb-2">
+                            <Link href="/privacy" className="font-mono text-xs font-bold uppercase hover:text-red-600 transition-colors border-b border-white/10 pb-2">
                                 Política de Privacidad
                             </Link>
                         </nav>
 
                         <div className="mt-auto pt-8">
-                            <h4 className="font-mono text-[10px] font-bold uppercase text-gray-400 mb-4 tracking-widest">SOCIAL</h4>
+                            <h4 className="font-mono text-[10px] font-bold uppercase text-white/40 mb-4 tracking-widest">SOCIAL</h4>
                             <div className="flex gap-4">
                                 {['IG', 'TW', 'TK'].map((social) => (
-                                    <a key={social} href="#" className="h-8 w-8 border border-black flex items-center justify-center font-mono text-[10px] font-bold hover:bg-black hover:text-white hover:border-black transition-all rounded-full">
+                                    <a key={social} href="#" className="h-8 w-8 border border-white/20 flex items-center justify-center font-mono text-[10px] font-bold hover:bg-red-600 hover:text-black hover:border-red-600 transition-all rounded-full">
                                         {social}
                                     </a>
                                 ))}
@@ -175,20 +150,19 @@ export const Footer = () => {
                 </div>
             </div>
 
-            {/* --- BIG LOGO --- */}
-            <div className="border-b border-black bg-white relative overflow-hidden group cursor-default">
-                <h1 className="text-[12vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center select-none group-hover:text-red-600 transition-colors duration-700">
+            {/* BIG LOGO */}
+            <div className="border-b border-white/10 relative overflow-hidden group cursor-default">
+                <h1 className="text-[12vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center select-none text-white group-hover:text-red-600 transition-colors duration-700 italic -skew-x-[9deg]">
                     NØR SPORTS
                 </h1>
             </div>
 
-            {/* --- BOTTOM BAR --- */}
+            {/* BOTTOM BAR */}
             <div className="px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 bg-black text-white">
                 <p className="font-mono text-[10px] uppercase tracking-widest opacity-60">
                     © 2026 NØR SPORTS S.A. DE C.V. // MX-CDMX
                 </p>
 
-                {/* --- HUUP SECTION (LARGE VERSION) --- */}
                 <div className="flex gap-8 items-center">
                     <motion.a
                         href="https://huup.com.mx"
@@ -200,12 +174,9 @@ export const Footer = () => {
                         whileHover="hover"
                         viewport={{ once: true }}
                     >
-                        {/* Aumentado a text-xs (antes 9px) */}
                         <span className="font-mono text-xs uppercase tracking-widest opacity-60 group-hover:text-white transition-colors">
                             DESIGNED BY
                         </span>
-
-                        {/* Aumentado a text-4xl (antes 2xl) */}
                         <motion.div
                             className="flex items-baseline font-sans font-bold text-4xl leading-none select-none"
                             variants={logoContainerVariants}
@@ -220,8 +191,8 @@ export const Footer = () => {
 
                     <div className="flex gap-2 items-center px-3 py-1 border border-white/20 rounded-full">
                         <div className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
                         </div>
                         <span className="font-mono text-[9px] uppercase tracking-widest font-bold text-white">
                             SYSTEM ONLINE

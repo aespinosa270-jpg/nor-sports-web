@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
         description: "Ingeniería de tejido en Micropanal. Su estructura de celdas optimiza la gestión térmica corporal absorbiendo el sudor rápidamente.",
         features: ["Matriz de Micropanal", "Secado ultra-rápido", "Tacto suave premium"],
         mainImage: "/assets/products/NORONE.png",
-        inStock: false,
+        inStock: true,
         variants: [
             { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
@@ -75,7 +75,7 @@ export const PRODUCTS: Product[] = [
         description: "Diseñada en Tela Ares de alto rendimiento. Una fibra suave al tacto pero extremadamente resistente, ideal para entrenamientos de fuerza y uso rudo.",
         features: ["Tecnología textil Ares", "Resistencia superior", "Elasticidad mecánica"],
         mainImage: "/assets/products/NORONE.png",
-        inStock: false,
+        inStock: true,
         variants: [
             { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
@@ -91,7 +91,7 @@ export const PRODUCTS: Product[] = [
         description: "Construcción robusta en Piqué Vera texturizado. Un tejido con mayor cuerpo y caída estética que define la silueta atlética.",
         features: ["Tejido Piqué Vera texturizado", "Ventilación estructurada", "Costuras reforzadas"],
         mainImage: "/assets/products/NORONE.png",
-        inStock: false,
+        inStock: true,
         variants: [
             { colorName: "White", colorHex: "#ffffff", image: "/assets/products/NORONE.png" }
         ]
