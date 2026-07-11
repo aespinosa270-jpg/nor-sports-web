@@ -64,7 +64,7 @@ function PanelShell({
     const ref = useRef<HTMLDivElement>(null);
     const clases =
         "group relative flex-1 border-b md:border-b-0 md:border-r border-white/10 last:border-0 " +
-        "overflow-hidden transition-[flex-grow] duration-[600ms] ease-out hover:flex-[1.4] " +
+        "overflow-hidden transition-[flex-grow] duration-700 ease-out hover:flex-[1.4] " +
         "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2";
 
     const inner = (
@@ -147,7 +147,7 @@ function SomaPanel() {
             </div>
 
             {/* línea plata fina que cruza (guiño a las suturas / el hilo del logo) */}
-            <div className="absolute left-0 top-1/2 w-full h-px bg-gradient-to-r from-transparent via-[#C7D0DA]/60 to-transparent scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-[900ms] ease-out z-0" />
+            <div className="absolute left-0 top-1/2 w-full h-px bg-gradient-to-r from-transparent via-[#C7D0DA]/60 to-transparent scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-1000 ease-out z-0" />
 
             <div className="relative z-10">
                 <h2
