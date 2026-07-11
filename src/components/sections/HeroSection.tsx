@@ -35,7 +35,7 @@ export const HeroSection = () => {
             {/* Imagen de fondo cinematográfica */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/assets/nored-hero.png"
+                    src="/assets/nor-herov2.png"
                     alt="NØR — Diseñado para el movimiento"
                     fill
                     className="object-cover object-center"
