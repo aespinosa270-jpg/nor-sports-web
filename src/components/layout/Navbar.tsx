@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,6 +19,9 @@ export const Navbar = () => {
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const { openCart, items } = useCartStore();
+    
+    // 1. Obtenemos la ruta actual
+    const pathname = usePathname();
 
     useEffect(() => {
         setMounted(true);
@@ -28,6 +32,11 @@ export const Navbar = () => {
     }, []);
 
     const cartCount = mounted ? items.reduce((acc, item) => acc + item.quantity, 0) : 0;
+
+    // 2. Si estamos en el portal de marcas (raíz), ocultamos el navbar por completo
+    if (pathname === "/") {
+        return null;
+    }
 
     return (
         <>
